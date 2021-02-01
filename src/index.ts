@@ -214,7 +214,7 @@ export default class Buffer {
    * @param {number} value 要写入的 16 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeInt16(value: number, littleEndian: boolean = false): void {
+  public writeInt16(value: number, littleEndian?: boolean): void {
     this.grow(ByteLength.INT16);
     this._dataView.setInt16(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.INT16);
@@ -226,7 +226,7 @@ export default class Buffer {
    * @param {number} value 要写入的 16 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeUint16(value: number, littleEndian: boolean = false): void {
+  public writeUint16(value: number, littleEndian?: boolean): void {
     this.grow(ByteLength.UINT16);
     this._dataView.setUint16(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.UINT16);
@@ -238,7 +238,7 @@ export default class Buffer {
    * @param {number} value 要写入的 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeInt32(value: number, littleEndian: boolean = false): void {
+  public writeInt32(value: number, littleEndian?: boolean): void {
     this.grow(ByteLength.INT32);
     this._dataView.setInt32(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.INT32);
@@ -250,7 +250,7 @@ export default class Buffer {
    * @param {number} value 要写入的 32 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeUint32(value: number, littleEndian: boolean = false): void {
+  public writeUint32(value: number, littleEndian?: boolean): void {
     this.grow(ByteLength.UINT32);
     this._dataView.setUint32(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.UINT32);
@@ -262,7 +262,7 @@ export default class Buffer {
    * @param {bigint} value 要写入的 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeInt64(value: bigint, littleEndian: boolean = false): void {
+  public writeInt64(value: bigint, littleEndian?: boolean): void {
     this.grow(ByteLength.INI64);
     this._dataView.setBigInt64(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.INI64);
@@ -274,7 +274,7 @@ export default class Buffer {
    * @param {bigint} value 要写入的 64 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeUint64(value: bigint, littleEndian: boolean = false): void {
+  public writeUint64(value: bigint, littleEndian?: boolean): void {
     this.grow(ByteLength.UINT64);
     this._dataView.setBigUint64(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.UINT64);
@@ -286,7 +286,7 @@ export default class Buffer {
    * @param {number} value 单精度 32 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeFloat32(value: number, littleEndian: boolean = false): void {
+  public writeFloat32(value: number, littleEndian?: boolean): void {
     this.grow(ByteLength.FLOAT32);
     this._dataView.setFloat32(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.FLOAT32);
@@ -298,7 +298,7 @@ export default class Buffer {
    * @param {number} value 双精度 64 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeFloat64(value: number, littleEndian: boolean = false): void {
+  public writeFloat64(value: number, littleEndian?: boolean): void {
     this.grow(ByteLength.FLOAT64);
     this._dataView.setFloat64(this._offset, value, littleEndian);
     this.stepOffset(ByteLength.FLOAT64);
@@ -370,7 +370,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 16 位有符号整数
    * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
    */
-  public readInt16(littleEndian: boolean = false): number {
+  public readInt16(littleEndian?: boolean): number {
     const value: number = this._dataView.getInt16(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.INT16);
@@ -383,7 +383,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 16 位无符号整数
    * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
    */
-  public readUint16(littleEndian: boolean = false): number {
+  public readUint16(littleEndian?: boolean): number {
     const value: number = this._dataView.getUint16(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.UINT16);
@@ -396,7 +396,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 32 位有符号整数
    * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
    */
-  public readInt32(littleEndian: boolean = false): number {
+  public readInt32(littleEndian?: boolean): number {
     const value: number = this._dataView.getInt32(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.INT32);
@@ -409,7 +409,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 32 位无符号整数
    * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
    */
-  public readUint32(littleEndian: boolean = false): number {
+  public readUint32(littleEndian?: boolean): number {
     const value: number = this._dataView.getUint32(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.UINT32);
@@ -422,7 +422,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 64 位有符号整数
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
-  public readInt64(littleEndian: boolean = false): bigint {
+  public readInt64(littleEndian?: boolean): bigint {
     const value: bigint = this._dataView.getBigInt64(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.INI64);
@@ -435,7 +435,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 64 位无符号整数
    * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
    */
-  public readUint64(littleEndian: boolean = false): bigint {
+  public readUint64(littleEndian?: boolean): bigint {
     const value: bigint = this._dataView.getBigUint64(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.UINT64);
@@ -448,7 +448,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 IEEE 754 单精度 32 位浮点数
    * @returns {number} 单精度 32 位浮点数
    */
-  public readFloat32(littleEndian: boolean = false): number {
+  public readFloat32(littleEndian?: boolean): number {
     const value: number = this._dataView.getFloat32(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.FLOAT32);
@@ -461,7 +461,7 @@ export default class Buffer {
    * @description 从缓冲区中读取一个 IEEE 754 双精度 64 位浮点数
    * @returns {number} 双精度 64 位浮点数
    */
-  public readFloat64(littleEndian: boolean = false): number {
+  public readFloat64(littleEndian?: boolean): number {
     const value: number = this._dataView.getFloat64(this._offset, littleEndian);
 
     this.stepOffset(ByteLength.FLOAT64);

@@ -436,7 +436,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeInt16 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(2 /* INT16 */);
         this._dataView.setInt16(this._offset, value, littleEndian);
         this.stepOffset(2 /* INT16 */);
@@ -448,7 +447,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeUint16 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(2 /* UINT16 */);
         this._dataView.setUint16(this._offset, value, littleEndian);
         this.stepOffset(2 /* UINT16 */);
@@ -460,7 +458,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeInt32 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(4 /* INT32 */);
         this._dataView.setInt32(this._offset, value, littleEndian);
         this.stepOffset(4 /* INT32 */);
@@ -472,7 +469,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeUint32 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(4 /* UINT32 */);
         this._dataView.setUint32(this._offset, value, littleEndian);
         this.stepOffset(4 /* UINT32 */);
@@ -484,7 +480,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeInt64 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(8 /* INI64 */);
         this._dataView.setBigInt64(this._offset, value, littleEndian);
         this.stepOffset(8 /* INI64 */);
@@ -496,7 +491,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeUint64 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(8 /* UINT64 */);
         this._dataView.setBigUint64(this._offset, value, littleEndian);
         this.stepOffset(8 /* UINT64 */);
@@ -508,7 +502,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeFloat32 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(4 /* FLOAT32 */);
         this._dataView.setFloat32(this._offset, value, littleEndian);
         this.stepOffset(4 /* FLOAT32 */);
@@ -520,7 +513,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeFloat64 = function (value, littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         this.grow(8 /* FLOAT64 */);
         this._dataView.setFloat64(this._offset, value, littleEndian);
         this.stepOffset(8 /* FLOAT64 */);
@@ -585,7 +577,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
      */
     Buffer.prototype.readInt16 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getInt16(this._offset, littleEndian);
         this.stepOffset(2 /* INT16 */);
         return value;
@@ -596,7 +587,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
      */
     Buffer.prototype.readUint16 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getUint16(this._offset, littleEndian);
         this.stepOffset(2 /* UINT16 */);
         return value;
@@ -607,7 +597,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
      */
     Buffer.prototype.readInt32 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getInt32(this._offset, littleEndian);
         this.stepOffset(4 /* INT32 */);
         return value;
@@ -618,7 +607,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
      */
     Buffer.prototype.readUint32 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getUint32(this._offset, littleEndian);
         this.stepOffset(4 /* UINT32 */);
         return value;
@@ -629,7 +617,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
      */
     Buffer.prototype.readInt64 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getBigInt64(this._offset, littleEndian);
         this.stepOffset(8 /* INI64 */);
         return value;
@@ -640,7 +627,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
      */
     Buffer.prototype.readUint64 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getBigUint64(this._offset, littleEndian);
         this.stepOffset(8 /* UINT64 */);
         return value;
@@ -651,7 +637,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 单精度 32 位浮点数
      */
     Buffer.prototype.readFloat32 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getFloat32(this._offset, littleEndian);
         this.stepOffset(4 /* FLOAT32 */);
         return value;
@@ -662,7 +647,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 双精度 64 位浮点数
      */
     Buffer.prototype.readFloat64 = function (littleEndian) {
-        if (littleEndian === void 0) { littleEndian = false; }
         var value = this._dataView.getFloat64(this._offset, littleEndian);
         this.stepOffset(8 /* FLOAT64 */);
         return value;
