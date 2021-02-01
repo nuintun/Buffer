@@ -158,9 +158,10 @@ export default class Buffer {
       bytes.set(this._bytes);
 
       this._bytes = bytes;
-      this._length = length;
       this._dataView = new DataView(bytes.buffer);
     }
+
+    this._length = length;
   }
 
   /**

@@ -386,9 +386,9 @@ var Buffer = /*#__PURE__*/ (function () {
             var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
             bytes.set(this._bytes);
             this._bytes = bytes;
-            this._length = length;
             this._dataView = new DataView(bytes.buffer);
         }
+        this._length = length;
     };
     /**
      * @public
