@@ -362,7 +362,7 @@ export default class Buffer {
    * @returns {boolean} 如果字节非零，则返回 true，否则返回 false
    */
   public readBoolean(): boolean {
-    return !!this.readUint8();
+    return Boolean(this.readUint8());
   }
 
   /**

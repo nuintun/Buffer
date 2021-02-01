@@ -7,7 +7,7 @@ import treeShake from './plugins/tree-shake';
 import typescript from 'rollup-plugin-typescript2';
 
 export default function configure(esnext) {
-  clean(esnext ? ['esnext', 'typings'] : ['es5']);
+  clean(esnext ? ['esm', 'typings'] : ['cjs']);
 
   const tsconfigOverride = { compilerOptions: { declaration: true, declarationDir: 'typings' } };
   const tsconfig = esnext ? { tsconfigOverride, clean: true, useTsconfigDeclarationDir: true } : { clean: true };

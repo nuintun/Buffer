@@ -2,8 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "pretty": true,
+    "target": "ES5",
     "newLine": "LF",
-    "target": "ESNext",
     "module": "ESNext",
     "alwaysStrict": true,
     "importHelpers": true,
