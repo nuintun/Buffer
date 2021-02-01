@@ -1,10 +1,12 @@
 /**
- * @module rollup.config
+ * @module rollup.examples
  */
 
-import rimraf from 'rimraf';
+import clean from './clean';
 import pkg from '../package.json';
+import treeShake from './plugins/tree-shake';
 import resolve from '@rollup/plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
 
 const banner = `/**
  * @module Buffer
@@ -16,10 +18,10 @@ const banner = `/**
  */
 `;
 
-rimraf.sync('examples/index.bundle.js');
+clean('examples/index.bundle.js');
 
 export default {
-  input: 'examples/index.js',
+  input: 'examples/index.ts',
   output: {
     banner,
     format: 'umd',
@@ -27,12 +29,12 @@ export default {
     interop: false,
     esModule: false,
     amd: { id: 'buffer' },
-    file: 'examples/index.bundle.js'
+    file: 'examples/index.js'
   },
-  plugins: [resolve()],
   onwarn(error, warn) {
     if (error.code !== 'CIRCULAR_DEPENDENCY') {
       warn(error);
     }
-  }
+  },
+  plugins: [resolve(), typescript(), treeShake()]
 };

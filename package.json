@@ -1,19 +1,20 @@
 {
   "name": "@nuintun/buffer",
   "version": "0.0.1",
-  "description": "A buffer tool using WebAssembly.",
+  "description": "A buffer tool for javascript.",
   "main": "index.js",
   "typings": "typings/index.d.ts",
   "scripts": {
     "test": "node tests/index.js",
     "prepublishOnly": "npm run build",
-    "build:node": "tsc --module CommonJS --outDir node",
+    "build:es5": "tsc --module CommonJS --outDir es5",
     "build:esnext": "tsc --module ESNext --outDir esnext",
-    "build": "npm run build:node && npm run build:esnext"
+    "build:examples": "rollup -c tools/rollup.examples.js",
+    "build": "npm run build:es5 && npm run build:esnext && npm run build:examples"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nuintun/buffer.git"
+    "url": "git+https://github.com/nuintun/Buffer.git"
   },
   "keywords": [
     "buffer"
@@ -24,9 +25,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nuintun/buffer/issues"
+    "url": "https://github.com/nuintun/Buffer/issues"
   },
-  "homepage": "https://github.com/nuintun/buffer#readme",
+  "homepage": "https://github.com/nuintun/Buffer#readme",
   "dependencies": {
     "tslib": "^2.1.0"
   },

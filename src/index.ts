@@ -5,6 +5,7 @@
 import * as utils from './utils';
 import * as Binary from './Binary';
 import { ByteLength } from './enum';
+import * as Encoding from './Encoding';
 
 /**
  * @class Buffer
@@ -36,7 +37,7 @@ export default class Buffer {
    */
   constructor(length: number = 0, pageSize: number = 4096) {
     this._pageSize = pageSize;
-    this._initLength = utils.calcBestLength(length, pageSize);
+    this._initLength = utils.calcBufferLength(length, pageSize);
     this._bytes = new Uint8Array(this._initLength);
     this._dataView = new DataView(this._bytes.buffer);
   }
@@ -48,7 +49,7 @@ export default class Buffer {
    * @description 下一次调用读写方法时将在此位置开始读写
    */
   public set offset(value: number) {
-    this._offset = Math.min(value, this._length);
+    this._offset = Math.max(0, Math.min(value, this._length));
   }
 
   /**
@@ -134,6 +135,16 @@ export default class Buffer {
 
   /**
    * @protected
+   * @method seek
+   * @description 偏移读写指针
+   * @param {number} offset
+   */
+  protected seek(offset: number): void {
+    this.offset = this._offset + offset;
+  }
+
+  /**
+   * @protected
    * @method grow
    * @description 扩充指定长度的缓冲区大小，如果缓冲区未溢出则不刷新缓冲区
    * @param {number} length
@@ -142,7 +153,7 @@ export default class Buffer {
     length = Math.max(this._length, this._offset + length);
 
     if (this._dataView.byteLength < length) {
-      const bytes: Uint8Array = new Uint8Array(utils.calcBestLength(length, this._pageSize));
+      const bytes: Uint8Array = new Uint8Array(utils.calcBufferLength(length, this._pageSize));
 
       bytes.set(this._bytes);
 
@@ -150,16 +161,6 @@ export default class Buffer {
       this._length = length;
       this._dataView = new DataView(bytes.buffer);
     }
-  }
-
-  /**
-   * @protected
-   * @method moveOffset
-   * @description 移动读写指针位置
-   * @param {number} offset
-   */
-  protected moveOffset(offset: number): void {
-    this._offset += offset;
   }
 
   /**
@@ -183,7 +184,7 @@ export default class Buffer {
   public writeInt8(value: number): void {
     this.grow(ByteLength.INT8);
     this._dataView.setInt8(this._offset, value);
-    this.moveOffset(ByteLength.INT8);
+    this.seek(ByteLength.INT8);
   }
 
   /**
@@ -195,7 +196,7 @@ export default class Buffer {
   public writeUint8(value: number): void {
     this.grow(ByteLength.UINT8);
     this._dataView.setUint8(this._offset, value);
-    this.moveOffset(ByteLength.UINT8);
+    this.seek(ByteLength.UINT8);
   }
 
   /**
@@ -216,7 +217,7 @@ export default class Buffer {
   public writeInt16(value: number, littleEndian: boolean = false): void {
     this.grow(ByteLength.INT16);
     this._dataView.setInt16(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.INT16);
+    this.seek(ByteLength.INT16);
   }
 
   /**
@@ -228,7 +229,7 @@ export default class Buffer {
   public writeUint16(value: number, littleEndian: boolean = false): void {
     this.grow(ByteLength.UINT16);
     this._dataView.setUint16(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.UINT16);
+    this.seek(ByteLength.UINT16);
   }
 
   /**
@@ -240,7 +241,7 @@ export default class Buffer {
   public writeInt32(value: number, littleEndian: boolean = false): void {
     this.grow(ByteLength.INT32);
     this._dataView.setInt32(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.INT32);
+    this.seek(ByteLength.INT32);
   }
 
   /**
@@ -252,7 +253,7 @@ export default class Buffer {
   public writeUint32(value: number, littleEndian: boolean = false): void {
     this.grow(ByteLength.UINT32);
     this._dataView.setUint32(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.UINT32);
+    this.seek(ByteLength.UINT32);
   }
 
   /**
@@ -264,7 +265,7 @@ export default class Buffer {
   public writeInt64(value: bigint, littleEndian: boolean = false): void {
     this.grow(ByteLength.INI64);
     this._dataView.setBigInt64(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.INI64);
+    this.seek(ByteLength.INI64);
   }
 
   /**
@@ -276,7 +277,7 @@ export default class Buffer {
   public writeUint64(value: bigint, littleEndian: boolean = false): void {
     this.grow(ByteLength.UINT64);
     this._dataView.setBigUint64(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.UINT64);
+    this.seek(ByteLength.UINT64);
   }
 
   /**
@@ -288,7 +289,7 @@ export default class Buffer {
   public writeFloat32(value: number, littleEndian: boolean = false): void {
     this.grow(ByteLength.FLOAT32);
     this._dataView.setFloat32(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.FLOAT32);
+    this.seek(ByteLength.FLOAT32);
   }
 
   /**
@@ -300,7 +301,7 @@ export default class Buffer {
   public writeFloat64(value: number, littleEndian: boolean = false): void {
     this.grow(ByteLength.FLOAT64);
     this._dataView.setFloat64(this._offset, value, littleEndian);
-    this.moveOffset(ByteLength.FLOAT64);
+    this.seek(ByteLength.FLOAT64);
   }
 
   /**
@@ -315,7 +316,7 @@ export default class Buffer {
     if (length > 0) {
       this.grow(length);
       this._bytes.set(bytes.subarray(begin, end), this._offset);
-      this.moveOffset(length);
+      this.seek(length);
     }
   }
 
@@ -326,7 +327,7 @@ export default class Buffer {
    * @param {string} [encoding] 字符串编码
    */
   public write(value: string, encoding: string = 'UTF8'): void {
-    this.writeBytes(utils.stringEncode(value, encoding));
+    this.writeBytes(Encoding.encode(value, encoding));
   }
 
   /**
@@ -337,7 +338,7 @@ export default class Buffer {
   public readInt8(): number {
     const value: number = this._dataView.getInt8(this._offset);
 
-    this.moveOffset(ByteLength.INT8);
+    this.seek(ByteLength.INT8);
 
     return value;
   }
@@ -350,7 +351,7 @@ export default class Buffer {
   public readUint8(): number {
     const value: number = this._dataView.getUint8(this._offset);
 
-    this.moveOffset(ByteLength.UINT8);
+    this.seek(ByteLength.UINT8);
 
     return value;
   }
@@ -372,7 +373,7 @@ export default class Buffer {
   public readInt16(littleEndian: boolean = false): number {
     const value: number = this._dataView.getInt16(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.INT16);
+    this.seek(ByteLength.INT16);
 
     return value;
   }
@@ -385,7 +386,7 @@ export default class Buffer {
   public readUint16(littleEndian: boolean = false): number {
     const value: number = this._dataView.getUint16(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.UINT16);
+    this.seek(ByteLength.UINT16);
 
     return value;
   }
@@ -398,7 +399,7 @@ export default class Buffer {
   public readInt32(littleEndian: boolean = false): number {
     const value: number = this._dataView.getInt32(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.INT32);
+    this.seek(ByteLength.INT32);
 
     return value;
   }
@@ -411,7 +412,7 @@ export default class Buffer {
   public readUint32(littleEndian: boolean = false): number {
     const value: number = this._dataView.getUint32(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.UINT32);
+    this.seek(ByteLength.UINT32);
 
     return value;
   }
@@ -424,7 +425,7 @@ export default class Buffer {
   public readInt64(littleEndian: boolean = false): bigint {
     const value: bigint = this._dataView.getBigInt64(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.INI64);
+    this.seek(ByteLength.INI64);
 
     return value;
   }
@@ -437,7 +438,7 @@ export default class Buffer {
   public readUint64(littleEndian: boolean = false): bigint {
     const value: bigint = this._dataView.getBigUint64(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.UINT64);
+    this.seek(ByteLength.UINT64);
 
     return value;
   }
@@ -450,7 +451,7 @@ export default class Buffer {
   public readFloat32(littleEndian: boolean = false): number {
     const value: number = this._dataView.getFloat32(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.FLOAT32);
+    this.seek(ByteLength.FLOAT32);
 
     return value;
   }
@@ -463,7 +464,7 @@ export default class Buffer {
   public readFloat64(littleEndian: boolean = false): number {
     const value: number = this._dataView.getFloat64(this._offset, littleEndian);
 
-    this.moveOffset(ByteLength.FLOAT64);
+    this.seek(ByteLength.FLOAT64);
 
     return value;
   }
@@ -481,7 +482,7 @@ export default class Buffer {
       if (end <= this._length + 1) {
         const bytes: Uint8Array = this._bytes.slice(this._offset, end);
 
-        this.moveOffset(length);
+        this.seek(length);
 
         return bytes;
       }
@@ -498,7 +499,7 @@ export default class Buffer {
    * @returns {string} 指定编码的字符串
    */
   public read(length: number, encoding: string = 'UTF8'): string {
-    return utils.stringDecode(this.readBytes(length).buffer, encoding);
+    return Encoding.decode(this.readBytes(length), encoding);
   }
 
   /**
