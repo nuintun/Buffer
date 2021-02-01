@@ -15,9 +15,36 @@
   /**
    * @module hex
    */
-  function zero(num, max) {
-      return num.toString(16).toUpperCase().padStart(max, '0');
+  /**
+   * @type {string[]}
+   * @description 已获得的 hex 映射表
+   */
+  var mapping = [];
+  // 字母映射表
+  var alphabet = '0123456789ABCDEF';
+  // 生成映射表
+  for (var i = 0; i < 16; ++i) {
+      var i16 = i * 16;
+      for (var j = 0; j < 16; ++j) {
+          mapping[i16 + j] = alphabet[i] + alphabet[j];
+      }
   }
+  /**
+   * @function zero
+   * @description 数字左边补零操作
+   * @param {number} num
+   * @param {number} max
+   * @returns {string}
+   */
+  function zero(num, max) {
+      return mapping[num].padStart(max, '0');
+  }
+  /**
+   * @function hex
+   * @function Hex 查看器
+   * @param {Uint8Array} buffer
+   * @returns {string}
+   */
   function hex(buffer) {
       var length = buffer.length;
       var last = length % 16 || 16;
@@ -101,10 +128,10 @@
    * @type {string[]}
    * @description 已获得的二进制映射表
    */
-  var mapping = [];
+  var mapping$1 = [];
   // 生成映射表
-  for (var i = 0; i < 256; i++) {
-      mapping[i] = String.fromCharCode(i);
+  for (var i$1 = 0; i$1 < 256; i$1++) {
+      mapping$1[i$1] = String.fromCharCode(i$1);
   }
 
   /**
@@ -685,7 +712,7 @@
           var length = bytes.length;
           // 获取二进制编码
           for (var i = 0; i < length; i++) {
-              binary += mapping[bytes[i]];
+              binary += mapping$1[bytes[i]];
           }
           // 返回二进制编码
           return binary;
@@ -694,7 +721,7 @@
   }());
 
   /**
-   * @module index
+   * @module examples
    */
   var timer;
   var index = 0;

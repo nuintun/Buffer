@@ -27,8 +27,9 @@ for (let i: number = 0; i < 16; ++i) {
  * @param {number} max
  * @returns {string}
  */
+
 function zero(num: number, max: number): string {
-  return mapping[num].padStart(max, '0');
+  return num.toString(16).toUpperCase().padStart(max, '0');
 }
 
 /**
@@ -46,20 +47,20 @@ export default function hex(buffer: Uint8Array): string {
   let rowBytes: number;
   let index: number = 0;
   let rowSpaces: number;
-  let hex: string = `OFFSET  `;
+  let hex: string = `\u001b[36mOFFSET  `;
 
   for (let i: number = 0; i < 16; i++) {
     hex += ` ${zero(i, 2)}`;
   }
 
-  hex += `\n`;
+  hex += `\u001b[0m\n`;
 
   if (length) {
     hex += `\n`;
   }
 
   for (let i: number = 0; i < rows; i++) {
-    hex += `${zero(index, offsetLength)}  `;
+    hex += `\u001b[36m${zero(index, offsetLength)}\u001b[0m  `;
     rowBytes = i === rows - 1 ? last : 16;
     rowSpaces = 16 - rowBytes;
 

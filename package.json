@@ -10,8 +10,9 @@
     "prepublishOnly": "npm run build",
     "build:cjs": "rollup -c tools/rollup.cjs.js",
     "build:esm": "rollup -c tools/rollup.esm.js",
+    "build:test": "rollup -c tools/rollup.tests.js",
     "build:examples": "rollup -c tools/rollup.examples.js",
-    "build": "npm run build:esm && npm run build:cjs && npm run build:examples"
+    "build": "npm run build:esm && npm run build:cjs && npm run build:test && npm run build:examples"
   },
   "repository": {
     "type": "git",
