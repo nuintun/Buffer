@@ -368,11 +368,11 @@
       });
       /**
        * @protected
-       * @method seek
+       * @method stepOffset
        * @description 偏移读写指针
        * @param {number} offset
        */
-      Buffer.prototype.seek = function (offset) {
+      Buffer.prototype.stepOffset = function (offset) {
           this.offset = this._offset + offset;
       };
       /**
@@ -411,7 +411,7 @@
       Buffer.prototype.writeInt8 = function (value) {
           this.grow(1 /* INT8 */);
           this._dataView.setInt8(this._offset, value);
-          this.seek(1 /* INT8 */);
+          this.stepOffset(1 /* INT8 */);
       };
       /**
        * @public
@@ -422,7 +422,7 @@
       Buffer.prototype.writeUint8 = function (value) {
           this.grow(1 /* UINT8 */);
           this._dataView.setUint8(this._offset, value);
-          this.seek(1 /* UINT8 */);
+          this.stepOffset(1 /* UINT8 */);
       };
       /**
        * @method writeBoolean
@@ -442,7 +442,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(2 /* INT16 */);
           this._dataView.setInt16(this._offset, value, littleEndian);
-          this.seek(2 /* INT16 */);
+          this.stepOffset(2 /* INT16 */);
       };
       /**
        * @method writeUint16
@@ -454,7 +454,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(2 /* UINT16 */);
           this._dataView.setUint16(this._offset, value, littleEndian);
-          this.seek(2 /* UINT16 */);
+          this.stepOffset(2 /* UINT16 */);
       };
       /**
        * @method writeInt32
@@ -466,7 +466,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(4 /* INT32 */);
           this._dataView.setInt32(this._offset, value, littleEndian);
-          this.seek(4 /* INT32 */);
+          this.stepOffset(4 /* INT32 */);
       };
       /**
        * @method writeUint32
@@ -478,7 +478,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(4 /* UINT32 */);
           this._dataView.setUint32(this._offset, value, littleEndian);
-          this.seek(4 /* UINT32 */);
+          this.stepOffset(4 /* UINT32 */);
       };
       /**
        * @method writeInt64
@@ -490,7 +490,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(8 /* INI64 */);
           this._dataView.setBigInt64(this._offset, value, littleEndian);
-          this.seek(8 /* INI64 */);
+          this.stepOffset(8 /* INI64 */);
       };
       /**
        * @method writeUint64
@@ -502,7 +502,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(8 /* UINT64 */);
           this._dataView.setBigUint64(this._offset, value, littleEndian);
-          this.seek(8 /* UINT64 */);
+          this.stepOffset(8 /* UINT64 */);
       };
       /**
        * @method writeFloat32
@@ -514,7 +514,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(4 /* FLOAT32 */);
           this._dataView.setFloat32(this._offset, value, littleEndian);
-          this.seek(4 /* FLOAT32 */);
+          this.stepOffset(4 /* FLOAT32 */);
       };
       /**
        * @method writeFloat64
@@ -526,7 +526,7 @@
           if (littleEndian === void 0) { littleEndian = false; }
           this.grow(8 /* FLOAT64 */);
           this._dataView.setFloat64(this._offset, value, littleEndian);
-          this.seek(8 /* FLOAT64 */);
+          this.stepOffset(8 /* FLOAT64 */);
       };
       /**
        * @method writeBytes
@@ -541,7 +541,7 @@
           if (length > 0) {
               this.grow(length);
               this._bytes.set(bytes.subarray(begin, end), this._offset);
-              this.seek(length);
+              this.stepOffset(length);
           }
       };
       /**
@@ -561,7 +561,7 @@
        */
       Buffer.prototype.readInt8 = function () {
           var value = this._dataView.getInt8(this._offset);
-          this.seek(1 /* INT8 */);
+          this.stepOffset(1 /* INT8 */);
           return value;
       };
       /**
@@ -571,7 +571,7 @@
        */
       Buffer.prototype.readUint8 = function () {
           var value = this._dataView.getUint8(this._offset);
-          this.seek(1 /* UINT8 */);
+          this.stepOffset(1 /* UINT8 */);
           return value;
       };
       /**
@@ -590,7 +590,7 @@
       Buffer.prototype.readInt16 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getInt16(this._offset, littleEndian);
-          this.seek(2 /* INT16 */);
+          this.stepOffset(2 /* INT16 */);
           return value;
       };
       /**
@@ -601,7 +601,7 @@
       Buffer.prototype.readUint16 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getUint16(this._offset, littleEndian);
-          this.seek(2 /* UINT16 */);
+          this.stepOffset(2 /* UINT16 */);
           return value;
       };
       /**
@@ -612,7 +612,7 @@
       Buffer.prototype.readInt32 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getInt32(this._offset, littleEndian);
-          this.seek(4 /* INT32 */);
+          this.stepOffset(4 /* INT32 */);
           return value;
       };
       /**
@@ -623,7 +623,7 @@
       Buffer.prototype.readUint32 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getUint32(this._offset, littleEndian);
-          this.seek(4 /* UINT32 */);
+          this.stepOffset(4 /* UINT32 */);
           return value;
       };
       /**
@@ -634,7 +634,7 @@
       Buffer.prototype.readInt64 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getBigInt64(this._offset, littleEndian);
-          this.seek(8 /* INI64 */);
+          this.stepOffset(8 /* INI64 */);
           return value;
       };
       /**
@@ -645,7 +645,7 @@
       Buffer.prototype.readUint64 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getBigUint64(this._offset, littleEndian);
-          this.seek(8 /* UINT64 */);
+          this.stepOffset(8 /* UINT64 */);
           return value;
       };
       /**
@@ -656,7 +656,7 @@
       Buffer.prototype.readFloat32 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getFloat32(this._offset, littleEndian);
-          this.seek(4 /* FLOAT32 */);
+          this.stepOffset(4 /* FLOAT32 */);
           return value;
       };
       /**
@@ -667,7 +667,7 @@
       Buffer.prototype.readFloat64 = function (littleEndian) {
           if (littleEndian === void 0) { littleEndian = false; }
           var value = this._dataView.getFloat64(this._offset, littleEndian);
-          this.seek(8 /* FLOAT64 */);
+          this.stepOffset(8 /* FLOAT64 */);
           return value;
       };
       /**
@@ -681,7 +681,7 @@
               var end = this._offset + length;
               if (end <= this._length + 1) {
                   var bytes = this._bytes.slice(this._offset, end);
-                  this.seek(length);
+                  this.stepOffset(length);
                   return bytes;
               }
           }
