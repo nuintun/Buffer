@@ -11,7 +11,7 @@
     "build:esm": "tsc --module ESNext --outDir esm",
     "build:cjs": "tsc --module CommonJS --outDir cjs",
     "build:examples": "rollup -c tools/rollup.examples.js",
-    "build": "npm run build:es5 && npm run build:esnext && npm run build:examples"
+    "build": "npm run build:esm && npm run build:cjs && npm run build:examples"
   },
   "repository": {
     "type": "git",
