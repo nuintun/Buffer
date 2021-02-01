@@ -18,8 +18,8 @@ export default function configure(esnext) {
       interop: false,
       exports: 'auto',
       esModule: false,
-      format: esnext ? 'esm' : 'cjs',
-      dir: esnext ? 'esnext' : 'es5'
+      dir: esnext ? 'esm' : 'cjs',
+      format: esnext ? 'esm' : 'cjs'
     },
     external: ['tslib'],
     onwarn(error, warn) {
