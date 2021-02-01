@@ -13,7 +13,7 @@ import Buffer from '../src';
  * @returns {number}
  */
 function byteLength(input: string, encoding?: string): number {
-  const buffer = new Buffer();
+  const buffer: Buffer = new Buffer();
 
   buffer.write(input, encoding);
 
