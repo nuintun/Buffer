@@ -192,10 +192,11 @@ function decode$1(input, Buffer) {
  * @function encode
  * @description 用指定编码编码字符串
  * @param {string} input 需要编码的字符串
- * @param {string} encoding 字符串编码
+ * @param {string} [encoding] 字符串编码
  * @returns {Uint8Array}
  */
 function encode$2(input, encoding) {
+    if (encoding === void 0) { encoding = 'UTF8'; }
     switch (encoding.toUpperCase()) {
         case 'UTF8':
         case 'UTF-8':
@@ -214,10 +215,11 @@ function encode$2(input, encoding) {
  * @function decode
  * @description 用指定编码解码字符串数据
  * @param {BufferSource} input 需要解码的字符串数据
- * @param {string} encoding 字符串编码
+ * @param {string} [encoding] 字符串编码
  * @returns {string}
  */
 function decode$2(input, encoding) {
+    if (encoding === void 0) { encoding = 'UTF8'; }
     switch (encoding.toUpperCase()) {
         case 'UTF8':
         case 'UTF-8':
@@ -520,8 +522,8 @@ var Buffer = /*#__PURE__*/ (function () {
     /**
      * @method writeBytes
      * @description 在缓冲区中写入 Uint8Array 对象
-     * @param {number} [begin] 开始索引
-     * @param {number} [end] 结束索引
+     * @param {number} [begin] Uint8Array 对象开始索引
+     * @param {number} [end] Uint8Array 对象结束索引
      */
     Buffer.prototype.writeBytes = function (bytes, begin, end) {
         if (begin === void 0) { begin = 0; }
@@ -540,7 +542,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {string} [encoding] 字符串编码
      */
     Buffer.prototype.write = function (value, encoding) {
-        if (encoding === void 0) { encoding = 'UTF8'; }
         this.writeBytes(encode$2(value, encoding));
     };
     /**
@@ -653,9 +654,9 @@ var Buffer = /*#__PURE__*/ (function () {
     };
     /**
      * @method writeBytes
-     * @description 在缓冲区中写入 Uint8Array 对象
-     * @param {number} [begin] 开始索引
-     * @param {number} [end] 结束索引
+     * @description 从缓冲区中读取指定长度的 Uint8Array 对象
+     * @param {number} length 读取的字节长度
+     * @returns {Uint8Array}
      */
     Buffer.prototype.readBytes = function (length) {
         if (length >= 0) {
@@ -676,7 +677,6 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {string} 指定编码的字符串
      */
     Buffer.prototype.read = function (length, encoding) {
-        if (encoding === void 0) { encoding = 'UTF8'; }
         return decode$2(this.readBytes(length), encoding);
     };
     /**

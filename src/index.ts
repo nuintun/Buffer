@@ -307,8 +307,8 @@ export default class Buffer {
   /**
    * @method writeBytes
    * @description 在缓冲区中写入 Uint8Array 对象
-   * @param {number} [begin] 开始索引
-   * @param {number} [end] 结束索引
+   * @param {number} [begin] Uint8Array 对象开始索引
+   * @param {number} [end] Uint8Array 对象结束索引
    */
   public writeBytes(bytes: Uint8Array, begin: number = 0, end: number = bytes.length): void {
     const length: number = utils.calcSubLength(bytes.length, begin, end);
@@ -326,7 +326,7 @@ export default class Buffer {
    * @param {string} value 要写入的字符串
    * @param {string} [encoding] 字符串编码
    */
-  public write(value: string, encoding: string = 'UTF8'): void {
+  public write(value: string, encoding?: string): void {
     this.writeBytes(Encoding.encode(value, encoding));
   }
 
@@ -471,9 +471,9 @@ export default class Buffer {
 
   /**
    * @method writeBytes
-   * @description 在缓冲区中写入 Uint8Array 对象
-   * @param {number} [begin] 开始索引
-   * @param {number} [end] 结束索引
+   * @description 从缓冲区中读取指定长度的 Uint8Array 对象
+   * @param {number} length 读取的字节长度
+   * @returns {Uint8Array}
    */
   public readBytes(length: number): Uint8Array {
     if (length >= 0) {
@@ -498,7 +498,7 @@ export default class Buffer {
    * @param {string} [encoding] 字符串编码
    * @returns {string} 指定编码的字符串
    */
-  public read(length: number, encoding: string = 'UTF8'): string {
+  public read(length: number, encoding?: string): string {
     return Encoding.decode(this.readBytes(length), encoding);
   }
 
