@@ -22,6 +22,7 @@ export default function rollup(esnext) {
       format: esnext ? 'esm' : 'cjs'
     },
     external: ['tslib'],
+    preserveModules: true,
     onwarn(error, warn) {
       if (error.code !== 'CIRCULAR_DEPENDENCY') {
         warn(error);
