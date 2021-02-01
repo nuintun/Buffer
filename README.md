@@ -1,3 +1,3 @@
 # Buffer
 
-A buffer tool using WebAssembly.
+A buffer tool for javascript.

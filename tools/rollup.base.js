@@ -1,16 +1,16 @@
 /**
- * @module configure
+ * @module rollup.base
  */
 
 import clean from './clean';
 import treeShake from './plugins/tree-shake';
 import typescript from 'rollup-plugin-typescript2';
 
-export default function configure(esnext) {
+export default function rollup(esnext) {
   clean(esnext ? ['esm', 'typings'] : ['cjs']);
 
   const tsconfigOverride = { compilerOptions: { declaration: true, declarationDir: 'typings' } };
-  const tsconfig = esnext ? { tsconfigOverride, clean: true, useTsconfigDeclarationDir: true } : { clean: true };
+  const tsconfig = esnext ? { tsconfigOverride, useTsconfigDeclarationDir: true } : {};
 
   return {
     input: 'src/index.ts',

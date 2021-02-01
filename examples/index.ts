@@ -15,7 +15,7 @@ function onStart() {
 
   const buffer: Buffer = new Buffer();
 
-  buffer.write(`${++index}: A buffer tool using WebAssembly.`);
+  buffer.write(`${++index}: A buffer tool for javascript.`);
 
   view.innerHTML = hex(buffer.bytes);
 
