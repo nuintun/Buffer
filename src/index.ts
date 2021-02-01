@@ -488,7 +488,7 @@ export default class Buffer {
       }
     }
 
-    throw new RangeError('Index out of range');
+    throw new RangeError('Offset is outside the bounds of the DataView');
   }
 
   /**
