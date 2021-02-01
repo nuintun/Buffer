@@ -8,8 +8,8 @@
   "scripts": {
     "test": "node tests/index.js",
     "prepublishOnly": "npm run build",
-    "build:es5": "tsc --module CommonJS --outDir cjs",
-    "build:esnext": "tsc --module ESNext --outDir esm",
+    "build:esm": "tsc --module ESNext --outDir esm",
+    "build:cjs": "tsc --module CommonJS --outDir cjs",
     "build:examples": "rollup -c tools/rollup.examples.js",
     "build": "npm run build:es5 && npm run build:esnext && npm run build:examples"
   },
