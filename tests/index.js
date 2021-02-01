@@ -727,11 +727,11 @@ var Buffer = /*#__PURE__*/ (function () {
  * @param {string} [encoding]
  * @returns {number}
  */
-// function byteLength(input: string, encoding?: string): number {
-//   const buffer = new Buffer();
-//   buffer.write(input, encoding);
-//   return buffer.length;
-// }
+function byteLength(input, encoding) {
+    var buffer = new Buffer();
+    buffer.write(input, encoding);
+    return buffer.length;
+}
 var buffer = new Buffer();
 var desc = "A buffer tool for javascript.";
 buffer.writeInt8(0xaf);
@@ -762,5 +762,5 @@ console.log(0xf0f1fafbfcfdfeffn, '->', buffer.readInt64());
 console.log(0xfffefdfcfbfaf1f0n, '->', buffer.readUint64());
 console.log(123456.654321, '->', buffer.readFloat32());
 console.log(987654321.123456789, '->', buffer.readFloat64());
-console.log(desc, '->', buffer.read(1000));
+console.log(desc, '->', buffer.read(byteLength(desc)));
 process.stdout.write("\r\n" + hex(buffer.bytes));
