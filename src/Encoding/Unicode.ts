@@ -15,7 +15,7 @@ export function encode(input: string, Buffer: TypeArray): Uint8Array {
   const raw: InstanceType<TypeArray> = new Buffer(length);
 
   for (let i: number = 0; i < length; i++) {
-    raw[i] = input.codePointAt(i);
+    raw[i] = input.codePointAt(i) || 0;
   }
 
   return new Uint8Array(raw.buffer);

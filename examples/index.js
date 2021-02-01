@@ -167,7 +167,7 @@
       var length = input.length;
       var raw = new Buffer(length);
       for (var i = 0; i < length; i++) {
-          raw[i] = input.codePointAt(i);
+          raw[i] = input.codePointAt(i) || 0;
       }
       return new Uint8Array(raw.buffer);
   }
