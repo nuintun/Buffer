@@ -23,9 +23,6 @@ export default class Buffer {
   // 读写指针位置
   private _offset: number = 0;
 
-  // 初始化字节大小
-  private _initLength: number;
-
   // 缓冲区数据
   private _bytes: Uint8Array;
 
@@ -34,13 +31,25 @@ export default class Buffer {
 
   /**
    * @constructor
+   * @param {number|Uint8Array} 缓冲区初始大小或数据
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
-  constructor(length: number = 0, pageSize: number = 4096) {
+  constructor(length?: number, pageSize?: number);
+  constructor(bytes?: Uint8Array, pageSize?: number);
+  constructor(input: number | Uint8Array = 0, pageSize: number = 4096) {
     this._pageSize = pageSize;
-    this._initLength = utils.calcBufferLength(length, pageSize);
-    this._bytes = new Uint8Array(this._initLength);
-    this._dataView = new DataView(this._bytes.buffer);
+
+    if (input instanceof Uint8Array) {
+      this._bytes = input;
+      this._length = input.length;
+      this._dataView = new DataView(input.buffer);
+    } else {
+      const bytes: Uint8Array = new Uint8Array(utils.calcBufferLength(input, pageSize));
+
+      this._bytes = bytes;
+      this._length = input;
+      this._dataView = new DataView(bytes.buffer);
+    }
   }
 
   /**
@@ -122,6 +131,19 @@ export default class Buffer {
    */
   public get bytes(): Uint8Array {
     return this._bytes.slice(0, this._length);
+  }
+
+  /**
+   * @public
+   * @method slice
+   * @description 从指定开始和结束位置截取并返回新的 Buffer 对象
+   * @param {number} begin 开始位置
+   * @param {number} end 结束位置
+   */
+  public slice(begin?: number, end?: number): Buffer {
+    const bytes: Uint8Array = this._bytes.slice(begin, end);
+
+    return new Buffer(bytes, this._pageSize);
   }
 
   /**
@@ -306,12 +328,14 @@ export default class Buffer {
    * @param {number} [begin] Uint8Array 对象开始索引
    * @param {number} [end] Uint8Array 对象结束索引
    */
-  public writeBytes(bytes: Uint8Array, begin: number = 0, end: number = bytes.length): void {
-    const length: number = utils.calcSubLength(bytes.length, begin, end);
+  public writeBytes(bytes: Uint8Array, begin?: number, end?: number): void {
+    bytes = bytes.subarray(begin, end);
+
+    const { length }: Uint8Array = bytes;
 
     if (length > 0) {
       this.alloc(length);
-      this._bytes.set(bytes.subarray(begin, end), this._offset);
+      this._bytes.set(bytes, this._offset);
       this.stepOffset(length);
     }
   }
@@ -539,17 +563,5 @@ export default class Buffer {
 
     // 返回二进制编码
     return binary;
-  }
-
-  /**
-   * @public
-   * @method clear
-   * @description 清除缓冲区数据并重置默认状态
-   */
-  public clear(): void {
-    this._offset = 0;
-    this._length = 0;
-    this._bytes = new Uint8Array(this._initLength);
-    this._dataView = new DataView(this._bytes.buffer);
   }
 }

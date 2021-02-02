@@ -112,26 +112,6 @@
             return length;
         }
     }
-    /**
-     * @function calcSubLength
-     * @description 通过开始和结束索引计算截取长度
-     * @param {number} length 总长
-     * @param {number} begin 开始索引
-     * @param {number} end 结束索引
-     * @returns {number}
-     */
-    function calcSubLength(length, begin, end) {
-        var diff = 0;
-        if (length > 0 && begin >= 0) {
-            if (end < 0) {
-                diff = length + (end - begin);
-            }
-            else if (end > 0) {
-                diff = Math.min(length, Math.max(0, end - begin));
-            }
-        }
-        return diff;
-    }
 
     /**
      * @module Binary
@@ -258,21 +238,25 @@
      * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
      */
     var Buffer = /*#__PURE__*/ (function () {
-        /**
-         * @constructor
-         * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
-         */
-        function Buffer(length, pageSize) {
-            if (length === void 0) { length = 0; }
+        function Buffer(input, pageSize) {
+            if (input === void 0) { input = 0; }
             if (pageSize === void 0) { pageSize = 4096; }
             // 已使用字节长度
             this._length = 0;
             // 读写指针位置
             this._offset = 0;
             this._pageSize = pageSize;
-            this._initLength = calcBufferLength(length, pageSize);
-            this._bytes = new Uint8Array(this._initLength);
-            this._dataView = new DataView(this._bytes.buffer);
+            if (input instanceof Uint8Array) {
+                this._bytes = input;
+                this._length = input.length;
+                this._dataView = new DataView(input.buffer);
+            }
+            else {
+                var bytes = new Uint8Array(calcBufferLength(input, pageSize));
+                this._bytes = bytes;
+                this._length = input;
+                this._dataView = new DataView(bytes.buffer);
+            }
         }
         Object.defineProperty(Buffer.prototype, "offset", {
             /**
@@ -362,6 +346,17 @@
             enumerable: false,
             configurable: true
         });
+        /**
+         * @public
+         * @method slice
+         * @description 从指定开始和结束位置截取并返回新的 Buffer 对象
+         * @param {number} begin 开始位置
+         * @param {number} end 结束位置
+         */
+        Buffer.prototype.slice = function (begin, end) {
+            var bytes = this._bytes.slice(begin, end);
+            return new Buffer(bytes, this._pageSize);
+        };
         /**
          * @protected
          * @method alloc
@@ -527,12 +522,11 @@
          * @param {number} [end] Uint8Array 对象结束索引
          */
         Buffer.prototype.writeBytes = function (bytes, begin, end) {
-            if (begin === void 0) { begin = 0; }
-            if (end === void 0) { end = bytes.length; }
-            var length = calcSubLength(bytes.length, begin, end);
+            bytes = bytes.subarray(begin, end);
+            var length = bytes.length;
             if (length > 0) {
                 this.alloc(length);
-                this._bytes.set(bytes.subarray(begin, end), this._offset);
+                this._bytes.set(bytes, this._offset);
                 this.stepOffset(length);
             }
         };
@@ -708,17 +702,6 @@
             }
             // 返回二进制编码
             return binary;
-        };
-        /**
-         * @public
-         * @method clear
-         * @description 清除缓冲区数据并重置默认状态
-         */
-        Buffer.prototype.clear = function () {
-            this._offset = 0;
-            this._length = 0;
-            this._bytes = new Uint8Array(this._initLength);
-            this._dataView = new DataView(this._bytes.buffer);
         };
         return Buffer;
     }());
