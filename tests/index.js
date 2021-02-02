@@ -291,25 +291,6 @@ var Buffer = /*#__PURE__*/ (function () {
         get: function () {
             return this._length;
         },
-        /**
-         * @public
-         * @property {number} length
-         * @description 设置 Buffer 长度
-         * @description 如果将长度设置为小于当前长度的值，将会截断该字节数组
-         * @description 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧
-         */
-        set: function (value) {
-            var length = value - this._length;
-            if (length > 0) {
-                this.alloc(length);
-            }
-            else if (length < 0) {
-                this._length = value;
-            }
-            if (this._offset > value) {
-                this._offset = value;
-            }
-        },
         enumerable: false,
         configurable: true
     });
@@ -339,41 +320,6 @@ var Buffer = /*#__PURE__*/ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Buffer.prototype, "readAvailable", {
-        /**
-         * @public
-         * @property {number} readAvailable
-         * @description 获取剩余可读字节长度
-         * @returns {number}
-         */
-        get: function () {
-            return this._length - this._offset;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Buffer.prototype, "bytesAvailable", {
-        /**
-         * @public
-         * @property {number} bytesAvailable
-         * @description 获取剩余可写字节长度
-         * @returns {number}
-         */
-        get: function () {
-            return this._bytes.length - this._offset;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    /**
-     * @protected
-     * @method stepOffset
-     * @description 偏移读写指针
-     * @param {number} offset
-     */
-    Buffer.prototype.stepOffset = function (offset) {
-        this.offset = this._offset + offset;
-    };
     /**
      * @protected
      * @method alloc
@@ -389,19 +335,19 @@ var Buffer = /*#__PURE__*/ (function () {
                 this._bytes = bytes;
                 this._dataView = new DataView(bytes.buffer);
             }
-            this._length = Math.max(length, this._length);
+            if (length > this._length) {
+                this._length = length;
+            }
         }
     };
     /**
-     * @public
-     * @method clear
-     * @description 清除缓冲区数据并重置默认状态
+     * @protected
+     * @method stepOffset
+     * @description 偏移读写指针
+     * @param {number} offset
      */
-    Buffer.prototype.clear = function () {
-        this._offset = 0;
-        this._length = 0;
-        this._bytes = new Uint8Array(this._initLength);
-        this._dataView = new DataView(this._bytes.buffer);
+    Buffer.prototype.stepOffset = function (offset) {
+        this.offset = this._offset + offset;
     };
     /**
      * @public
@@ -663,7 +609,7 @@ var Buffer = /*#__PURE__*/ (function () {
     Buffer.prototype.readBytes = function (length) {
         if (length >= 0) {
             var end = this._offset + length;
-            if (end <= this._length + 1) {
+            if (end <= this._length) {
                 var bytes = this._bytes.slice(this._offset, end);
                 this.stepOffset(length);
                 return bytes;
@@ -699,6 +645,17 @@ var Buffer = /*#__PURE__*/ (function () {
         }
         // 返回二进制编码
         return binary;
+    };
+    /**
+     * @public
+     * @method clear
+     * @description 清除缓冲区数据并重置默认状态
+     */
+    Buffer.prototype.clear = function () {
+        this._offset = 0;
+        this._length = 0;
+        this._bytes = new Uint8Array(this._initLength);
+        this._dataView = new DataView(this._bytes.buffer);
     };
     return Buffer;
 }());

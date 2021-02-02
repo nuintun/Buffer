@@ -8,721 +8,678 @@
  */
 
 (function (factory) {
-  typeof define === 'function' && define.amd ? define('buffer', factory) :
-  factory();
+    typeof define === 'function' && define.amd ? define('buffer', factory) :
+    factory();
 }((function () { 'use strict';
 
-  /**
-   * @module hex
-   */
-  /**
-   * @type {string[]}
-   * @description 已获得的 hex 映射表
-   */
-  var mapping = [];
-  // 字母映射表
-  var alphabet = '0123456789ABCDEF';
-  // 生成映射表
-  for (var i = 0; i < 16; ++i) {
-      var i16 = i * 16;
-      for (var j = 0; j < 16; ++j) {
-          mapping[i16 + j] = alphabet[i] + alphabet[j];
-      }
-  }
-  /**
-   * @function zero
-   * @description 数字左边补零操作
-   * @param {number} num
-   * @param {number} max
-   * @returns {string}
-   */
-  function zero(num, max) {
-      return mapping[num].padStart(max, '0');
-  }
-  /**
-   * @function hex
-   * @function Hex 查看器
-   * @param {Uint8Array} buffer
-   * @returns {string}
-   */
-  function hex(buffer) {
-      var length = buffer.length;
-      var last = length % 16 || 16;
-      var rows = Math.ceil(length / 16);
-      var offsetLength = Math.max(6, length.toString(16).length);
-      var rowBytes;
-      var index = 0;
-      var rowSpaces;
-      var hex = "OFFSET  ";
-      for (var i = 0; i < 16; i++) {
-          hex += " " + zero(i, 2);
-      }
-      hex += "\n";
-      if (length) {
-          hex += "\n";
-      }
-      for (var i = 0; i < rows; i++) {
-          hex += zero(index, offsetLength) + "  ";
-          rowBytes = i === rows - 1 ? last : 16;
-          rowSpaces = 16 - rowBytes;
-          for (var j = 0; j < rowBytes; j++) {
-              hex += " " + zero(buffer[index++], 2);
-          }
-          for (var j = 0; j <= rowSpaces; j++) {
-              hex += "   ";
-          }
-          index -= rowBytes;
-          for (var j = 0; j < rowBytes; j++) {
-              var byte = buffer[index++];
-              hex += (byte > 31 && byte < 127) || byte > 159 ? String.fromCharCode(byte) : ".";
-          }
-          hex += "\n";
-      }
-      return hex;
-  }
+    /**
+     * @module hex
+     */
+    /**
+     * @type {string[]}
+     * @description 已获得的 hex 映射表
+     */
+    var mapping = [];
+    // 字母映射表
+    var alphabet = '0123456789ABCDEF';
+    // 生成映射表
+    for (var i = 0; i < 16; ++i) {
+        var i16 = i * 16;
+        for (var j = 0; j < 16; ++j) {
+            mapping[i16 + j] = alphabet[i] + alphabet[j];
+        }
+    }
+    /**
+     * @function zero
+     * @description 数字左边补零操作
+     * @param {number} num
+     * @param {number} max
+     * @returns {string}
+     */
+    function zero(num, max) {
+        return mapping[num].padStart(max, '0');
+    }
+    /**
+     * @function hex
+     * @function Hex 查看器
+     * @param {Uint8Array} buffer
+     * @returns {string}
+     */
+    function hex(buffer) {
+        var length = buffer.length;
+        var last = length % 16 || 16;
+        var rows = Math.ceil(length / 16);
+        var offsetLength = Math.max(6, length.toString(16).length);
+        var rowBytes;
+        var index = 0;
+        var rowSpaces;
+        var hex = "OFFSET  ";
+        for (var i = 0; i < 16; i++) {
+            hex += " " + zero(i, 2);
+        }
+        hex += "\n";
+        if (length) {
+            hex += "\n";
+        }
+        for (var i = 0; i < rows; i++) {
+            hex += zero(index, offsetLength) + "  ";
+            rowBytes = i === rows - 1 ? last : 16;
+            rowSpaces = 16 - rowBytes;
+            for (var j = 0; j < rowBytes; j++) {
+                hex += " " + zero(buffer[index++], 2);
+            }
+            for (var j = 0; j <= rowSpaces; j++) {
+                hex += "   ";
+            }
+            index -= rowBytes;
+            for (var j = 0; j < rowBytes; j++) {
+                var byte = buffer[index++];
+                hex += (byte > 31 && byte < 127) || byte > 159 ? String.fromCharCode(byte) : ".";
+            }
+            hex += "\n";
+        }
+        return hex;
+    }
 
-  /**
-   * @module utils
-   */
-  /**
-   * @function calcBufferLength
-   * @description 计算适合的 Buffer 长度
-   * @param {number} length 数据字节总大小
-   * @param {number} pageSize 缓冲区页大小
-   * @returns {number}
-   */
-  function calcBufferLength(length, pageSize) {
-      if (length > pageSize) {
-          var pages = Math.ceil(length / pageSize);
-          return pages * pageSize;
-      }
-      else {
-          return length;
-      }
-  }
-  /**
-   * @function calcSubLength
-   * @description 通过开始和结束索引计算截取长度
-   * @param {number} length 总长
-   * @param {number} begin 开始索引
-   * @param {number} end 结束索引
-   * @returns {number}
-   */
-  function calcSubLength(length, begin, end) {
-      var diff = 0;
-      if (length > 0 && begin >= 0) {
-          if (end < 0) {
-              diff = length + (end - begin);
-          }
-          else if (end > 0) {
-              diff = Math.min(length, Math.max(0, end - begin));
-          }
-      }
-      return diff;
-  }
+    /**
+     * @module utils
+     */
+    /**
+     * @function calcBufferLength
+     * @description 计算适合的 Buffer 长度
+     * @param {number} length 数据字节总大小
+     * @param {number} pageSize 缓冲区页大小
+     * @returns {number}
+     */
+    function calcBufferLength(length, pageSize) {
+        if (length > pageSize) {
+            var pages = Math.ceil(length / pageSize);
+            return pages * pageSize;
+        }
+        else {
+            return length;
+        }
+    }
+    /**
+     * @function calcSubLength
+     * @description 通过开始和结束索引计算截取长度
+     * @param {number} length 总长
+     * @param {number} begin 开始索引
+     * @param {number} end 结束索引
+     * @returns {number}
+     */
+    function calcSubLength(length, begin, end) {
+        var diff = 0;
+        if (length > 0 && begin >= 0) {
+            if (end < 0) {
+                diff = length + (end - begin);
+            }
+            else if (end > 0) {
+                diff = Math.min(length, Math.max(0, end - begin));
+            }
+        }
+        return diff;
+    }
 
-  /**
-   * @module Binary
-   */
-  /**
-   * @type {string[]}
-   * @description 已获得的二进制映射表
-   */
-  var mapping$1 = [];
-  // 生成映射表
-  for (var i$1 = 0; i$1 < 256; i$1++) {
-      mapping$1[i$1] = String.fromCharCode(i$1);
-  }
+    /**
+     * @module Binary
+     */
+    /**
+     * @type {string[]}
+     * @description 已获得的二进制映射表
+     */
+    var mapping$1 = [];
+    // 生成映射表
+    for (var i$1 = 0; i$1 < 256; i$1++) {
+        mapping$1[i$1] = String.fromCharCode(i$1);
+    }
 
-  /**
-   * @module UTF8
-   */
-  // 编码器实例
-  var encoder = new TextEncoder();
-  // 解码器实例
-  var decoder = new TextDecoder();
-  /**
-   * @function encode
-   * @param {string} input
-   * @returns {Uint8Array}
-   */
-  var encode = encoder.encode.bind(encoder);
-  /**
-   * @function decode
-   * @param {BufferSource} input
-   * @returns {string}
-   */
-  var decode = decoder.decode.bind(decoder);
+    /**
+     * @module UTF8
+     */
+    // 编码器实例
+    var encoder = new TextEncoder();
+    // 解码器实例
+    var decoder = new TextDecoder();
+    /**
+     * @function encode
+     * @param {string} input
+     * @returns {Uint8Array}
+     */
+    var encode = encoder.encode.bind(encoder);
+    /**
+     * @function decode
+     * @param {BufferSource} input
+     * @returns {string}
+     */
+    var decode = decoder.decode.bind(decoder);
 
-  /**
-   * @module Unicode
-   */
-  /**
-   * @function encode
-   * @param {string} input
-   * @param {TypeArray} Buffer
-   * @returns {Uint8Array}
-   */
-  function encode$1(input, Buffer) {
-      var length = input.length;
-      var raw = new Buffer(length);
-      for (var i = 0; i < length; i++) {
-          raw[i] = input.codePointAt(i) || 0;
-      }
-      return new Uint8Array(raw.buffer);
-  }
-  /**
-   * @function decode
-   * @param {BufferSource} input
-   * @param {TypeArray} Buffer
-   * @returns {string}
-   */
-  function decode$1(input, Buffer) {
-      var buffer = ArrayBuffer.isView(input) ? input.buffer : input;
-      var raw = new Buffer(buffer);
-      var length = raw.length;
-      var result = '';
-      for (var i = 0; i < length; i++) {
-          result += String.fromCodePoint(raw[i]);
-      }
-      return result;
-  }
+    /**
+     * @module Unicode
+     */
+    /**
+     * @function encode
+     * @param {string} input
+     * @param {TypeArray} Buffer
+     * @returns {Uint8Array}
+     */
+    function encode$1(input, Buffer) {
+        var length = input.length;
+        var raw = new Buffer(length);
+        for (var i = 0; i < length; i++) {
+            raw[i] = input.codePointAt(i) || 0;
+        }
+        return new Uint8Array(raw.buffer);
+    }
+    /**
+     * @function decode
+     * @param {BufferSource} input
+     * @param {TypeArray} Buffer
+     * @returns {string}
+     */
+    function decode$1(input, Buffer) {
+        var buffer = ArrayBuffer.isView(input) ? input.buffer : input;
+        var raw = new Buffer(buffer);
+        var length = raw.length;
+        var result = '';
+        for (var i = 0; i < length; i++) {
+            result += String.fromCodePoint(raw[i]);
+        }
+        return result;
+    }
 
-  /**
-   * @module Encoding
-   */
-  /**
-   * @function encode
-   * @description 用指定编码编码字符串
-   * @param {string} input 需要编码的字符串
-   * @param {string} [encoding] 字符串编码
-   * @returns {Uint8Array}
-   */
-  function encode$2(input, encoding) {
-      if (encoding === void 0) { encoding = 'UTF8'; }
-      switch (encoding.toUpperCase()) {
-          case 'UTF8':
-          case 'UTF-8':
-              return encode(input);
-          case 'UTF16':
-          case 'UTF-16':
-              return encode$1(input, Uint16Array);
-          case 'UTF32':
-          case 'UTF-32':
-              return encode$1(input, Uint32Array);
-          default:
-              throw new TypeError('Unsupported encoding ' + encoding);
-      }
-  }
-  /**
-   * @function decode
-   * @description 用指定编码解码字符串数据
-   * @param {BufferSource} input 需要解码的字符串数据
-   * @param {string} [encoding] 字符串编码
-   * @returns {string}
-   */
-  function decode$2(input, encoding) {
-      if (encoding === void 0) { encoding = 'UTF8'; }
-      switch (encoding.toUpperCase()) {
-          case 'UTF8':
-          case 'UTF-8':
-              return decode(input);
-          case 'UTF16':
-          case 'UTF-16':
-              return decode$1(input, Uint16Array);
-          case 'UTF32':
-          case 'UTF-32':
-              return decode$1(input, Uint32Array);
-          default:
-              throw new TypeError('Unsupported encoding ' + encoding);
-      }
-  }
+    /**
+     * @module Encoding
+     */
+    /**
+     * @function encode
+     * @description 用指定编码编码字符串
+     * @param {string} input 需要编码的字符串
+     * @param {string} [encoding] 字符串编码
+     * @returns {Uint8Array}
+     */
+    function encode$2(input, encoding) {
+        if (encoding === void 0) { encoding = 'UTF8'; }
+        switch (encoding.toUpperCase()) {
+            case 'UTF8':
+            case 'UTF-8':
+                return encode(input);
+            case 'UTF16':
+            case 'UTF-16':
+                return encode$1(input, Uint16Array);
+            case 'UTF32':
+            case 'UTF-32':
+                return encode$1(input, Uint32Array);
+            default:
+                throw new TypeError('Unsupported encoding ' + encoding);
+        }
+    }
+    /**
+     * @function decode
+     * @description 用指定编码解码字符串数据
+     * @param {BufferSource} input 需要解码的字符串数据
+     * @param {string} [encoding] 字符串编码
+     * @returns {string}
+     */
+    function decode$2(input, encoding) {
+        if (encoding === void 0) { encoding = 'UTF8'; }
+        switch (encoding.toUpperCase()) {
+            case 'UTF8':
+            case 'UTF-8':
+                return decode(input);
+            case 'UTF16':
+            case 'UTF-16':
+                return decode$1(input, Uint16Array);
+            case 'UTF32':
+            case 'UTF-32':
+                return decode$1(input, Uint32Array);
+            default:
+                throw new TypeError('Unsupported encoding ' + encoding);
+        }
+    }
 
-  /**
-   * @module Buffer
-   */
-  /**
-   * @class Buffer
-   * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
-   */
-  var Buffer = /*#__PURE__*/ (function () {
-      /**
-       * @constructor
-       * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
-       */
-      function Buffer(length, pageSize) {
-          if (length === void 0) { length = 0; }
-          if (pageSize === void 0) { pageSize = 4096; }
-          // 已使用字节长度
-          this._length = 0;
-          // 读写指针位置
-          this._offset = 0;
-          this._pageSize = pageSize;
-          this._initLength = calcBufferLength(length, pageSize);
-          this._bytes = new Uint8Array(this._initLength);
-          this._dataView = new DataView(this._bytes.buffer);
-      }
-      Object.defineProperty(Buffer.prototype, "offset", {
-          /**
-           * @public
-           * @property {number} offset
-           * @description 获取读写指针的位置
-           * @returns {number}
-           */
-          get: function () {
-              return this._offset;
-          },
-          /**
-           * @public
-           * @property {number} offset
-           * @description 设置读写指针位置，以字节为单位
-           * @description 下一次调用读写方法时将在此位置开始读写
-           */
-          set: function (value) {
-              this._offset = Math.max(0, Math.min(value, this._length));
-          },
-          enumerable: false,
-          configurable: true
-      });
-      Object.defineProperty(Buffer.prototype, "length", {
-          /**
-           * @public
-           * @property {number} length
-           * @description 获取 Buffer 长度
-           * @returns {number}
-           */
-          get: function () {
-              return this._length;
-          },
-          /**
-           * @public
-           * @property {number} length
-           * @description 设置 Buffer 长度
-           * @description 如果将长度设置为小于当前长度的值，将会截断该字节数组
-           * @description 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧
-           */
-          set: function (value) {
-              var length = value - this._length;
-              if (length > 0) {
-                  this.alloc(length);
-              }
-              else if (length < 0) {
-                  this._length = value;
-              }
-              if (this._offset > value) {
-                  this._offset = value;
-              }
-          },
-          enumerable: false,
-          configurable: true
-      });
-      Object.defineProperty(Buffer.prototype, "buffer", {
-          /**
-           * @public
-           * @property {ArrayBuffer} buffer
-           * @description 获取 ArrayBuffer 缓冲区
-           * @returns {ArrayBuffer}
-           */
-          get: function () {
-              return this._bytes.buffer.slice(0, this._length);
-          },
-          enumerable: false,
-          configurable: true
-      });
-      Object.defineProperty(Buffer.prototype, "bytes", {
-          /**
-           * @public
-           * @property {Uint8Array} bytes
-           * @description 获取 Uint8Array 缓冲区
-           * @returns {Uint8Array}
-           */
-          get: function () {
-              return this._bytes.slice(0, this._length);
-          },
-          enumerable: false,
-          configurable: true
-      });
-      Object.defineProperty(Buffer.prototype, "readAvailable", {
-          /**
-           * @public
-           * @property {number} readAvailable
-           * @description 获取剩余可读字节长度
-           * @returns {number}
-           */
-          get: function () {
-              return this._length - this._offset;
-          },
-          enumerable: false,
-          configurable: true
-      });
-      Object.defineProperty(Buffer.prototype, "bytesAvailable", {
-          /**
-           * @public
-           * @property {number} bytesAvailable
-           * @description 获取剩余可写字节长度
-           * @returns {number}
-           */
-          get: function () {
-              return this._bytes.length - this._offset;
-          },
-          enumerable: false,
-          configurable: true
-      });
-      /**
-       * @protected
-       * @method stepOffset
-       * @description 偏移读写指针
-       * @param {number} offset
-       */
-      Buffer.prototype.stepOffset = function (offset) {
-          this.offset = this._offset + offset;
-      };
-      /**
-       * @protected
-       * @method alloc
-       * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
-       * @param {number} length
-       */
-      Buffer.prototype.alloc = function (length) {
-          if (length > 0) {
-              length += this.offset;
-              if (length > this._bytes.length) {
-                  var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
-                  bytes.set(this._bytes);
-                  this._bytes = bytes;
-                  this._dataView = new DataView(bytes.buffer);
-              }
-              this._length = Math.max(length, this._length);
-          }
-      };
-      /**
-       * @public
-       * @method clear
-       * @description 清除缓冲区数据并重置默认状态
-       */
-      Buffer.prototype.clear = function () {
-          this._offset = 0;
-          this._length = 0;
-          this._bytes = new Uint8Array(this._initLength);
-          this._dataView = new DataView(this._bytes.buffer);
-      };
-      /**
-       * @public
-       * @method writeInt8
-       * @description 在缓冲区中写入一个有符号整数
-       * @param {number} value 介于 -128 和 127 之间的整数
-       */
-      Buffer.prototype.writeInt8 = function (value) {
-          this.alloc(1 /* INT8 */);
-          this._dataView.setInt8(this._offset, value);
-          this.stepOffset(1 /* INT8 */);
-      };
-      /**
-       * @public
-       * @method writeUint8
-       * @description 在缓冲区中写入一个无符号整数
-       * @param {number} value 介于 0 和 255 之间的整数
-       */
-      Buffer.prototype.writeUint8 = function (value) {
-          this.alloc(1 /* UINT8 */);
-          this._dataView.setUint8(this._offset, value);
-          this.stepOffset(1 /* UINT8 */);
-      };
-      /**
-       * @method writeBoolean
-       * @description 在缓冲区中写入布尔值，true 写 1，false写 0
-       * @param {boolean} value 布尔值
-       */
-      Buffer.prototype.writeBoolean = function (value) {
-          this.writeUint8(value ? 1 : 0);
-      };
-      /**
-       * @method writeInt16
-       * @description 在缓冲区中写入一个 16 位有符号整数
-       * @param {number} value 要写入的 16 位有符号整数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeInt16 = function (value, littleEndian) {
-          this.alloc(2 /* INT16 */);
-          this._dataView.setInt16(this._offset, value, littleEndian);
-          this.stepOffset(2 /* INT16 */);
-      };
-      /**
-       * @method writeUint16
-       * @description 在缓冲区中写入一个 16 位无符号整数
-       * @param {number} value 要写入的 16 位无符号整数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeUint16 = function (value, littleEndian) {
-          this.alloc(2 /* UINT16 */);
-          this._dataView.setUint16(this._offset, value, littleEndian);
-          this.stepOffset(2 /* UINT16 */);
-      };
-      /**
-       * @method writeInt32
-       * @description 在缓冲区中写入一个有符号的 32 位有符号整数
-       * @param {number} value 要写入的 32 位有符号整数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeInt32 = function (value, littleEndian) {
-          this.alloc(4 /* INT32 */);
-          this._dataView.setInt32(this._offset, value, littleEndian);
-          this.stepOffset(4 /* INT32 */);
-      };
-      /**
-       * @method writeUint32
-       * @description 在缓冲区中写入一个无符号的 32 位无符号整数
-       * @param {number} value 要写入的 32 位无符号整数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeUint32 = function (value, littleEndian) {
-          this.alloc(4 /* UINT32 */);
-          this._dataView.setUint32(this._offset, value, littleEndian);
-          this.stepOffset(4 /* UINT32 */);
-      };
-      /**
-       * @method writeInt64
-       * @description 在缓冲区中写入一个无符号的 64 位有符号整数
-       * @param {bigint} value 要写入的 32 位有符号整数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeInt64 = function (value, littleEndian) {
-          this.alloc(8 /* INI64 */);
-          this._dataView.setBigInt64(this._offset, value, littleEndian);
-          this.stepOffset(8 /* INI64 */);
-      };
-      /**
-       * @method writeUint64
-       * @description 在缓冲区中写入一个无符号的 64 位无符号整数
-       * @param {bigint} value 要写入的 64 位无符号整数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeUint64 = function (value, littleEndian) {
-          this.alloc(8 /* UINT64 */);
-          this._dataView.setBigUint64(this._offset, value, littleEndian);
-          this.stepOffset(8 /* UINT64 */);
-      };
-      /**
-       * @method writeFloat32
-       * @description 在缓冲区中写入一个 IEEE 754 单精度 32 位浮点数
-       * @param {number} value 单精度 32 位浮点数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeFloat32 = function (value, littleEndian) {
-          this.alloc(4 /* FLOAT32 */);
-          this._dataView.setFloat32(this._offset, value, littleEndian);
-          this.stepOffset(4 /* FLOAT32 */);
-      };
-      /**
-       * @method writeFloat64
-       * @description 在缓冲区中写入一个 IEEE 754 双精度 64 位浮点数
-       * @param {number} value 双精度 64 位浮点数
-       * @param {boolean} [littleEndian] 是否为小端字节序
-       */
-      Buffer.prototype.writeFloat64 = function (value, littleEndian) {
-          this.alloc(8 /* FLOAT64 */);
-          this._dataView.setFloat64(this._offset, value, littleEndian);
-          this.stepOffset(8 /* FLOAT64 */);
-      };
-      /**
-       * @method writeBytes
-       * @description 在缓冲区中写入 Uint8Array 对象
-       * @param {number} [begin] Uint8Array 对象开始索引
-       * @param {number} [end] Uint8Array 对象结束索引
-       */
-      Buffer.prototype.writeBytes = function (bytes, begin, end) {
-          if (begin === void 0) { begin = 0; }
-          if (end === void 0) { end = bytes.length; }
-          var length = calcSubLength(bytes.length, begin, end);
-          if (length > 0) {
-              this.alloc(length);
-              this._bytes.set(bytes.subarray(begin, end), this._offset);
-              this.stepOffset(length);
-          }
-      };
-      /**
-       * @method write
-       * @description 将字符串用指定编码写入字节流
-       * @param {string} value 要写入的字符串
-       * @param {string} [encoding] 字符串编码
-       */
-      Buffer.prototype.write = function (value, encoding) {
-          this.writeBytes(encode$2(value, encoding));
-      };
-      /**
-       * @method readInt8
-       * @description 从缓冲区中读取有符号的整数
-       * @returns {number} 介于 -128 和 127 之间的整数
-       */
-      Buffer.prototype.readInt8 = function () {
-          var value = this._dataView.getInt8(this._offset);
-          this.stepOffset(1 /* INT8 */);
-          return value;
-      };
-      /**
-       * @method readUint8
-       * @description 从缓冲区中读取无符号的整数
-       * @returns {number} 介于 0 和 255 之间的无符号整数
-       */
-      Buffer.prototype.readUint8 = function () {
-          var value = this._dataView.getUint8(this._offset);
-          this.stepOffset(1 /* UINT8 */);
-          return value;
-      };
-      /**
-       * @method readBoolean
-       * @description 从缓冲区中读取布尔值
-       * @returns {boolean} 如果字节非零，则返回 true，否则返回 false
-       */
-      Buffer.prototype.readBoolean = function () {
-          return Boolean(this.readUint8());
-      };
-      /**
-       * @method readInt16
-       * @description 从缓冲区中读取一个 16 位有符号整数
-       * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
-       */
-      Buffer.prototype.readInt16 = function (littleEndian) {
-          var value = this._dataView.getInt16(this._offset, littleEndian);
-          this.stepOffset(2 /* INT16 */);
-          return value;
-      };
-      /**
-       * @method readUint16
-       * @description 从缓冲区中读取一个 16 位无符号整数
-       * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
-       */
-      Buffer.prototype.readUint16 = function (littleEndian) {
-          var value = this._dataView.getUint16(this._offset, littleEndian);
-          this.stepOffset(2 /* UINT16 */);
-          return value;
-      };
-      /**
-       * @method readInt32
-       * @description 从缓冲区中读取一个 32 位有符号整数
-       * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
-       */
-      Buffer.prototype.readInt32 = function (littleEndian) {
-          var value = this._dataView.getInt32(this._offset, littleEndian);
-          this.stepOffset(4 /* INT32 */);
-          return value;
-      };
-      /**
-       * @method readUint32
-       * @description 从缓冲区中读取一个 32 位无符号整数
-       * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
-       */
-      Buffer.prototype.readUint32 = function (littleEndian) {
-          var value = this._dataView.getUint32(this._offset, littleEndian);
-          this.stepOffset(4 /* UINT32 */);
-          return value;
-      };
-      /**
-       * @method readInt64
-       * @description 从缓冲区中读取一个 64 位有符号整数
-       * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
-       */
-      Buffer.prototype.readInt64 = function (littleEndian) {
-          var value = this._dataView.getBigInt64(this._offset, littleEndian);
-          this.stepOffset(8 /* INI64 */);
-          return value;
-      };
-      /**
-       * @method readUint64
-       * @description 从缓冲区中读取一个 64 位无符号整数
-       * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
-       */
-      Buffer.prototype.readUint64 = function (littleEndian) {
-          var value = this._dataView.getBigUint64(this._offset, littleEndian);
-          this.stepOffset(8 /* UINT64 */);
-          return value;
-      };
-      /**
-       * @method readFloat32
-       * @description 从缓冲区中读取一个 IEEE 754 单精度 32 位浮点数
-       * @returns {number} 单精度 32 位浮点数
-       */
-      Buffer.prototype.readFloat32 = function (littleEndian) {
-          var value = this._dataView.getFloat32(this._offset, littleEndian);
-          this.stepOffset(4 /* FLOAT32 */);
-          return value;
-      };
-      /**
-       * @method readFloat64
-       * @description 从缓冲区中读取一个 IEEE 754 双精度 64 位浮点数
-       * @returns {number} 双精度 64 位浮点数
-       */
-      Buffer.prototype.readFloat64 = function (littleEndian) {
-          var value = this._dataView.getFloat64(this._offset, littleEndian);
-          this.stepOffset(8 /* FLOAT64 */);
-          return value;
-      };
-      /**
-       * @method writeBytes
-       * @description 从缓冲区中读取指定长度的 Uint8Array 对象
-       * @param {number} length 读取的字节长度
-       * @returns {Uint8Array}
-       */
-      Buffer.prototype.readBytes = function (length) {
-          if (length >= 0) {
-              var end = this._offset + length;
-              if (end <= this._length + 1) {
-                  var bytes = this._bytes.slice(this._offset, end);
-                  this.stepOffset(length);
-                  return bytes;
-              }
-          }
-          throw new RangeError('Offset is outside the bounds of the DataView');
-      };
-      /**
-       * @method read
-       * @description 从缓冲区中读取一个字符串
-       * @param {number} length 读取的字节长度
-       * @param {string} [encoding] 字符串编码
-       * @returns {string} 指定编码的字符串
-       */
-      Buffer.prototype.read = function (length, encoding) {
-          return decode$2(this.readBytes(length), encoding);
-      };
-      /**
-       * @override
-       * @method toString
-       * @description 获取 Buffer 二进制编码字符串
-       * @returns {string}
-       */
-      Buffer.prototype.toString = function () {
-          // 二进制编码字符串
-          var binary = '';
-          // 提前获取 bytes，防止重复计算
-          var bytes = this.bytes;
-          var length = bytes.length;
-          // 获取二进制编码
-          for (var i = 0; i < length; i++) {
-              binary += mapping$1[bytes[i]];
-          }
-          // 返回二进制编码
-          return binary;
-      };
-      return Buffer;
-  }());
+    /**
+     * @module Buffer
+     */
+    /**
+     * @class Buffer
+     * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
+     */
+    var Buffer = /*#__PURE__*/ (function () {
+        /**
+         * @constructor
+         * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
+         */
+        function Buffer(length, pageSize) {
+            if (length === void 0) { length = 0; }
+            if (pageSize === void 0) { pageSize = 4096; }
+            // 已使用字节长度
+            this._length = 0;
+            // 读写指针位置
+            this._offset = 0;
+            this._pageSize = pageSize;
+            this._initLength = calcBufferLength(length, pageSize);
+            this._bytes = new Uint8Array(this._initLength);
+            this._dataView = new DataView(this._bytes.buffer);
+        }
+        Object.defineProperty(Buffer.prototype, "offset", {
+            /**
+             * @public
+             * @property {number} offset
+             * @description 获取读写指针的位置
+             * @returns {number}
+             */
+            get: function () {
+                return this._offset;
+            },
+            /**
+             * @public
+             * @property {number} offset
+             * @description 设置读写指针位置，以字节为单位
+             * @description 下一次调用读写方法时将在此位置开始读写
+             */
+            set: function (value) {
+                this._offset = Math.max(0, Math.min(value, this._length));
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Buffer.prototype, "length", {
+            /**
+             * @public
+             * @property {number} length
+             * @description 获取 Buffer 长度
+             * @returns {number}
+             */
+            get: function () {
+                return this._length;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Buffer.prototype, "buffer", {
+            /**
+             * @public
+             * @property {ArrayBuffer} buffer
+             * @description 获取 ArrayBuffer 缓冲区
+             * @returns {ArrayBuffer}
+             */
+            get: function () {
+                return this._bytes.buffer.slice(0, this._length);
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Buffer.prototype, "bytes", {
+            /**
+             * @public
+             * @property {Uint8Array} bytes
+             * @description 获取 Uint8Array 缓冲区
+             * @returns {Uint8Array}
+             */
+            get: function () {
+                return this._bytes.slice(0, this._length);
+            },
+            enumerable: false,
+            configurable: true
+        });
+        /**
+         * @protected
+         * @method alloc
+         * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
+         * @param {number} length
+         */
+        Buffer.prototype.alloc = function (length) {
+            if (length > 0) {
+                length += this.offset;
+                if (length > this._bytes.length) {
+                    var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
+                    bytes.set(this._bytes);
+                    this._bytes = bytes;
+                    this._dataView = new DataView(bytes.buffer);
+                }
+                if (length > this._length) {
+                    this._length = length;
+                }
+            }
+        };
+        /**
+         * @protected
+         * @method stepOffset
+         * @description 偏移读写指针
+         * @param {number} offset
+         */
+        Buffer.prototype.stepOffset = function (offset) {
+            this.offset = this._offset + offset;
+        };
+        /**
+         * @public
+         * @method writeInt8
+         * @description 在缓冲区中写入一个有符号整数
+         * @param {number} value 介于 -128 和 127 之间的整数
+         */
+        Buffer.prototype.writeInt8 = function (value) {
+            this.alloc(1 /* INT8 */);
+            this._dataView.setInt8(this._offset, value);
+            this.stepOffset(1 /* INT8 */);
+        };
+        /**
+         * @public
+         * @method writeUint8
+         * @description 在缓冲区中写入一个无符号整数
+         * @param {number} value 介于 0 和 255 之间的整数
+         */
+        Buffer.prototype.writeUint8 = function (value) {
+            this.alloc(1 /* UINT8 */);
+            this._dataView.setUint8(this._offset, value);
+            this.stepOffset(1 /* UINT8 */);
+        };
+        /**
+         * @method writeBoolean
+         * @description 在缓冲区中写入布尔值，true 写 1，false写 0
+         * @param {boolean} value 布尔值
+         */
+        Buffer.prototype.writeBoolean = function (value) {
+            this.writeUint8(value ? 1 : 0);
+        };
+        /**
+         * @method writeInt16
+         * @description 在缓冲区中写入一个 16 位有符号整数
+         * @param {number} value 要写入的 16 位有符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeInt16 = function (value, littleEndian) {
+            this.alloc(2 /* INT16 */);
+            this._dataView.setInt16(this._offset, value, littleEndian);
+            this.stepOffset(2 /* INT16 */);
+        };
+        /**
+         * @method writeUint16
+         * @description 在缓冲区中写入一个 16 位无符号整数
+         * @param {number} value 要写入的 16 位无符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeUint16 = function (value, littleEndian) {
+            this.alloc(2 /* UINT16 */);
+            this._dataView.setUint16(this._offset, value, littleEndian);
+            this.stepOffset(2 /* UINT16 */);
+        };
+        /**
+         * @method writeInt32
+         * @description 在缓冲区中写入一个有符号的 32 位有符号整数
+         * @param {number} value 要写入的 32 位有符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeInt32 = function (value, littleEndian) {
+            this.alloc(4 /* INT32 */);
+            this._dataView.setInt32(this._offset, value, littleEndian);
+            this.stepOffset(4 /* INT32 */);
+        };
+        /**
+         * @method writeUint32
+         * @description 在缓冲区中写入一个无符号的 32 位无符号整数
+         * @param {number} value 要写入的 32 位无符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeUint32 = function (value, littleEndian) {
+            this.alloc(4 /* UINT32 */);
+            this._dataView.setUint32(this._offset, value, littleEndian);
+            this.stepOffset(4 /* UINT32 */);
+        };
+        /**
+         * @method writeInt64
+         * @description 在缓冲区中写入一个无符号的 64 位有符号整数
+         * @param {bigint} value 要写入的 32 位有符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeInt64 = function (value, littleEndian) {
+            this.alloc(8 /* INI64 */);
+            this._dataView.setBigInt64(this._offset, value, littleEndian);
+            this.stepOffset(8 /* INI64 */);
+        };
+        /**
+         * @method writeUint64
+         * @description 在缓冲区中写入一个无符号的 64 位无符号整数
+         * @param {bigint} value 要写入的 64 位无符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeUint64 = function (value, littleEndian) {
+            this.alloc(8 /* UINT64 */);
+            this._dataView.setBigUint64(this._offset, value, littleEndian);
+            this.stepOffset(8 /* UINT64 */);
+        };
+        /**
+         * @method writeFloat32
+         * @description 在缓冲区中写入一个 IEEE 754 单精度 32 位浮点数
+         * @param {number} value 单精度 32 位浮点数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeFloat32 = function (value, littleEndian) {
+            this.alloc(4 /* FLOAT32 */);
+            this._dataView.setFloat32(this._offset, value, littleEndian);
+            this.stepOffset(4 /* FLOAT32 */);
+        };
+        /**
+         * @method writeFloat64
+         * @description 在缓冲区中写入一个 IEEE 754 双精度 64 位浮点数
+         * @param {number} value 双精度 64 位浮点数
+         * @param {boolean} [littleEndian] 是否为小端字节序
+         */
+        Buffer.prototype.writeFloat64 = function (value, littleEndian) {
+            this.alloc(8 /* FLOAT64 */);
+            this._dataView.setFloat64(this._offset, value, littleEndian);
+            this.stepOffset(8 /* FLOAT64 */);
+        };
+        /**
+         * @method writeBytes
+         * @description 在缓冲区中写入 Uint8Array 对象
+         * @param {number} [begin] Uint8Array 对象开始索引
+         * @param {number} [end] Uint8Array 对象结束索引
+         */
+        Buffer.prototype.writeBytes = function (bytes, begin, end) {
+            if (begin === void 0) { begin = 0; }
+            if (end === void 0) { end = bytes.length; }
+            var length = calcSubLength(bytes.length, begin, end);
+            if (length > 0) {
+                this.alloc(length);
+                this._bytes.set(bytes.subarray(begin, end), this._offset);
+                this.stepOffset(length);
+            }
+        };
+        /**
+         * @method write
+         * @description 将字符串用指定编码写入字节流
+         * @param {string} value 要写入的字符串
+         * @param {string} [encoding] 字符串编码
+         */
+        Buffer.prototype.write = function (value, encoding) {
+            this.writeBytes(encode$2(value, encoding));
+        };
+        /**
+         * @method readInt8
+         * @description 从缓冲区中读取有符号的整数
+         * @returns {number} 介于 -128 和 127 之间的整数
+         */
+        Buffer.prototype.readInt8 = function () {
+            var value = this._dataView.getInt8(this._offset);
+            this.stepOffset(1 /* INT8 */);
+            return value;
+        };
+        /**
+         * @method readUint8
+         * @description 从缓冲区中读取无符号的整数
+         * @returns {number} 介于 0 和 255 之间的无符号整数
+         */
+        Buffer.prototype.readUint8 = function () {
+            var value = this._dataView.getUint8(this._offset);
+            this.stepOffset(1 /* UINT8 */);
+            return value;
+        };
+        /**
+         * @method readBoolean
+         * @description 从缓冲区中读取布尔值
+         * @returns {boolean} 如果字节非零，则返回 true，否则返回 false
+         */
+        Buffer.prototype.readBoolean = function () {
+            return Boolean(this.readUint8());
+        };
+        /**
+         * @method readInt16
+         * @description 从缓冲区中读取一个 16 位有符号整数
+         * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
+         */
+        Buffer.prototype.readInt16 = function (littleEndian) {
+            var value = this._dataView.getInt16(this._offset, littleEndian);
+            this.stepOffset(2 /* INT16 */);
+            return value;
+        };
+        /**
+         * @method readUint16
+         * @description 从缓冲区中读取一个 16 位无符号整数
+         * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
+         */
+        Buffer.prototype.readUint16 = function (littleEndian) {
+            var value = this._dataView.getUint16(this._offset, littleEndian);
+            this.stepOffset(2 /* UINT16 */);
+            return value;
+        };
+        /**
+         * @method readInt32
+         * @description 从缓冲区中读取一个 32 位有符号整数
+         * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
+         */
+        Buffer.prototype.readInt32 = function (littleEndian) {
+            var value = this._dataView.getInt32(this._offset, littleEndian);
+            this.stepOffset(4 /* INT32 */);
+            return value;
+        };
+        /**
+         * @method readUint32
+         * @description 从缓冲区中读取一个 32 位无符号整数
+         * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
+         */
+        Buffer.prototype.readUint32 = function (littleEndian) {
+            var value = this._dataView.getUint32(this._offset, littleEndian);
+            this.stepOffset(4 /* UINT32 */);
+            return value;
+        };
+        /**
+         * @method readInt64
+         * @description 从缓冲区中读取一个 64 位有符号整数
+         * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
+         */
+        Buffer.prototype.readInt64 = function (littleEndian) {
+            var value = this._dataView.getBigInt64(this._offset, littleEndian);
+            this.stepOffset(8 /* INI64 */);
+            return value;
+        };
+        /**
+         * @method readUint64
+         * @description 从缓冲区中读取一个 64 位无符号整数
+         * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
+         */
+        Buffer.prototype.readUint64 = function (littleEndian) {
+            var value = this._dataView.getBigUint64(this._offset, littleEndian);
+            this.stepOffset(8 /* UINT64 */);
+            return value;
+        };
+        /**
+         * @method readFloat32
+         * @description 从缓冲区中读取一个 IEEE 754 单精度 32 位浮点数
+         * @returns {number} 单精度 32 位浮点数
+         */
+        Buffer.prototype.readFloat32 = function (littleEndian) {
+            var value = this._dataView.getFloat32(this._offset, littleEndian);
+            this.stepOffset(4 /* FLOAT32 */);
+            return value;
+        };
+        /**
+         * @method readFloat64
+         * @description 从缓冲区中读取一个 IEEE 754 双精度 64 位浮点数
+         * @returns {number} 双精度 64 位浮点数
+         */
+        Buffer.prototype.readFloat64 = function (littleEndian) {
+            var value = this._dataView.getFloat64(this._offset, littleEndian);
+            this.stepOffset(8 /* FLOAT64 */);
+            return value;
+        };
+        /**
+         * @method writeBytes
+         * @description 从缓冲区中读取指定长度的 Uint8Array 对象
+         * @param {number} length 读取的字节长度
+         * @returns {Uint8Array}
+         */
+        Buffer.prototype.readBytes = function (length) {
+            if (length >= 0) {
+                var end = this._offset + length;
+                if (end <= this._length) {
+                    var bytes = this._bytes.slice(this._offset, end);
+                    this.stepOffset(length);
+                    return bytes;
+                }
+            }
+            throw new RangeError('Offset is outside the bounds of the DataView');
+        };
+        /**
+         * @method read
+         * @description 从缓冲区中读取一个字符串
+         * @param {number} length 读取的字节长度
+         * @param {string} [encoding] 字符串编码
+         * @returns {string} 指定编码的字符串
+         */
+        Buffer.prototype.read = function (length, encoding) {
+            return decode$2(this.readBytes(length), encoding);
+        };
+        /**
+         * @override
+         * @method toString
+         * @description 获取 Buffer 二进制编码字符串
+         * @returns {string}
+         */
+        Buffer.prototype.toString = function () {
+            // 二进制编码字符串
+            var binary = '';
+            // 提前获取 bytes，防止重复计算
+            var bytes = this.bytes;
+            var length = bytes.length;
+            // 获取二进制编码
+            for (var i = 0; i < length; i++) {
+                binary += mapping$1[bytes[i]];
+            }
+            // 返回二进制编码
+            return binary;
+        };
+        /**
+         * @public
+         * @method clear
+         * @description 清除缓冲区数据并重置默认状态
+         */
+        Buffer.prototype.clear = function () {
+            this._offset = 0;
+            this._length = 0;
+            this._bytes = new Uint8Array(this._initLength);
+            this._dataView = new DataView(this._bytes.buffer);
+        };
+        return Buffer;
+    }());
 
-  /**
-   * @module examples
-   */
-  var timer;
-  var index = 0;
-  var view = document.getElementById('view');
-  function onStart() {
-      onStop();
-      var buffer = new Buffer();
-      buffer.write(++index + ": A buffer tool for javascript.");
-      view.innerHTML = hex(buffer.bytes);
-      timer = window.setTimeout(onStart, 16);
-  }
-  function onStop() {
-      clearTimeout(timer);
-  }
-  document.getElementById('start').addEventListener('click', onStart, false);
-  document.getElementById('stop').addEventListener('click', onStop, false);
+    /**
+     * @module examples
+     */
+    var timer;
+    var index = 0;
+    var view = document.getElementById('view');
+    function onStart() {
+        onStop();
+        var buffer = new Buffer();
+        buffer.write(++index + ": A buffer tool for javascript.");
+        view.innerHTML = hex(buffer.bytes);
+        timer = window.setTimeout(onStart, 16);
+    }
+    function onStop() {
+        clearTimeout(timer);
+    }
+    document.getElementById('start').addEventListener('click', onStart, false);
+    document.getElementById('stop').addEventListener('click', onStop, false);
 
 })));

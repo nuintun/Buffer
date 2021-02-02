@@ -2,9 +2,9 @@
  * @module Buffer
  */
 
+import { SizeOf } from './enum';
 import * as utils from './utils';
 import * as Binary from './Binary';
-import { ByteLength } from './enum';
 import * as Encoding from './Encoding';
 
 /**
@@ -65,27 +65,6 @@ export default class Buffer {
   /**
    * @public
    * @property {number} length
-   * @description 设置 Buffer 长度
-   * @description 如果将长度设置为小于当前长度的值，将会截断该字节数组
-   * @description 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧
-   */
-  public set length(value: number) {
-    const length: number = value - this._length;
-
-    if (length > 0) {
-      this.alloc(length);
-    } else if (length < 0) {
-      this._length = value;
-    }
-
-    if (this._offset > value) {
-      this._offset = value;
-    }
-  }
-
-  /**
-   * @public
-   * @property {number} length
    * @description 获取 Buffer 长度
    * @returns {number}
    */
@@ -114,36 +93,6 @@ export default class Buffer {
   }
 
   /**
-   * @public
-   * @property {number} readAvailable
-   * @description 获取剩余可读字节长度
-   * @returns {number}
-   */
-  public get readAvailable(): number {
-    return this._length - this._offset;
-  }
-
-  /**
-   * @public
-   * @property {number} bytesAvailable
-   * @description 获取剩余可写字节长度
-   * @returns {number}
-   */
-  public get bytesAvailable(): number {
-    return this._bytes.length - this._offset;
-  }
-
-  /**
-   * @protected
-   * @method stepOffset
-   * @description 偏移读写指针
-   * @param {number} offset
-   */
-  protected stepOffset(offset: number): void {
-    this.offset = this._offset + offset;
-  }
-
-  /**
    * @protected
    * @method alloc
    * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
@@ -162,20 +111,20 @@ export default class Buffer {
         this._dataView = new DataView(bytes.buffer);
       }
 
-      this._length = Math.max(length, this._length);
+      if (length > this._length) {
+        this._length = length;
+      }
     }
   }
 
   /**
-   * @public
-   * @method clear
-   * @description 清除缓冲区数据并重置默认状态
+   * @protected
+   * @method stepOffset
+   * @description 偏移读写指针
+   * @param {number} offset
    */
-  public clear(): void {
-    this._offset = 0;
-    this._length = 0;
-    this._bytes = new Uint8Array(this._initLength);
-    this._dataView = new DataView(this._bytes.buffer);
+  protected stepOffset(offset: number): void {
+    this.offset = this._offset + offset;
   }
 
   /**
@@ -185,9 +134,9 @@ export default class Buffer {
    * @param {number} value 介于 -128 和 127 之间的整数
    */
   public writeInt8(value: number): void {
-    this.alloc(ByteLength.INT8);
+    this.alloc(SizeOf.INT8);
     this._dataView.setInt8(this._offset, value);
-    this.stepOffset(ByteLength.INT8);
+    this.stepOffset(SizeOf.INT8);
   }
 
   /**
@@ -197,9 +146,9 @@ export default class Buffer {
    * @param {number} value 介于 0 和 255 之间的整数
    */
   public writeUint8(value: number): void {
-    this.alloc(ByteLength.UINT8);
+    this.alloc(SizeOf.UINT8);
     this._dataView.setUint8(this._offset, value);
-    this.stepOffset(ByteLength.UINT8);
+    this.stepOffset(SizeOf.UINT8);
   }
 
   /**
@@ -218,9 +167,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt16(value: number, littleEndian?: boolean): void {
-    this.alloc(ByteLength.INT16);
+    this.alloc(SizeOf.INT16);
     this._dataView.setInt16(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.INT16);
+    this.stepOffset(SizeOf.INT16);
   }
 
   /**
@@ -230,9 +179,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeUint16(value: number, littleEndian?: boolean): void {
-    this.alloc(ByteLength.UINT16);
+    this.alloc(SizeOf.UINT16);
     this._dataView.setUint16(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.UINT16);
+    this.stepOffset(SizeOf.UINT16);
   }
 
   /**
@@ -242,9 +191,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt32(value: number, littleEndian?: boolean): void {
-    this.alloc(ByteLength.INT32);
+    this.alloc(SizeOf.INT32);
     this._dataView.setInt32(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.INT32);
+    this.stepOffset(SizeOf.INT32);
   }
 
   /**
@@ -254,9 +203,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeUint32(value: number, littleEndian?: boolean): void {
-    this.alloc(ByteLength.UINT32);
+    this.alloc(SizeOf.UINT32);
     this._dataView.setUint32(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.UINT32);
+    this.stepOffset(SizeOf.UINT32);
   }
 
   /**
@@ -266,9 +215,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt64(value: bigint, littleEndian?: boolean): void {
-    this.alloc(ByteLength.INI64);
+    this.alloc(SizeOf.INI64);
     this._dataView.setBigInt64(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.INI64);
+    this.stepOffset(SizeOf.INI64);
   }
 
   /**
@@ -278,9 +227,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeUint64(value: bigint, littleEndian?: boolean): void {
-    this.alloc(ByteLength.UINT64);
+    this.alloc(SizeOf.UINT64);
     this._dataView.setBigUint64(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.UINT64);
+    this.stepOffset(SizeOf.UINT64);
   }
 
   /**
@@ -290,9 +239,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeFloat32(value: number, littleEndian?: boolean): void {
-    this.alloc(ByteLength.FLOAT32);
+    this.alloc(SizeOf.FLOAT32);
     this._dataView.setFloat32(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.FLOAT32);
+    this.stepOffset(SizeOf.FLOAT32);
   }
 
   /**
@@ -302,9 +251,9 @@ export default class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeFloat64(value: number, littleEndian?: boolean): void {
-    this.alloc(ByteLength.FLOAT64);
+    this.alloc(SizeOf.FLOAT64);
     this._dataView.setFloat64(this._offset, value, littleEndian);
-    this.stepOffset(ByteLength.FLOAT64);
+    this.stepOffset(SizeOf.FLOAT64);
   }
 
   /**
@@ -341,7 +290,7 @@ export default class Buffer {
   public readInt8(): number {
     const value: number = this._dataView.getInt8(this._offset);
 
-    this.stepOffset(ByteLength.INT8);
+    this.stepOffset(SizeOf.INT8);
 
     return value;
   }
@@ -354,7 +303,7 @@ export default class Buffer {
   public readUint8(): number {
     const value: number = this._dataView.getUint8(this._offset);
 
-    this.stepOffset(ByteLength.UINT8);
+    this.stepOffset(SizeOf.UINT8);
 
     return value;
   }
@@ -376,7 +325,7 @@ export default class Buffer {
   public readInt16(littleEndian?: boolean): number {
     const value: number = this._dataView.getInt16(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.INT16);
+    this.stepOffset(SizeOf.INT16);
 
     return value;
   }
@@ -389,7 +338,7 @@ export default class Buffer {
   public readUint16(littleEndian?: boolean): number {
     const value: number = this._dataView.getUint16(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.UINT16);
+    this.stepOffset(SizeOf.UINT16);
 
     return value;
   }
@@ -402,7 +351,7 @@ export default class Buffer {
   public readInt32(littleEndian?: boolean): number {
     const value: number = this._dataView.getInt32(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.INT32);
+    this.stepOffset(SizeOf.INT32);
 
     return value;
   }
@@ -415,7 +364,7 @@ export default class Buffer {
   public readUint32(littleEndian?: boolean): number {
     const value: number = this._dataView.getUint32(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.UINT32);
+    this.stepOffset(SizeOf.UINT32);
 
     return value;
   }
@@ -428,7 +377,7 @@ export default class Buffer {
   public readInt64(littleEndian?: boolean): bigint {
     const value: bigint = this._dataView.getBigInt64(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.INI64);
+    this.stepOffset(SizeOf.INI64);
 
     return value;
   }
@@ -441,7 +390,7 @@ export default class Buffer {
   public readUint64(littleEndian?: boolean): bigint {
     const value: bigint = this._dataView.getBigUint64(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.UINT64);
+    this.stepOffset(SizeOf.UINT64);
 
     return value;
   }
@@ -454,7 +403,7 @@ export default class Buffer {
   public readFloat32(littleEndian?: boolean): number {
     const value: number = this._dataView.getFloat32(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.FLOAT32);
+    this.stepOffset(SizeOf.FLOAT32);
 
     return value;
   }
@@ -467,7 +416,7 @@ export default class Buffer {
   public readFloat64(littleEndian?: boolean): number {
     const value: number = this._dataView.getFloat64(this._offset, littleEndian);
 
-    this.stepOffset(ByteLength.FLOAT64);
+    this.stepOffset(SizeOf.FLOAT64);
 
     return value;
   }
@@ -482,7 +431,7 @@ export default class Buffer {
     if (length >= 0) {
       const end: number = this._offset + length;
 
-      if (end <= this._length + 1) {
+      if (end <= this._length) {
         const bytes: Uint8Array = this._bytes.slice(this._offset, end);
 
         this.stepOffset(length);
@@ -526,5 +475,17 @@ export default class Buffer {
 
     // 返回二进制编码
     return binary;
+  }
+
+  /**
+   * @public
+   * @method clear
+   * @description 清除缓冲区数据并重置默认状态
+   */
+  public clear(): void {
+    this._offset = 0;
+    this._length = 0;
+    this._bytes = new Uint8Array(this._initLength);
+    this._dataView = new DataView(this._bytes.buffer);
   }
 }
