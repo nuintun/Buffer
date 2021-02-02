@@ -709,7 +709,7 @@
     /**
      * @module examples
      */
-    var timer;
+    var raf;
     var index = 0;
     var view = document.getElementById('view');
     function onStart() {
@@ -717,10 +717,10 @@
         var buffer = new Buffer();
         buffer.write(++index + ": A buffer tool for javascript.");
         view.innerHTML = hex(buffer.bytes);
-        timer = window.setTimeout(onStart, 16);
+        raf = window.requestAnimationFrame(onStart);
     }
     function onStop() {
-        clearTimeout(timer);
+        window.cancelAnimationFrame(raf);
     }
     document.getElementById('start').addEventListener('click', onStart, false);
     document.getElementById('stop').addEventListener('click', onStop, false);
