@@ -304,7 +304,7 @@
           set: function (value) {
               var length = value - this._length;
               if (length > 0) {
-                  this.grow(length);
+                  this.alloc(length);
               }
               else if (length < 0) {
                   this._length = value;
@@ -324,7 +324,7 @@
            * @returns {ArrayBuffer}
            */
           get: function () {
-              return this._dataView.buffer.slice(0, this._length);
+              return this._bytes.buffer.slice(0, this._length);
           },
           enumerable: false,
           configurable: true
@@ -363,7 +363,7 @@
            * @returns {number}
            */
           get: function () {
-              return this._dataView.byteLength - this._offset;
+              return this._bytes.length - this._offset;
           },
           enumerable: false,
           configurable: true
@@ -379,19 +379,21 @@
       };
       /**
        * @protected
-       * @method grow
-       * @description 扩充指定长度的缓冲区大小，如果缓冲区未溢出则不刷新缓冲区
+       * @method alloc
+       * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
        * @param {number} length
        */
-      Buffer.prototype.grow = function (length) {
-          length = Math.max(this._length, this._offset + length);
-          if (this._dataView.byteLength < length) {
-              var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
-              bytes.set(this._bytes);
-              this._bytes = bytes;
-              this._dataView = new DataView(bytes.buffer);
+      Buffer.prototype.alloc = function (length) {
+          if (length > 0) {
+              length += this.offset;
+              if (length > this._bytes.length) {
+                  var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
+                  bytes.set(this._bytes);
+                  this._bytes = bytes;
+                  this._dataView = new DataView(bytes.buffer);
+              }
+              this._length = Math.max(length, this._length);
           }
-          this._length = length;
       };
       /**
        * @public
@@ -411,7 +413,7 @@
        * @param {number} value 介于 -128 和 127 之间的整数
        */
       Buffer.prototype.writeInt8 = function (value) {
-          this.grow(1 /* INT8 */);
+          this.alloc(1 /* INT8 */);
           this._dataView.setInt8(this._offset, value);
           this.stepOffset(1 /* INT8 */);
       };
@@ -422,7 +424,7 @@
        * @param {number} value 介于 0 和 255 之间的整数
        */
       Buffer.prototype.writeUint8 = function (value) {
-          this.grow(1 /* UINT8 */);
+          this.alloc(1 /* UINT8 */);
           this._dataView.setUint8(this._offset, value);
           this.stepOffset(1 /* UINT8 */);
       };
@@ -441,7 +443,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeInt16 = function (value, littleEndian) {
-          this.grow(2 /* INT16 */);
+          this.alloc(2 /* INT16 */);
           this._dataView.setInt16(this._offset, value, littleEndian);
           this.stepOffset(2 /* INT16 */);
       };
@@ -452,7 +454,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeUint16 = function (value, littleEndian) {
-          this.grow(2 /* UINT16 */);
+          this.alloc(2 /* UINT16 */);
           this._dataView.setUint16(this._offset, value, littleEndian);
           this.stepOffset(2 /* UINT16 */);
       };
@@ -463,7 +465,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeInt32 = function (value, littleEndian) {
-          this.grow(4 /* INT32 */);
+          this.alloc(4 /* INT32 */);
           this._dataView.setInt32(this._offset, value, littleEndian);
           this.stepOffset(4 /* INT32 */);
       };
@@ -474,7 +476,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeUint32 = function (value, littleEndian) {
-          this.grow(4 /* UINT32 */);
+          this.alloc(4 /* UINT32 */);
           this._dataView.setUint32(this._offset, value, littleEndian);
           this.stepOffset(4 /* UINT32 */);
       };
@@ -485,7 +487,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeInt64 = function (value, littleEndian) {
-          this.grow(8 /* INI64 */);
+          this.alloc(8 /* INI64 */);
           this._dataView.setBigInt64(this._offset, value, littleEndian);
           this.stepOffset(8 /* INI64 */);
       };
@@ -496,7 +498,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeUint64 = function (value, littleEndian) {
-          this.grow(8 /* UINT64 */);
+          this.alloc(8 /* UINT64 */);
           this._dataView.setBigUint64(this._offset, value, littleEndian);
           this.stepOffset(8 /* UINT64 */);
       };
@@ -507,7 +509,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeFloat32 = function (value, littleEndian) {
-          this.grow(4 /* FLOAT32 */);
+          this.alloc(4 /* FLOAT32 */);
           this._dataView.setFloat32(this._offset, value, littleEndian);
           this.stepOffset(4 /* FLOAT32 */);
       };
@@ -518,7 +520,7 @@
        * @param {boolean} [littleEndian] 是否为小端字节序
        */
       Buffer.prototype.writeFloat64 = function (value, littleEndian) {
-          this.grow(8 /* FLOAT64 */);
+          this.alloc(8 /* FLOAT64 */);
           this._dataView.setFloat64(this._offset, value, littleEndian);
           this.stepOffset(8 /* FLOAT64 */);
       };
@@ -533,7 +535,7 @@
           if (end === void 0) { end = bytes.length; }
           var length = calcSubLength(bytes.length, begin, end);
           if (length > 0) {
-              this.grow(length);
+              this.alloc(length);
               this._bytes.set(bytes.subarray(begin, end), this._offset);
               this.stepOffset(length);
           }
