@@ -3,6 +3,7 @@
  */
 
 import { SizeOf } from './enum';
+import * as CONST from './const';
 import * as utils from './utils';
 import * as Binary from './Binary';
 import * as Encoding from './Encoding';
@@ -50,11 +51,11 @@ export default class Buffer {
    */
   public set offset(value: number) {
     if (value < 0) {
-      throw new RangeError('Invalid buffer offset');
+      throw new RangeError(CONST.OFFSET_INVALID);
     }
 
     if (value > this._length) {
-      throw new RangeError('Offset is outside the bounds of the Buffer');
+      throw new RangeError(CONST.OFFSET_OVERFLOW);
     }
 
     this._offset = value;
@@ -79,7 +80,7 @@ export default class Buffer {
    */
   public set length(value: number) {
     if (value < 0) {
-      throw new RangeError('Invalid buffer length');
+      throw new RangeError(CONST.LENGTH_INVALID);
     }
 
     if (value > this._bytes.length) {
@@ -156,6 +157,18 @@ export default class Buffer {
    */
   protected stepOffset(offset: number): void {
     this.offset = this._offset + offset;
+  }
+
+  /**
+   * @protected
+   * @method assertRead
+   * @description 读取断言，防止越界读取
+   * @param {number} length
+   */
+  protected assertRead(length: number): void {
+    if (this._offset + length > this._length) {
+      throw new RangeError(CONST.OFFSET_OVERFLOW);
+    }
   }
 
   /**
@@ -319,6 +332,8 @@ export default class Buffer {
    * @returns {number} 介于 -128 和 127 之间的整数
    */
   public readInt8(): number {
+    this.assertRead(SizeOf.INT8);
+
     const value: number = this._dataView.getInt8(this._offset);
 
     this.stepOffset(SizeOf.INT8);
@@ -332,6 +347,8 @@ export default class Buffer {
    * @returns {number} 介于 0 和 255 之间的无符号整数
    */
   public readUint8(): number {
+    this.assertRead(SizeOf.UINT8);
+
     const value: number = this._dataView.getUint8(this._offset);
 
     this.stepOffset(SizeOf.UINT8);
@@ -354,6 +371,8 @@ export default class Buffer {
    * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
    */
   public readInt16(littleEndian?: boolean): number {
+    this.assertRead(SizeOf.INT16);
+
     const value: number = this._dataView.getInt16(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.INT16);
@@ -367,6 +386,8 @@ export default class Buffer {
    * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
    */
   public readUint16(littleEndian?: boolean): number {
+    this.assertRead(SizeOf.UINT16);
+
     const value: number = this._dataView.getUint16(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.UINT16);
@@ -380,6 +401,8 @@ export default class Buffer {
    * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
    */
   public readInt32(littleEndian?: boolean): number {
+    this.assertRead(SizeOf.INT32);
+
     const value: number = this._dataView.getInt32(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.INT32);
@@ -393,6 +416,8 @@ export default class Buffer {
    * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
    */
   public readUint32(littleEndian?: boolean): number {
+    this.assertRead(SizeOf.UINT32);
+
     const value: number = this._dataView.getUint32(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.UINT32);
@@ -406,6 +431,8 @@ export default class Buffer {
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
   public readInt64(littleEndian?: boolean): bigint {
+    this.assertRead(SizeOf.INI64);
+
     const value: bigint = this._dataView.getBigInt64(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.INI64);
@@ -419,6 +446,8 @@ export default class Buffer {
    * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
    */
   public readUint64(littleEndian?: boolean): bigint {
+    this.assertRead(SizeOf.UINT64);
+
     const value: bigint = this._dataView.getBigUint64(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.UINT64);
@@ -432,6 +461,8 @@ export default class Buffer {
    * @returns {number} 单精度 32 位浮点数
    */
   public readFloat32(littleEndian?: boolean): number {
+    this.assertRead(SizeOf.FLOAT32);
+
     const value: number = this._dataView.getFloat32(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.FLOAT32);
@@ -445,6 +476,8 @@ export default class Buffer {
    * @returns {number} 双精度 64 位浮点数
    */
   public readFloat64(littleEndian?: boolean): number {
+    this.assertRead(SizeOf.FLOAT64);
+
     const value: number = this._dataView.getFloat64(this._offset, littleEndian);
 
     this.stepOffset(SizeOf.FLOAT64);
@@ -471,7 +504,7 @@ export default class Buffer {
       }
     }
 
-    throw new RangeError('Offset is outside the bounds of the DataView');
+    throw new RangeError(CONST.OFFSET_OVERFLOW);
   }
 
   /**

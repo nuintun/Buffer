@@ -79,6 +79,16 @@ function hex(buffer) {
 }
 
 /**
+ * @module const
+ */
+// 非法长度
+var LENGTH_INVALID = 'Invalid buffer length';
+// 非法读写指针
+var OFFSET_INVALID = 'Invalid buffer offset';
+// 读写指针溢出
+var OFFSET_OVERFLOW = 'Offset is outside the bounds of the Buffer';
+
+/**
  * @module utils
  */
 /**
@@ -277,10 +287,10 @@ var Buffer = /*#__PURE__*/ (function () {
          */
         set: function (value) {
             if (value < 0) {
-                throw new RangeError('Invalid buffer offset');
+                throw new RangeError(OFFSET_INVALID);
             }
             if (value > this._length) {
-                throw new RangeError('Offset is outside the bounds of the Buffer');
+                throw new RangeError(OFFSET_OVERFLOW);
             }
             this._offset = value;
         },
@@ -306,7 +316,7 @@ var Buffer = /*#__PURE__*/ (function () {
          */
         set: function (value) {
             if (value < 0) {
-                throw new RangeError('Invalid buffer length');
+                throw new RangeError(LENGTH_INVALID);
             }
             if (value > this._bytes.length) {
                 this.alloc(value - this._offset);
@@ -375,6 +385,17 @@ var Buffer = /*#__PURE__*/ (function () {
      */
     Buffer.prototype.stepOffset = function (offset) {
         this.offset = this._offset + offset;
+    };
+    /**
+     * @protected
+     * @method assertRead
+     * @description 读取断言，防止越界读取
+     * @param {number} length
+     */
+    Buffer.prototype.assertRead = function (length) {
+        if (this._offset + length > this._length) {
+            throw new RangeError(OFFSET_OVERFLOW);
+        }
     };
     /**
      * @public
@@ -525,6 +546,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 -128 和 127 之间的整数
      */
     Buffer.prototype.readInt8 = function () {
+        this.assertRead(1 /* INT8 */);
         var value = this._dataView.getInt8(this._offset);
         this.stepOffset(1 /* INT8 */);
         return value;
@@ -535,6 +557,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 0 和 255 之间的无符号整数
      */
     Buffer.prototype.readUint8 = function () {
+        this.assertRead(1 /* UINT8 */);
         var value = this._dataView.getUint8(this._offset);
         this.stepOffset(1 /* UINT8 */);
         return value;
@@ -553,6 +576,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
      */
     Buffer.prototype.readInt16 = function (littleEndian) {
+        this.assertRead(2 /* INT16 */);
         var value = this._dataView.getInt16(this._offset, littleEndian);
         this.stepOffset(2 /* INT16 */);
         return value;
@@ -563,6 +587,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
      */
     Buffer.prototype.readUint16 = function (littleEndian) {
+        this.assertRead(2 /* UINT16 */);
         var value = this._dataView.getUint16(this._offset, littleEndian);
         this.stepOffset(2 /* UINT16 */);
         return value;
@@ -573,6 +598,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
      */
     Buffer.prototype.readInt32 = function (littleEndian) {
+        this.assertRead(4 /* INT32 */);
         var value = this._dataView.getInt32(this._offset, littleEndian);
         this.stepOffset(4 /* INT32 */);
         return value;
@@ -583,6 +609,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
      */
     Buffer.prototype.readUint32 = function (littleEndian) {
+        this.assertRead(4 /* UINT32 */);
         var value = this._dataView.getUint32(this._offset, littleEndian);
         this.stepOffset(4 /* UINT32 */);
         return value;
@@ -593,6 +620,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
      */
     Buffer.prototype.readInt64 = function (littleEndian) {
+        this.assertRead(8 /* INI64 */);
         var value = this._dataView.getBigInt64(this._offset, littleEndian);
         this.stepOffset(8 /* INI64 */);
         return value;
@@ -603,6 +631,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
      */
     Buffer.prototype.readUint64 = function (littleEndian) {
+        this.assertRead(8 /* UINT64 */);
         var value = this._dataView.getBigUint64(this._offset, littleEndian);
         this.stepOffset(8 /* UINT64 */);
         return value;
@@ -613,6 +642,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 单精度 32 位浮点数
      */
     Buffer.prototype.readFloat32 = function (littleEndian) {
+        this.assertRead(4 /* FLOAT32 */);
         var value = this._dataView.getFloat32(this._offset, littleEndian);
         this.stepOffset(4 /* FLOAT32 */);
         return value;
@@ -623,6 +653,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @returns {number} 双精度 64 位浮点数
      */
     Buffer.prototype.readFloat64 = function (littleEndian) {
+        this.assertRead(8 /* FLOAT64 */);
         var value = this._dataView.getFloat64(this._offset, littleEndian);
         this.stepOffset(8 /* FLOAT64 */);
         return value;
@@ -642,7 +673,7 @@ var Buffer = /*#__PURE__*/ (function () {
                 return bytes;
             }
         }
-        throw new RangeError('Offset is outside the bounds of the DataView');
+        throw new RangeError(OFFSET_OVERFLOW);
     };
     /**
      * @method read
