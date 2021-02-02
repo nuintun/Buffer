@@ -291,6 +291,24 @@ var Buffer = /*#__PURE__*/ (function () {
         get: function () {
             return this._length;
         },
+        /**
+         * @public
+         * @property {number} length
+         * @description 设置 Buffer 长度
+         * @description 如果将长度设置为小于当前长度的值，将会截断该字节数组
+         * @description 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧
+         */
+        set: function (value) {
+            if (value > this._bytes.length) {
+                this.alloc(value - this._offset);
+            }
+            else {
+                this._length = value;
+            }
+            if (this._offset > value) {
+                this._offset = value;
+            }
+        },
         enumerable: false,
         configurable: true
     });
