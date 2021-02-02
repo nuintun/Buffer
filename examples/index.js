@@ -279,7 +279,13 @@
              * @description 下一次调用读写方法时将在此位置开始读写
              */
             set: function (value) {
-                this._offset = Math.max(0, Math.min(value, this._length));
+                if (value < 0) {
+                    throw new RangeError('Invalid buffer offset');
+                }
+                if (value > this._length) {
+                    throw new RangeError('Offset is outside the bounds of the Buffer');
+                }
+                this._offset = value;
             },
             enumerable: false,
             configurable: true
@@ -302,6 +308,9 @@
              * @description 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧
              */
             set: function (value) {
+                if (value < 0) {
+                    throw new RangeError('Invalid buffer length');
+                }
                 if (value > this._bytes.length) {
                     this.alloc(value - this._offset);
                 }
