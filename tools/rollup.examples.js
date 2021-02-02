@@ -2,11 +2,10 @@
  * @module rollup.examples
  */
 
-import clean from './clean';
 import pkg from '../package.json';
 import treeShake from './plugins/tree-shake';
 import resolve from '@rollup/plugin-node-resolve';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 
 const banner = `/**
  * @module Buffer
@@ -17,8 +16,6 @@ const banner = `/**
  * @see ${pkg.homepage}
  */
 `;
-
-clean('examples/index.js');
 
 export default {
   input: 'examples/index.ts',
