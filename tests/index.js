@@ -85,6 +85,8 @@ function hex(buffer) {
 var LENGTH_INVALID = 'Invalid buffer length';
 // 非法读写指针
 var OFFSET_INVALID = 'Invalid buffer offset';
+// 数据读取溢出
+var READ_OVERFLOW = 'Read is outside the bounds of the Buffer';
 // 读写指针溢出
 var OFFSET_OVERFLOW = 'Offset is outside the bounds of the Buffer';
 
@@ -394,7 +396,7 @@ var Buffer = /*#__PURE__*/ (function () {
      */
     Buffer.prototype.assertRead = function (length) {
         if (this._offset + length > this._length) {
-            throw new RangeError(OFFSET_OVERFLOW);
+            throw new RangeError(READ_OVERFLOW);
         }
     };
     /**
@@ -673,7 +675,7 @@ var Buffer = /*#__PURE__*/ (function () {
                 return bytes;
             }
         }
-        throw new RangeError(OFFSET_OVERFLOW);
+        throw new RangeError(READ_OVERFLOW);
     };
     /**
      * @method read
