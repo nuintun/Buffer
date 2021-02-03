@@ -78,7 +78,7 @@
             }
             hex += "\n";
         }
-        return hex;
+        return hex.trim();
     }
 
     /**
