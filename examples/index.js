@@ -349,13 +349,27 @@
         /**
          * @public
          * @method slice
-         * @description 从指定开始和结束位置截取并返回新的 Buffer 对象
-         * @param {number} begin 开始位置
-         * @param {number} end 结束位置
+         * @description 从指定开始和结束位置索引截取并返回新的 Buffer 对象
+         * @param {number} [start] 截取开始位置索引
+         * @param {number} [end] 截取结束位置索引
+         * @returns {Buffer}
          */
-        Buffer.prototype.slice = function (begin, end) {
-            var bytes = this._bytes.slice(begin, end);
+        Buffer.prototype.slice = function (start, end) {
+            var bytes = this._bytes.slice(start, end);
             return new Buffer(bytes, this._pageSize);
+        };
+        /**
+         * @public
+         * @method copyWithin
+         * @description 从 Buffer 对象中将指定位置的数据复制到以 target 起始的位置
+         * @param {number} target 粘贴开始位置索引
+         * @param {number} start 复制开始位置索引
+         * @param {number} [end] 复制结束位置索引
+         * @returns {Buffer}
+         */
+        Buffer.prototype.copyWithin = function (target, start, end) {
+            this._bytes.copyWithin(target, start, end);
+            return this;
         };
         /**
          * @protected
@@ -518,11 +532,12 @@
         /**
          * @method writeBytes
          * @description 在缓冲区中写入 Uint8Array 对象
-         * @param {number} [begin] Uint8Array 对象开始索引
+         * @param {Uint8Array} bytes 要写入的 Uint8Array 对象
+         * @param {number} [start] Uint8Array 对象开始索引
          * @param {number} [end] Uint8Array 对象结束索引
          */
-        Buffer.prototype.writeBytes = function (bytes, begin, end) {
-            bytes = bytes.subarray(begin, end);
+        Buffer.prototype.writeBytes = function (bytes, start, end) {
+            bytes = bytes.subarray(start, end);
             var length = bytes.length;
             if (length > 0) {
                 this.alloc(length);
@@ -572,6 +587,7 @@
         /**
          * @method readInt16
          * @description 从缓冲区中读取一个 16 位有符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
          */
         Buffer.prototype.readInt16 = function (littleEndian) {
@@ -583,6 +599,7 @@
         /**
          * @method readUint16
          * @description 从缓冲区中读取一个 16 位无符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
          */
         Buffer.prototype.readUint16 = function (littleEndian) {
@@ -594,6 +611,7 @@
         /**
          * @method readInt32
          * @description 从缓冲区中读取一个 32 位有符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
          */
         Buffer.prototype.readInt32 = function (littleEndian) {
@@ -605,6 +623,7 @@
         /**
          * @method readUint32
          * @description 从缓冲区中读取一个 32 位无符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
          */
         Buffer.prototype.readUint32 = function (littleEndian) {
@@ -616,6 +635,7 @@
         /**
          * @method readInt64
          * @description 从缓冲区中读取一个 64 位有符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
          */
         Buffer.prototype.readInt64 = function (littleEndian) {
@@ -627,6 +647,7 @@
         /**
          * @method readUint64
          * @description 从缓冲区中读取一个 64 位无符号整数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
          */
         Buffer.prototype.readUint64 = function (littleEndian) {
@@ -638,6 +659,7 @@
         /**
          * @method readFloat32
          * @description 从缓冲区中读取一个 IEEE 754 单精度 32 位浮点数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {number} 单精度 32 位浮点数
          */
         Buffer.prototype.readFloat32 = function (littleEndian) {
@@ -649,6 +671,7 @@
         /**
          * @method readFloat64
          * @description 从缓冲区中读取一个 IEEE 754 双精度 64 位浮点数
+         * @param {boolean} [littleEndian] 是否为小端字节序
          * @returns {number} 双精度 64 位浮点数
          */
         Buffer.prototype.readFloat64 = function (littleEndian) {
@@ -658,7 +681,7 @@
             return value;
         };
         /**
-         * @method writeBytes
+         * @method readBytes
          * @description 从缓冲区中读取指定长度的 Uint8Array 对象
          * @param {number} length 读取的字节长度
          * @returns {Uint8Array}
@@ -687,7 +710,7 @@
         /**
          * @override
          * @method toString
-         * @description 获取 Buffer 二进制编码字符串
+         * @description 获取 Buffer 对象二进制编码字符串
          * @returns {string}
          */
         Buffer.prototype.toString = function () {
