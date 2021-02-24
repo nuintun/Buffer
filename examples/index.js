@@ -312,6 +312,8 @@
                 }
                 else {
                     this._length = value;
+                    // 重置多余字节
+                    this._bytes.fill(0, value);
                 }
                 if (this._offset > value) {
                     this._offset = value;
