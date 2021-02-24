@@ -375,7 +375,7 @@
          * @protected
          * @method alloc
          * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
-         * @param {number} length
+         * @param {number} length 分配字节长度
          */
         Buffer.prototype.alloc = function (length) {
             if (length > 0) {
@@ -393,18 +393,18 @@
         };
         /**
          * @protected
-         * @method stepOffset
-         * @description 偏移读写指针
-         * @param {number} offset
+         * @method moveOffset
+         * @description 移动读写指针
+         * @param {number} offset 移动偏移量
          */
-        Buffer.prototype.stepOffset = function (offset) {
+        Buffer.prototype.moveOffset = function (offset) {
             this.offset = this._offset + offset;
         };
         /**
          * @protected
          * @method assertRead
          * @description 读取断言，防止越界读取
-         * @param {number} length
+         * @param {number} length 断言字节长度
          */
         Buffer.prototype.assertRead = function (length) {
             if (this._offset + length > this._length) {
@@ -420,7 +420,7 @@
         Buffer.prototype.writeInt8 = function (value) {
             this.alloc(1 /* INT8 */);
             this._dataView.setInt8(this._offset, value);
-            this.stepOffset(1 /* INT8 */);
+            this.moveOffset(1 /* INT8 */);
         };
         /**
          * @public
@@ -431,7 +431,7 @@
         Buffer.prototype.writeUint8 = function (value) {
             this.alloc(1 /* UINT8 */);
             this._dataView.setUint8(this._offset, value);
-            this.stepOffset(1 /* UINT8 */);
+            this.moveOffset(1 /* UINT8 */);
         };
         /**
          * @method writeBoolean
@@ -450,7 +450,7 @@
         Buffer.prototype.writeInt16 = function (value, littleEndian) {
             this.alloc(2 /* INT16 */);
             this._dataView.setInt16(this._offset, value, littleEndian);
-            this.stepOffset(2 /* INT16 */);
+            this.moveOffset(2 /* INT16 */);
         };
         /**
          * @method writeUint16
@@ -461,7 +461,7 @@
         Buffer.prototype.writeUint16 = function (value, littleEndian) {
             this.alloc(2 /* UINT16 */);
             this._dataView.setUint16(this._offset, value, littleEndian);
-            this.stepOffset(2 /* UINT16 */);
+            this.moveOffset(2 /* UINT16 */);
         };
         /**
          * @method writeInt32
@@ -472,7 +472,7 @@
         Buffer.prototype.writeInt32 = function (value, littleEndian) {
             this.alloc(4 /* INT32 */);
             this._dataView.setInt32(this._offset, value, littleEndian);
-            this.stepOffset(4 /* INT32 */);
+            this.moveOffset(4 /* INT32 */);
         };
         /**
          * @method writeUint32
@@ -483,7 +483,7 @@
         Buffer.prototype.writeUint32 = function (value, littleEndian) {
             this.alloc(4 /* UINT32 */);
             this._dataView.setUint32(this._offset, value, littleEndian);
-            this.stepOffset(4 /* UINT32 */);
+            this.moveOffset(4 /* UINT32 */);
         };
         /**
          * @method writeInt64
@@ -494,7 +494,7 @@
         Buffer.prototype.writeInt64 = function (value, littleEndian) {
             this.alloc(8 /* INI64 */);
             this._dataView.setBigInt64(this._offset, value, littleEndian);
-            this.stepOffset(8 /* INI64 */);
+            this.moveOffset(8 /* INI64 */);
         };
         /**
          * @method writeUint64
@@ -505,7 +505,7 @@
         Buffer.prototype.writeUint64 = function (value, littleEndian) {
             this.alloc(8 /* UINT64 */);
             this._dataView.setBigUint64(this._offset, value, littleEndian);
-            this.stepOffset(8 /* UINT64 */);
+            this.moveOffset(8 /* UINT64 */);
         };
         /**
          * @method writeFloat32
@@ -516,7 +516,7 @@
         Buffer.prototype.writeFloat32 = function (value, littleEndian) {
             this.alloc(4 /* FLOAT32 */);
             this._dataView.setFloat32(this._offset, value, littleEndian);
-            this.stepOffset(4 /* FLOAT32 */);
+            this.moveOffset(4 /* FLOAT32 */);
         };
         /**
          * @method writeFloat64
@@ -527,32 +527,22 @@
         Buffer.prototype.writeFloat64 = function (value, littleEndian) {
             this.alloc(8 /* FLOAT64 */);
             this._dataView.setFloat64(this._offset, value, littleEndian);
-            this.stepOffset(8 /* FLOAT64 */);
+            this.moveOffset(8 /* FLOAT64 */);
         };
-        /**
-         * @method writeBytes
-         * @description 在缓冲区中写入 Uint8Array 对象
-         * @param {Uint8Array} bytes 要写入的 Uint8Array 对象
-         * @param {number} [start] Uint8Array 对象开始索引
-         * @param {number} [end] Uint8Array 对象结束索引
-         */
-        Buffer.prototype.writeBytes = function (bytes, start, end) {
-            bytes = bytes.subarray(start, end);
+        Buffer.prototype.write = function (input, start, end) {
+            var bytes;
+            if (input instanceof Uint8Array) {
+                bytes = input.subarray(start, end);
+            }
+            else {
+                bytes = encode$2(input, start);
+            }
             var length = bytes.length;
             if (length > 0) {
                 this.alloc(length);
                 this._bytes.set(bytes, this._offset);
-                this.stepOffset(length);
+                this.moveOffset(length);
             }
-        };
-        /**
-         * @method write
-         * @description 将字符串用指定编码写入字节流
-         * @param {string} value 要写入的字符串
-         * @param {string} [encoding] 字符串编码
-         */
-        Buffer.prototype.write = function (value, encoding) {
-            this.writeBytes(encode$2(value, encoding));
         };
         /**
          * @method readInt8
@@ -562,7 +552,7 @@
         Buffer.prototype.readInt8 = function () {
             this.assertRead(1 /* INT8 */);
             var value = this._dataView.getInt8(this._offset);
-            this.stepOffset(1 /* INT8 */);
+            this.moveOffset(1 /* INT8 */);
             return value;
         };
         /**
@@ -573,7 +563,7 @@
         Buffer.prototype.readUint8 = function () {
             this.assertRead(1 /* UINT8 */);
             var value = this._dataView.getUint8(this._offset);
-            this.stepOffset(1 /* UINT8 */);
+            this.moveOffset(1 /* UINT8 */);
             return value;
         };
         /**
@@ -593,7 +583,7 @@
         Buffer.prototype.readInt16 = function (littleEndian) {
             this.assertRead(2 /* INT16 */);
             var value = this._dataView.getInt16(this._offset, littleEndian);
-            this.stepOffset(2 /* INT16 */);
+            this.moveOffset(2 /* INT16 */);
             return value;
         };
         /**
@@ -605,7 +595,7 @@
         Buffer.prototype.readUint16 = function (littleEndian) {
             this.assertRead(2 /* UINT16 */);
             var value = this._dataView.getUint16(this._offset, littleEndian);
-            this.stepOffset(2 /* UINT16 */);
+            this.moveOffset(2 /* UINT16 */);
             return value;
         };
         /**
@@ -617,7 +607,7 @@
         Buffer.prototype.readInt32 = function (littleEndian) {
             this.assertRead(4 /* INT32 */);
             var value = this._dataView.getInt32(this._offset, littleEndian);
-            this.stepOffset(4 /* INT32 */);
+            this.moveOffset(4 /* INT32 */);
             return value;
         };
         /**
@@ -629,7 +619,7 @@
         Buffer.prototype.readUint32 = function (littleEndian) {
             this.assertRead(4 /* UINT32 */);
             var value = this._dataView.getUint32(this._offset, littleEndian);
-            this.stepOffset(4 /* UINT32 */);
+            this.moveOffset(4 /* UINT32 */);
             return value;
         };
         /**
@@ -641,7 +631,7 @@
         Buffer.prototype.readInt64 = function (littleEndian) {
             this.assertRead(8 /* INI64 */);
             var value = this._dataView.getBigInt64(this._offset, littleEndian);
-            this.stepOffset(8 /* INI64 */);
+            this.moveOffset(8 /* INI64 */);
             return value;
         };
         /**
@@ -653,7 +643,7 @@
         Buffer.prototype.readUint64 = function (littleEndian) {
             this.assertRead(8 /* UINT64 */);
             var value = this._dataView.getBigUint64(this._offset, littleEndian);
-            this.stepOffset(8 /* UINT64 */);
+            this.moveOffset(8 /* UINT64 */);
             return value;
         };
         /**
@@ -665,7 +655,7 @@
         Buffer.prototype.readFloat32 = function (littleEndian) {
             this.assertRead(4 /* FLOAT32 */);
             var value = this._dataView.getFloat32(this._offset, littleEndian);
-            this.stepOffset(4 /* FLOAT32 */);
+            this.moveOffset(4 /* FLOAT32 */);
             return value;
         };
         /**
@@ -677,35 +667,22 @@
         Buffer.prototype.readFloat64 = function (littleEndian) {
             this.assertRead(8 /* FLOAT64 */);
             var value = this._dataView.getFloat64(this._offset, littleEndian);
-            this.stepOffset(8 /* FLOAT64 */);
+            this.moveOffset(8 /* FLOAT64 */);
             return value;
         };
-        /**
-         * @method readBytes
-         * @description 从缓冲区中读取指定长度的 Uint8Array 对象
-         * @param {number} length 读取的字节长度
-         * @returns {Uint8Array}
-         */
-        Buffer.prototype.readBytes = function (length) {
+        Buffer.prototype.read = function (length, encoding) {
             if (length >= 0) {
                 var end = this._offset + length;
                 if (end <= this._length) {
                     var bytes = this._bytes.slice(this._offset, end);
-                    this.stepOffset(length);
+                    this.moveOffset(length);
+                    if (arguments.length >= 2) {
+                        return decode$2(bytes, encoding);
+                    }
                     return bytes;
                 }
             }
             throw new RangeError(READ_OVERFLOW);
-        };
-        /**
-         * @method read
-         * @description 从缓冲区中读取一个字符串
-         * @param {number} length 读取的字节长度
-         * @param {string} [encoding] 字符串编码
-         * @returns {string} 指定编码的字符串
-         */
-        Buffer.prototype.read = function (length, encoding) {
-            return decode$2(this.readBytes(length), encoding);
         };
         /**
          * @override
