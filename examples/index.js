@@ -713,18 +713,22 @@
      */
     var raf;
     var index = 0;
+    var start = document.getElementById('start');
+    var stop = document.getElementById('stop');
     var view = document.getElementById('view');
     function onStart() {
         onStop();
+        var timeStamp = window.performance.now();
         var buffer = new Buffer();
         buffer.write(++index + ": A buffer tool for javascript.");
-        view.innerHTML = hex(buffer.bytes);
+        var performance = window.performance.now() - timeStamp;
+        view.value = hex(buffer.bytes) + "\r\n\r\nperformance: " + performance + "ms";
         raf = window.requestAnimationFrame(onStart);
     }
     function onStop() {
         window.cancelAnimationFrame(raf);
     }
-    document.getElementById('start').addEventListener('click', onStart, false);
-    document.getElementById('stop').addEventListener('click', onStop, false);
+    start.addEventListener('click', onStart, false);
+    stop.addEventListener('click', onStop, false);
 
 })));

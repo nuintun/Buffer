@@ -8,16 +8,22 @@ import Buffer from '../src';
 let raf: number;
 let index: number = 0;
 
-const view: HTMLElement = document.getElementById('view') as HTMLElement;
+const start: HTMLElement = document.getElementById('start') as HTMLElement;
+const stop: HTMLElement = document.getElementById('stop') as HTMLElement;
+const view: HTMLTextAreaElement = document.getElementById('view') as HTMLTextAreaElement;
 
 function onStart() {
   onStop();
+
+  const timeStamp: number = window.performance.now();
 
   const buffer: Buffer = new Buffer();
 
   buffer.write(`${++index}: A buffer tool for javascript.`);
 
-  view.innerHTML = hex(buffer.bytes);
+  const performance: number = window.performance.now() - timeStamp;
+
+  view.value = `${hex(buffer.bytes)}\r\n\r\nperformance: ${performance}ms`;
 
   raf = window.requestAnimationFrame(onStart);
 }
@@ -26,5 +32,5 @@ function onStop() {
   window.cancelAnimationFrame(raf);
 }
 
-(document.getElementById('start') as HTMLElement).addEventListener('click', onStart, false);
-(document.getElementById('stop') as HTMLElement).addEventListener('click', onStop, false);
+start.addEventListener('click', onStart, false);
+stop.addEventListener('click', onStop, false);
