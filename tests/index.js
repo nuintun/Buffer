@@ -16,14 +16,14 @@
  * @type {string[]}
  * @description 已获得的 hex 映射表
  */
-var mapping = [];
+var mapping$1 = [];
 // 字母映射表
 var alphabet = '0123456789ABCDEF';
 // 生成映射表
-for (var i = 0; i < 16; ++i) {
-    var i16 = i * 16;
+for (var i$1 = 0; i$1 < 16; ++i$1) {
+    var i16 = i$1 * 16;
     for (var j = 0; j < 16; ++j) {
-        mapping[i16 + j] = alphabet[i] + alphabet[j];
+        mapping$1[i16 + j] = alphabet[i$1] + alphabet[j];
     }
 }
 /**
@@ -117,10 +117,10 @@ function calcBufferLength(length, pageSize) {
  * @type {string[]}
  * @description 已获得的二进制映射表
  */
-var mapping$1 = [];
+var mapping = [];
 // 生成映射表
-for (var i$1 = 0; i$1 < 256; i$1++) {
-    mapping$1[i$1] = String.fromCharCode(i$1);
+for (var i = 0; i < 256; i++) {
+    mapping[i] = String.fromCharCode(i);
 }
 
 /**
@@ -135,13 +135,13 @@ var decoder = new TextDecoder();
  * @param {string} input
  * @returns {Uint8Array}
  */
-var encode = encoder.encode.bind(encoder);
+var encode$2 = encoder.encode.bind(encoder);
 /**
  * @function decode
  * @param {BufferSource} input
  * @returns {string}
  */
-var decode = decoder.decode.bind(decoder);
+var decode$2 = decoder.decode.bind(decoder);
 
 /**
  * @module Unicode
@@ -187,12 +187,12 @@ function decode$1(input, Buffer) {
  * @param {string} [encoding] 字符串编码
  * @returns {Uint8Array}
  */
-function encode$2(input, encoding) {
+function encode(input, encoding) {
     if (encoding === void 0) { encoding = 'UTF8'; }
     switch (encoding.toUpperCase()) {
         case 'UTF8':
         case 'UTF-8':
-            return encode(input);
+            return encode$2(input);
         case 'UTF16':
         case 'UTF-16':
             return encode$1(input, Uint16Array);
@@ -210,12 +210,12 @@ function encode$2(input, encoding) {
  * @param {string} [encoding] 字符串编码
  * @returns {string}
  */
-function decode$2(input, encoding) {
+function decode(input, encoding) {
     if (encoding === void 0) { encoding = 'UTF8'; }
     switch (encoding.toUpperCase()) {
         case 'UTF8':
         case 'UTF-8':
-            return decode(input);
+            return decode$2(input);
         case 'UTF16':
         case 'UTF-16':
             return decode$1(input, Uint16Array);
@@ -534,7 +534,7 @@ var Buffer = /*#__PURE__*/ (function () {
             bytes = input.subarray(start, end);
         }
         else {
-            bytes = encode$2(input, start);
+            bytes = encode(input, start);
         }
         var length = bytes.length;
         if (length > 0) {
@@ -676,7 +676,7 @@ var Buffer = /*#__PURE__*/ (function () {
                 var bytes = this._bytes.slice(this._offset, end);
                 this.moveOffset(length);
                 if (arguments.length >= 2) {
-                    return decode$2(bytes, encoding);
+                    return decode(bytes, encoding);
                 }
                 return bytes;
             }
@@ -697,7 +697,7 @@ var Buffer = /*#__PURE__*/ (function () {
         var length = bytes.length;
         // 获取二进制编码
         for (var i = 0; i < length; i++) {
-            binary += mapping$1[bytes[i]];
+            binary += mapping[bytes[i]];
         }
         // 返回二进制编码
         return binary;
