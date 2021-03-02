@@ -3,7 +3,7 @@
  */
 
 import hex from './hex';
-import Buffer from '../src';
+import { Buffer, Endian, endianness } from '../src';
 
 /**
  * @function byteLength
@@ -54,5 +54,5 @@ console.log(0xfffefdfcfbfaf1f0n, '->', buffer.readUint64());
 console.log(123456.654321, '->', buffer.readFloat32());
 console.log(987654321.123456789, '->', buffer.readFloat64());
 console.log(desc, '->', buffer.read(byteLength(desc), 'UTF-8'));
-
-process.stdout.write(`\r\n${hex(buffer.bytes)}`);
+console.log(`\r\n${hex(buffer.bytes)}\r\n`);
+console.log('endianness', '->', Endian[endianness()]);

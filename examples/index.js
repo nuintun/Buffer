@@ -240,6 +240,21 @@
         Endian[Endian["Little"] = 1] = "Little";
     })(Endian || (Endian = {}));
     /**
+     * @function endianness
+     * @description 获取系统默认字节序
+     * @returns {Endian}
+     */
+    function endianness() {
+        switch (new Uint8Array(new Uint32Array([0x12345678]))[0]) {
+            case 0x12:
+                return Endian.Big;
+            case 0x78:
+                return Endian.Little;
+            default:
+                throw new TypeError('Unknown endianness');
+        }
+    }
+    /**
      * @class Buffer
      * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
      */
@@ -728,7 +743,7 @@
         var buffer = new Buffer();
         buffer.write(++index + ": A buffer tool for javascript.");
         var performance = window.performance.now() - timeStamp;
-        view.value = hex(buffer.bytes) + "\r\n\r\nperformance: " + performance + "ms";
+        view.value = hex(buffer.bytes) + "\r\n\r\nendianness: " + Endian[endianness()] + "\r\nperformance: " + performance + "ms";
         raf = window.requestAnimationFrame(onStart);
     }
     function onStop() {

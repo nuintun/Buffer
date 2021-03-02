@@ -34,7 +34,7 @@ export function endianness(): Endian {
  * @class Buffer
  * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
  */
-export default class Buffer {
+export class Buffer {
   // 缓冲区页大小
   // 容量不足时按页大小增长
   private _pageSize: number;

@@ -237,6 +237,21 @@ var Endian;
     Endian[Endian["Little"] = 1] = "Little";
 })(Endian || (Endian = {}));
 /**
+ * @function endianness
+ * @description 获取系统默认字节序
+ * @returns {Endian}
+ */
+function endianness() {
+    switch (new Uint8Array(new Uint32Array([0x12345678]))[0]) {
+        case 0x12:
+            return Endian.Big;
+        case 0x78:
+            return Endian.Little;
+        default:
+            throw new TypeError('Unknown endianness');
+    }
+}
+/**
  * @class Buffer
  * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
  */
@@ -757,4 +772,5 @@ console.log(0xfffefdfcfbfaf1f0n, '->', buffer.readUint64());
 console.log(123456.654321, '->', buffer.readFloat32());
 console.log(987654321.123456789, '->', buffer.readFloat64());
 console.log(desc, '->', buffer.read(byteLength(desc), 'UTF-8'));
-process.stdout.write("\r\n" + hex(buffer.bytes));
+console.log("\r\n" + hex(buffer.bytes) + "\r\n");
+console.log('endianness', '->', Endian[endianness()]);

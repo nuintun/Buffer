@@ -3,7 +3,7 @@
  */
 
 import hex from './hex';
-import Buffer from '../src';
+import { Buffer, Endian, endianness } from '../src';
 
 let raf: number;
 let index: number = 0;
@@ -23,7 +23,7 @@ function onStart() {
 
   const performance: number = window.performance.now() - timeStamp;
 
-  view.value = `${hex(buffer.bytes)}\r\n\r\nperformance: ${performance}ms`;
+  view.value = `${hex(buffer.bytes)}\r\n\r\nendianness: ${Endian[endianness()]}\r\nperformance: ${performance}ms`;
 
   raf = window.requestAnimationFrame(onStart);
 }
