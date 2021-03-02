@@ -233,6 +233,12 @@
     /**
      * @module Buffer
      */
+    // 字节序类型
+    var Endian;
+    (function (Endian) {
+        Endian[Endian["Big"] = 0] = "Big";
+        Endian[Endian["Little"] = 1] = "Little";
+    })(Endian || (Endian = {}));
     /**
      * @class Buffer
      * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性

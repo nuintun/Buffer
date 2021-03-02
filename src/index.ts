@@ -8,6 +8,28 @@ import * as utils from './utils';
 import * as Binary from './Binary';
 import * as Encoding from './Encoding';
 
+// 字节序类型
+export enum Endian {
+  Big,
+  Little
+}
+
+/**
+ * @function endianness
+ * @description 获取系统默认字节序
+ * @returns {Endian}
+ */
+export function endianness(): Endian {
+  switch (new Uint8Array(new Uint32Array([0x12345678]))[0]) {
+    case 0x12:
+      return Endian.Big;
+    case 0x78:
+      return Endian.Little;
+    default:
+      throw new TypeError('Unknown endianness');
+  }
+}
+
 /**
  * @class Buffer
  * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
