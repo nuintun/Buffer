@@ -29,12 +29,12 @@ for (var i$1 = 0; i$1 < 16; ++i$1) {
 /**
  * @function zero
  * @description 数字左边补零操作
- * @param {number} num
+ * @param {number} value
  * @param {number} max
  * @returns {string}
  */
-function zero(num, max) {
-    return num.toString(16).toUpperCase().padStart(max, '0');
+function zero(value, max) {
+    return (value > 0xff ? value.toString(16) : mapping$1[value]).padStart(max, '0');
 }
 /**
  * @function hex

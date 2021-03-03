@@ -32,12 +32,12 @@
     /**
      * @function zero
      * @description 数字左边补零操作
-     * @param {number} num
+     * @param {number} value
      * @param {number} max
      * @returns {string}
      */
-    function zero(num, max) {
-        return mapping$1[num].padStart(max, '0');
+    function zero(value, max) {
+        return (value > 0xff ? value.toString(16) : mapping$1[value]).padStart(max, '0');
     }
     /**
      * @function hex
