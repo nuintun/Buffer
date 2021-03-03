@@ -385,7 +385,7 @@ var Buffer = /*#__PURE__*/ (function () {
      * @param {number} target 粘贴开始位置索引
      * @param {number} start 复制开始位置索引
      * @param {number} [end] 复制结束位置索引
-     * @returns {Buffer}
+     * @returns {this}
      */
     Buffer.prototype.copyWithin = function (target, start, end) {
         this._bytes.copyWithin(target, start, end);

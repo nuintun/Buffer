@@ -184,9 +184,9 @@ export class Buffer {
    * @param {number} target 粘贴开始位置索引
    * @param {number} start 复制开始位置索引
    * @param {number} [end] 复制结束位置索引
-   * @returns {Buffer}
+   * @returns {this}
    */
-  public copyWithin(target: number, start: number, end?: number): Buffer {
+  public copyWithin(target: number, start: number, end?: number): this {
     this._bytes.copyWithin(target, start, end);
 
     return this;
