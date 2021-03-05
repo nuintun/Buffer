@@ -64,7 +64,7 @@ export default function hex(buffer: Uint8Array): string {
     rowSpaces = 16 - rowBytes;
 
     for (let j: number = 0; j < rowBytes; j++) {
-      hex += ` ${zero(buffer[index++], 2)}`;
+      hex += ` \u001b[33m${zero(buffer[index++], 2)}\u001b[0m`;
     }
 
     for (let j: number = 0; j <= rowSpaces; j++) {

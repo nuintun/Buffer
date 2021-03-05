@@ -63,7 +63,7 @@ function hex(buffer) {
         rowBytes = i === rows - 1 ? last : 16;
         rowSpaces = 16 - rowBytes;
         for (var j = 0; j < rowBytes; j++) {
-            hex += " " + zero(buffer[index++], 2);
+            hex += " \u001B[33m" + zero(buffer[index++], 2) + "\u001B[0m";
         }
         for (var j = 0; j <= rowSpaces; j++) {
             hex += "   ";
