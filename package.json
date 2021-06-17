@@ -34,12 +34,12 @@
   },
   "homepage": "https://github.com/nuintun/Buffer#readme",
   "dependencies": {
-    "tslib": "^2.2.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
-    "rollup": "^2.51.1",
-    "typescript": "^4.3.2",
+    "rollup": "^2.52.1",
+    "typescript": "^4.3.3",
     "magic-string": "^0.25.7",
     "@types/node": "^15.12.2",
     "@rollup/plugin-typescript": "^8.2.1",
