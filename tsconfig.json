@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "pretty": true,
     "strict": true,
     "newLine": "lf",
     "target": "ES5",

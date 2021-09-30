@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "noEmit": true,
+    "pretty": true,
     "strict": true,
     "newLine": "lf",
     "target": "ES5",
@@ -13,13 +13,12 @@
     "moduleResolution": "Node",
     "noUnusedParameters": true,
     "declarationDir": "typings",
+    "emitDeclarationOnly": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*",
-    "tests/**/*",
-    "examples/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
