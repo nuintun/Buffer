@@ -1,4 +1,18 @@
 {
+  "compilerOptions": {
+    "strict": true,
+    "newLine": "lf",
+    "target": "ES5",
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "Node",
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true
+  },
   "include": [
     "src/**/*",
     "tests/**/*",
@@ -6,22 +20,5 @@
   ],
   "exclude": [
     "node_modules"
-  ],
-  "compilerOptions": {
-    "pretty": true,
-    "target": "ES5",
-    "newLine": "LF",
-    "module": "ESNext",
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noEmitHelpers": true,
-    "importHelpers": false,
-    "noUnusedLocals": true,
-    "removeComments": false,
-    "strictNullChecks": true,
-    "moduleResolution": "Node",
-    "noUnusedParameters": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true
-  }
+  ]
 }
