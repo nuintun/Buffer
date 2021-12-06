@@ -52,18 +52,18 @@ function hex(buffer) {
   var rowSpaces;
   var hex = '\u001B[36mOFFSET  ';
   for (var i = 0; i < 16; i++) {
-    hex += ' ' + zero(i, 2);
+    hex += ' '.concat(zero(i, 2));
   }
   hex += '\u001B[0m\n';
   if (length) {
     hex += '\n';
   }
   for (var i = 0; i < rows; i++) {
-    hex += '\u001B[36m' + zero(index, offsetLength) + '\u001B[0m  ';
+    hex += '\u001B[36m'.concat(zero(index, offsetLength), '\u001B[0m  ');
     rowBytes = i === rows - 1 ? last : 16;
     rowSpaces = 16 - rowBytes;
     for (var j = 0; j < rowBytes; j++) {
-      hex += ' \u001B[33m' + zero(buffer[index++], 2) + '\u001B[0m';
+      hex += ' \u001B[33m'.concat(zero(buffer[index++], 2), '\u001B[0m');
     }
     for (var j = 0; j <= rowSpaces; j++) {
       hex += '   ';
@@ -776,5 +776,5 @@ console.log(0xfffefdfcfbfaf1f0n, '->', buffer.readUint64());
 console.log(123456.654321, '->', buffer.readFloat32());
 console.log(987654321.123456789, '->', buffer.readFloat64());
 console.log(desc, '->', buffer.read(byteLength(desc), 'UTF-8'));
-console.log('\r\n' + hex(buffer.bytes) + '\r\n');
+console.log('\r\n'.concat(hex(buffer.bytes), '\r\n'));
 console.log('endianness', '->', Endian[endianness()]);

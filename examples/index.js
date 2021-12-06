@@ -55,18 +55,18 @@
     var rowSpaces;
     var hex = 'OFFSET  ';
     for (var i = 0; i < 16; i++) {
-      hex += ' ' + zero(i, 2);
+      hex += ' '.concat(zero(i, 2));
     }
     hex += '\n';
     if (length) {
       hex += '\n';
     }
     for (var i = 0; i < rows; i++) {
-      hex += zero(index, offsetLength) + '  ';
+      hex += ''.concat(zero(index, offsetLength), '  ');
       rowBytes = i === rows - 1 ? last : 16;
       rowSpaces = 16 - rowBytes;
       for (var j = 0; j < rowBytes; j++) {
-        hex += ' ' + zero(buffer[index++], 2);
+        hex += ' '.concat(zero(buffer[index++], 2));
       }
       for (var j = 0; j <= rowSpaces; j++) {
         hex += '   ';
@@ -745,9 +745,12 @@
     onStop();
     var timeStamp = window.performance.now();
     var buffer = new Buffer();
-    buffer.write(++index + ': A buffer tool for javascript.');
+    buffer.write(''.concat(++index, ': A buffer tool for javascript.'));
     var performance = window.performance.now() - timeStamp;
-    view.value = hex(buffer.bytes) + '\r\n\r\nendianness: ' + Endian[endianness()] + '\r\nperformance: ' + performance + 'ms';
+    view.value = ''
+      .concat(hex(buffer.bytes), '\r\n\r\nendianness: ')
+      .concat(Endian[endianness()], '\r\nperformance: ')
+      .concat(performance, 'ms');
     raf = window.requestAnimationFrame(onStart);
   }
   function onStop() {
