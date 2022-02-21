@@ -33,5 +33,5 @@ export default {
       warn(error);
     }
   },
-  plugins: [resolve(), typescript(), treeShake()]
+  plugins: [resolve(), typescript({ tsconfig: 'examples/tsconfig.json' }), treeShake()]
 };
