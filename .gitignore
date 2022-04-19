@@ -34,7 +34,7 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (http://nodejs.org/api/addons.html)
+# Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
 # Dependency directories
@@ -103,12 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-# WebAssembly
-*.wat
-*.wasm
-*.asm.js
-*.wasm.map
-
-# Build
-cjs/
-esm/
+# Build dist
+/cjs/
+/esm/
