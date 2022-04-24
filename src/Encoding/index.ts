@@ -3,6 +3,7 @@
  */
 
 import * as UTF8 from './UTF8';
+import * as errors from '../errors';
 import * as Unicode from './Unicode';
 
 /**
@@ -24,7 +25,7 @@ export function encode(input: string, encoding: string = 'UTF8'): Uint8Array {
     case 'UTF-32':
       return Unicode.encode(input, Uint32Array);
     default:
-      throw new TypeError('Unsupported encoding ' + encoding);
+      throw new TypeError(errors.encodingInvalid(encoding));
   }
 }
 
@@ -47,6 +48,6 @@ export function decode(input: BufferSource, encoding: string = 'UTF8'): string {
     case 'UTF-32':
       return Unicode.decode(input, Uint32Array);
     default:
-      throw new TypeError('Unsupported encoding ' + encoding);
+      throw new TypeError(errors.encodingInvalid(encoding));
   }
 }

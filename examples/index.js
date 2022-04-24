@@ -82,18 +82,6 @@
   }
 
   /**
-   * @module const
-   */
-  // 非法长度
-  var LENGTH_INVALID = 'Invalid buffer length';
-  // 非法读写指针
-  var OFFSET_INVALID = 'Invalid buffer offset';
-  // 数据读取溢出
-  var READ_OVERFLOW = 'Read is outside the bounds of the Buffer';
-  // 读写指针溢出
-  var OFFSET_OVERFLOW = 'Offset is outside the bounds of the Buffer';
-
-  /**
    * @module utils
    */
   /**
@@ -124,6 +112,24 @@
   for (var i = 0; i < 256; i++) {
     mapping[i] = String.fromCharCode(i);
   }
+
+  /**
+   * @module errors
+   */
+  // 未支持的编码格式
+  function encodingInvalid(encoding) {
+    return 'Unsupported encoding ' + encoding;
+  }
+  // 未知字节序
+  var unknownEndianness = 'Unknown endianness';
+  // 非法长度
+  var lengthInvalid = 'Invalid buffer length';
+  // 非法读写指针
+  var offsetInvalid = 'Invalid buffer offset';
+  // 数据读取溢出
+  var readOverflow = 'Read is outside the bounds of the Buffer';
+  // 读写指针溢出
+  var offsetOverflow = 'Offset is outside the bounds of the Buffer';
 
   /**
    * @module UTF8
@@ -204,7 +210,7 @@
       case 'UTF-32':
         return encode$1(input, Uint32Array);
       default:
-        throw new TypeError('Unsupported encoding ' + encoding);
+        throw new TypeError(encodingInvalid(encoding));
     }
   }
   /**
@@ -229,7 +235,7 @@
       case 'UTF-32':
         return decode$1(input, Uint32Array);
       default:
-        throw new TypeError('Unsupported encoding ' + encoding);
+        throw new TypeError(encodingInvalid(encoding));
     }
   }
 
@@ -254,7 +260,7 @@
       case 0x78:
         return Endian.Little;
       default:
-        throw new TypeError('Unknown endianness');
+        throw new TypeError(unknownEndianness);
     }
   }
   /**
@@ -303,10 +309,10 @@
        */
       set: function (value) {
         if (value < 0) {
-          throw new RangeError(OFFSET_INVALID);
+          throw new RangeError(offsetInvalid);
         }
         if (value > this._length) {
-          throw new RangeError(OFFSET_OVERFLOW);
+          throw new RangeError(offsetOverflow);
         }
         this._offset = value;
       },
@@ -332,7 +338,7 @@
        */
       set: function (value) {
         if (value < 0) {
-          throw new RangeError(LENGTH_INVALID);
+          throw new RangeError(lengthInvalid);
         }
         if (value > this._bytes.length) {
           this.alloc(value - this._offset);
@@ -436,7 +442,7 @@
      */
     Buffer.prototype.assertRead = function (length) {
       if (this._offset + length > this._length) {
-        throw new RangeError(READ_OVERFLOW);
+        throw new RangeError(readOverflow);
       }
     };
     /**
@@ -709,7 +715,7 @@
           return bytes;
         }
       }
-      throw new RangeError(READ_OVERFLOW);
+      throw new RangeError(readOverflow);
     };
     /**
      * @override

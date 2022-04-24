@@ -3,9 +3,9 @@
  */
 
 import { SizeOf } from './enum';
-import * as CONST from './const';
 import * as utils from './utils';
 import * as Binary from './Binary';
+import * as errors from './errors';
 import * as Encoding from './Encoding';
 
 // 字节序类型
@@ -26,7 +26,7 @@ export function endianness(): Endian {
     case 0x78:
       return Endian.Little;
     default:
-      throw new TypeError('Unknown endianness');
+      throw new TypeError(errors.unknownEndianness);
   }
 }
 
@@ -87,11 +87,11 @@ export class Buffer {
    */
   public set offset(value: number) {
     if (value < 0) {
-      throw new RangeError(CONST.OFFSET_INVALID);
+      throw new RangeError(errors.offsetInvalid);
     }
 
     if (value > this._length) {
-      throw new RangeError(CONST.OFFSET_OVERFLOW);
+      throw new RangeError(errors.offsetOverflow);
     }
 
     this._offset = value;
@@ -116,7 +116,7 @@ export class Buffer {
    */
   public set length(value: number) {
     if (value < 0) {
-      throw new RangeError(CONST.LENGTH_INVALID);
+      throw new RangeError(errors.lengthInvalid);
     }
 
     if (value > this._bytes.length) {
@@ -235,7 +235,7 @@ export class Buffer {
    */
   protected assertRead(length: number): void {
     if (this._offset + length > this._length) {
-      throw new RangeError(CONST.READ_OVERFLOW);
+      throw new RangeError(errors.readOverflow);
     }
   }
 
@@ -600,7 +600,7 @@ export class Buffer {
       }
     }
 
-    throw new RangeError(CONST.READ_OVERFLOW);
+    throw new RangeError(errors.readOverflow);
   }
 
   /**

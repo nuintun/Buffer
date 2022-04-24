@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/nuintun/Buffer#readme",
   "dependencies": {
-    "tslib": "^2.3.1"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.2.1",
