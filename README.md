@@ -1,3 +1,3 @@
 # Buffer
 
-A buffer tool for javascript.
+> A buffer tool for javascript.
