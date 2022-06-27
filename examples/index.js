@@ -452,9 +452,9 @@
      * @param {number} value 介于 -128 和 127 之间的整数
      */
     Buffer.prototype.writeInt8 = function (value) {
-      this.alloc(1 /* INT8 */);
+      this.alloc(1 /* SizeOf.INT8 */);
       this._dataView.setInt8(this._offset, value);
-      this.seek(1 /* INT8 */);
+      this.seek(1 /* SizeOf.INT8 */);
     };
     /**
      * @public
@@ -463,9 +463,9 @@
      * @param {number} value 介于 0 和 255 之间的整数
      */
     Buffer.prototype.writeUint8 = function (value) {
-      this.alloc(1 /* UINT8 */);
+      this.alloc(1 /* SizeOf.UINT8 */);
       this._dataView.setUint8(this._offset, value);
-      this.seek(1 /* UINT8 */);
+      this.seek(1 /* SizeOf.UINT8 */);
     };
     /**
      * @method writeBoolean
@@ -482,9 +482,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeInt16 = function (value, littleEndian) {
-      this.alloc(2 /* INT16 */);
+      this.alloc(2 /* SizeOf.INT16 */);
       this._dataView.setInt16(this._offset, value, littleEndian);
-      this.seek(2 /* INT16 */);
+      this.seek(2 /* SizeOf.INT16 */);
     };
     /**
      * @method writeUint16
@@ -493,9 +493,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeUint16 = function (value, littleEndian) {
-      this.alloc(2 /* UINT16 */);
+      this.alloc(2 /* SizeOf.UINT16 */);
       this._dataView.setUint16(this._offset, value, littleEndian);
-      this.seek(2 /* UINT16 */);
+      this.seek(2 /* SizeOf.UINT16 */);
     };
     /**
      * @method writeInt32
@@ -504,9 +504,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeInt32 = function (value, littleEndian) {
-      this.alloc(4 /* INT32 */);
+      this.alloc(4 /* SizeOf.INT32 */);
       this._dataView.setInt32(this._offset, value, littleEndian);
-      this.seek(4 /* INT32 */);
+      this.seek(4 /* SizeOf.INT32 */);
     };
     /**
      * @method writeUint32
@@ -515,9 +515,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeUint32 = function (value, littleEndian) {
-      this.alloc(4 /* UINT32 */);
+      this.alloc(4 /* SizeOf.UINT32 */);
       this._dataView.setUint32(this._offset, value, littleEndian);
-      this.seek(4 /* UINT32 */);
+      this.seek(4 /* SizeOf.UINT32 */);
     };
     /**
      * @method writeInt64
@@ -526,9 +526,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeInt64 = function (value, littleEndian) {
-      this.alloc(8 /* INI64 */);
+      this.alloc(8 /* SizeOf.INI64 */);
       this._dataView.setBigInt64(this._offset, value, littleEndian);
-      this.seek(8 /* INI64 */);
+      this.seek(8 /* SizeOf.INI64 */);
     };
     /**
      * @method writeUint64
@@ -537,9 +537,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeUint64 = function (value, littleEndian) {
-      this.alloc(8 /* UINT64 */);
+      this.alloc(8 /* SizeOf.UINT64 */);
       this._dataView.setBigUint64(this._offset, value, littleEndian);
-      this.seek(8 /* UINT64 */);
+      this.seek(8 /* SizeOf.UINT64 */);
     };
     /**
      * @method writeFloat32
@@ -548,9 +548,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeFloat32 = function (value, littleEndian) {
-      this.alloc(4 /* FLOAT32 */);
+      this.alloc(4 /* SizeOf.FLOAT32 */);
       this._dataView.setFloat32(this._offset, value, littleEndian);
-      this.seek(4 /* FLOAT32 */);
+      this.seek(4 /* SizeOf.FLOAT32 */);
     };
     /**
      * @method writeFloat64
@@ -559,9 +559,9 @@
      * @param {boolean} [littleEndian] 是否为小端字节序
      */
     Buffer.prototype.writeFloat64 = function (value, littleEndian) {
-      this.alloc(8 /* FLOAT64 */);
+      this.alloc(8 /* SizeOf.FLOAT64 */);
       this._dataView.setFloat64(this._offset, value, littleEndian);
-      this.seek(8 /* FLOAT64 */);
+      this.seek(8 /* SizeOf.FLOAT64 */);
     };
     Buffer.prototype.write = function (input, start, end) {
       var bytes;
@@ -583,9 +583,9 @@
      * @returns {number} 介于 -128 和 127 之间的整数
      */
     Buffer.prototype.readInt8 = function () {
-      this.assertRead(1 /* INT8 */);
+      this.assertRead(1 /* SizeOf.INT8 */);
       var value = this._dataView.getInt8(this._offset);
-      this.seek(1 /* INT8 */);
+      this.seek(1 /* SizeOf.INT8 */);
       return value;
     };
     /**
@@ -594,9 +594,9 @@
      * @returns {number} 介于 0 和 255 之间的无符号整数
      */
     Buffer.prototype.readUint8 = function () {
-      this.assertRead(1 /* UINT8 */);
+      this.assertRead(1 /* SizeOf.UINT8 */);
       var value = this._dataView.getUint8(this._offset);
-      this.seek(1 /* UINT8 */);
+      this.seek(1 /* SizeOf.UINT8 */);
       return value;
     };
     /**
@@ -614,9 +614,9 @@
      * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
      */
     Buffer.prototype.readInt16 = function (littleEndian) {
-      this.assertRead(2 /* INT16 */);
+      this.assertRead(2 /* SizeOf.INT16 */);
       var value = this._dataView.getInt16(this._offset, littleEndian);
-      this.seek(2 /* INT16 */);
+      this.seek(2 /* SizeOf.INT16 */);
       return value;
     };
     /**
@@ -626,9 +626,9 @@
      * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
      */
     Buffer.prototype.readUint16 = function (littleEndian) {
-      this.assertRead(2 /* UINT16 */);
+      this.assertRead(2 /* SizeOf.UINT16 */);
       var value = this._dataView.getUint16(this._offset, littleEndian);
-      this.seek(2 /* UINT16 */);
+      this.seek(2 /* SizeOf.UINT16 */);
       return value;
     };
     /**
@@ -638,9 +638,9 @@
      * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
      */
     Buffer.prototype.readInt32 = function (littleEndian) {
-      this.assertRead(4 /* INT32 */);
+      this.assertRead(4 /* SizeOf.INT32 */);
       var value = this._dataView.getInt32(this._offset, littleEndian);
-      this.seek(4 /* INT32 */);
+      this.seek(4 /* SizeOf.INT32 */);
       return value;
     };
     /**
@@ -650,9 +650,9 @@
      * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
      */
     Buffer.prototype.readUint32 = function (littleEndian) {
-      this.assertRead(4 /* UINT32 */);
+      this.assertRead(4 /* SizeOf.UINT32 */);
       var value = this._dataView.getUint32(this._offset, littleEndian);
-      this.seek(4 /* UINT32 */);
+      this.seek(4 /* SizeOf.UINT32 */);
       return value;
     };
     /**
@@ -662,9 +662,9 @@
      * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
      */
     Buffer.prototype.readInt64 = function (littleEndian) {
-      this.assertRead(8 /* INI64 */);
+      this.assertRead(8 /* SizeOf.INI64 */);
       var value = this._dataView.getBigInt64(this._offset, littleEndian);
-      this.seek(8 /* INI64 */);
+      this.seek(8 /* SizeOf.INI64 */);
       return value;
     };
     /**
@@ -674,9 +674,9 @@
      * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
      */
     Buffer.prototype.readUint64 = function (littleEndian) {
-      this.assertRead(8 /* UINT64 */);
+      this.assertRead(8 /* SizeOf.UINT64 */);
       var value = this._dataView.getBigUint64(this._offset, littleEndian);
-      this.seek(8 /* UINT64 */);
+      this.seek(8 /* SizeOf.UINT64 */);
       return value;
     };
     /**
@@ -686,9 +686,9 @@
      * @returns {number} 单精度 32 位浮点数
      */
     Buffer.prototype.readFloat32 = function (littleEndian) {
-      this.assertRead(4 /* FLOAT32 */);
+      this.assertRead(4 /* SizeOf.FLOAT32 */);
       var value = this._dataView.getFloat32(this._offset, littleEndian);
-      this.seek(4 /* FLOAT32 */);
+      this.seek(4 /* SizeOf.FLOAT32 */);
       return value;
     };
     /**
@@ -698,9 +698,9 @@
      * @returns {number} 双精度 64 位浮点数
      */
     Buffer.prototype.readFloat64 = function (littleEndian) {
-      this.assertRead(8 /* FLOAT64 */);
+      this.assertRead(8 /* SizeOf.FLOAT64 */);
       var value = this._dataView.getFloat64(this._offset, littleEndian);
-      this.seek(8 /* FLOAT64 */);
+      this.seek(8 /* SizeOf.FLOAT64 */);
       return value;
     };
     Buffer.prototype.read = function (length, encoding) {
