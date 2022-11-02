@@ -1,13 +1,11 @@
 /**
- * @module Buffer
+ * @package @nuintun/buffer
  * @license MIT
  * @version 0.0.1
- * @author nuintun
+ * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
  */
-
-'use strict';
 
 /**
  * @module hex

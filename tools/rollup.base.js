@@ -2,25 +2,48 @@
  * @module rollup.base
  */
 
-import treeShake from './plugins/tree-shake';
+import { createRequire } from 'module';
+import treeShake from './plugins/tree-shake.js';
 import typescript from '@rollup/plugin-typescript';
 
+const pkg = createRequire(import.meta.url)('../package.json');
+
+const banner = `/**
+  * @package ${pkg.name}
+  * @license ${pkg.license}
+  * @version ${pkg.version}
+  * @author ${pkg.author.name} <${pkg.author.email}>
+  * @description ${pkg.description}
+  * @see ${pkg.homepage}
+  */
+ `;
+
+/**
+ * @function rollup
+ * @param esnext
+ * @param development
+ */
 export default function rollup(esnext) {
   return {
     input: 'src/index.ts',
     output: {
-      interop: false,
+      banner,
       esModule: false,
+      exports: 'auto',
+      interop: 'auto',
+      preserveModules: true,
       dir: esnext ? 'esm' : 'cjs',
-      format: esnext ? 'esm' : 'cjs'
+      format: esnext ? 'esm' : 'cjs',
+      generatedCode: { constBindings: true },
+      chunkFileNames: `[name].${esnext ? 'js' : 'cjs'}`,
+      entryFileNames: `[name].${esnext ? 'js' : 'cjs'}`
     },
-    external: ['tslib'],
-    preserveModules: true,
     plugins: [typescript(), treeShake()],
     onwarn(error, warn) {
       if (error.code !== 'CIRCULAR_DEPENDENCY') {
         warn(error);
       }
-    }
+    },
+    external: ['tslib']
   };
 }
