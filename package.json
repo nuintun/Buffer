@@ -4,13 +4,17 @@
   "description": "A buffer tool for javascript.",
   "type": "module",
   "sideEffects": false,
-  "main": "cjs/index.js",
+  "main": "cjs/index.cjs",
   "module": "esm/index.js",
-  "typings": "typings/index.d.ts",
+  "types": "types/index.d.ts",
+  "exports": {
+    "import": "./esm/index.js",
+    "require": "./cjs/index.cjs"
+  },
   "files": [
     "cjs",
     "esm",
-    "typings"
+    "types"
   ],
   "scripts": {
     "lint": "tsc --noEmit",
