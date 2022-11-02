@@ -39,17 +39,17 @@ export class Buffer {
   // 容量不足时按页大小增长
   private _pageSize: number;
 
-  // 已使用字节长度
-  private _length: number = 0;
-
-  // 读写指针位置
-  private _offset: number = 0;
-
   // 缓冲区数据
   private _bytes: Uint8Array;
 
   // 缓冲区视图
   private _dataView: DataView;
+
+  // 已使用字节长度
+  private _length: number = 0;
+
+  // 读写指针位置
+  private _offset: number = 0;
 
   /**
    * @constructor
