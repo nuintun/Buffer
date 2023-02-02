@@ -19,6 +19,9 @@ const banner = `/**
   */
  `;
 
+/**
+ * @type {import('rollup').RollupOptions}
+ */
 export default {
   input: 'tests/index.ts',
   output: {
