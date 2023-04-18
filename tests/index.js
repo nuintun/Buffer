@@ -376,58 +376,13 @@ var Buffer = /*#__PURE__*/ (function () {
     configurable: true
   });
   /**
-   * @public
-   * @method slice
-   * @description 从指定开始和结束位置索引截取并返回新的 Buffer 对象
-   * @param {number} [start] 截取开始位置索引
-   * @param {number} [end] 截取结束位置索引
-   * @returns {Buffer}
-   */
-  Buffer.prototype.slice = function (start, end) {
-    var bytes = this._bytes.slice(start, end);
-    return new Buffer(bytes, this._pageSize);
-  };
-  /**
-   * @public
-   * @method copyWithin
-   * @description 从 Buffer 对象中将指定位置的数据复制到以 target 起始的位置
-   * @param {number} target 粘贴开始位置索引
-   * @param {number} start 复制开始位置索引
-   * @param {number} [end] 复制结束位置索引
-   * @returns {this}
-   */
-  Buffer.prototype.copyWithin = function (target, start, end) {
-    this._bytes.copyWithin(target, start, end);
-    return this;
-  };
-  /**
-   * @protected
-   * @method alloc
-   * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
-   * @param {number} length 分配字节长度
-   */
-  Buffer.prototype.alloc = function (length) {
-    if (length > 0) {
-      length += this.offset;
-      if (length > this._bytes.length) {
-        var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
-        bytes.set(this._bytes);
-        this._bytes = bytes;
-        this._dataView = new DataView(bytes.buffer);
-      }
-      if (length > this._length) {
-        this._length = length;
-      }
-    }
-  };
-  /**
    * @protected
    * @method seek
    * @description 移动读写指针
    * @param {number} offset 移动偏移量
    */
   Buffer.prototype.seek = function (offset) {
-    this.offset = this._offset + offset;
+    this._offset += offset;
   };
   /**
    * @protected
@@ -438,6 +393,26 @@ var Buffer = /*#__PURE__*/ (function () {
   Buffer.prototype.assertRead = function (length) {
     if (this._offset + length > this._length) {
       throw new RangeError(readOverflow);
+    }
+  };
+  /**
+   * @protected
+   * @method alloc
+   * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
+   * @param {number} length 分配字节长度
+   */
+  Buffer.prototype.alloc = function (length) {
+    if (length > 0) {
+      length += this._offset;
+      if (length > this._bytes.length) {
+        var bytes = new Uint8Array(calcBufferLength(length, this._pageSize));
+        bytes.set(this._bytes);
+        this._bytes = bytes;
+        this._dataView = new DataView(bytes.buffer);
+      }
+      if (length > this._length) {
+        this._length = length;
+      }
     }
   };
   /**
@@ -711,6 +686,31 @@ var Buffer = /*#__PURE__*/ (function () {
       }
     }
     throw new RangeError(readOverflow);
+  };
+  /**
+   * @public
+   * @method slice
+   * @description 从指定开始和结束位置索引截取并返回新的 Buffer 对象
+   * @param {number} [start] 截取开始位置索引
+   * @param {number} [end] 截取结束位置索引
+   * @returns {Buffer}
+   */
+  Buffer.prototype.slice = function (start, end) {
+    var bytes = this._bytes.slice(start, end);
+    return new Buffer(bytes, this._pageSize);
+  };
+  /**
+   * @public
+   * @method copyWithin
+   * @description 从 Buffer 对象中将指定位置的数据复制到以 target 起始的位置
+   * @param {number} target 粘贴开始位置索引
+   * @param {number} start 复制开始位置索引
+   * @param {number} [end] 复制结束位置索引
+   * @returns {this}
+   */
+  Buffer.prototype.copyWithin = function (target, start, end) {
+    this._bytes.copyWithin(target, start, end);
+    return this;
   };
   /**
    * @override

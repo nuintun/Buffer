@@ -164,32 +164,25 @@ export class Buffer {
   }
 
   /**
-   * @public
-   * @method slice
-   * @description 从指定开始和结束位置索引截取并返回新的 Buffer 对象
-   * @param {number} [start] 截取开始位置索引
-   * @param {number} [end] 截取结束位置索引
-   * @returns {Buffer}
+   * @protected
+   * @method seek
+   * @description 移动读写指针
+   * @param {number} offset 移动偏移量
    */
-  public slice(start?: number, end?: number): Buffer {
-    const bytes: Uint8Array = this._bytes.slice(start, end);
-
-    return new Buffer(bytes, this._pageSize);
+  protected seek(offset: number): void {
+    this._offset += offset;
   }
 
   /**
-   * @public
-   * @method copyWithin
-   * @description 从 Buffer 对象中将指定位置的数据复制到以 target 起始的位置
-   * @param {number} target 粘贴开始位置索引
-   * @param {number} start 复制开始位置索引
-   * @param {number} [end] 复制结束位置索引
-   * @returns {this}
+   * @protected
+   * @method assertRead
+   * @description 读取断言，防止越界读取
+   * @param {number} length 断言字节长度
    */
-  public copyWithin(target: number, start: number, end?: number): this {
-    this._bytes.copyWithin(target, start, end);
-
-    return this;
+  protected assertRead(length: number): void {
+    if (this._offset + length > this._length) {
+      throw new RangeError(errors.readOverflow);
+    }
   }
 
   /**
@@ -200,7 +193,7 @@ export class Buffer {
    */
   protected alloc(length: number): void {
     if (length > 0) {
-      length += this.offset;
+      length += this._offset;
 
       if (length > this._bytes.length) {
         const bytes: Uint8Array = new Uint8Array(utils.calcBufferLength(length, this._pageSize));
@@ -214,28 +207,6 @@ export class Buffer {
       if (length > this._length) {
         this._length = length;
       }
-    }
-  }
-
-  /**
-   * @protected
-   * @method seek
-   * @description 移动读写指针
-   * @param {number} offset 移动偏移量
-   */
-  protected seek(offset: number): void {
-    this.offset = this._offset + offset;
-  }
-
-  /**
-   * @protected
-   * @method assertRead
-   * @description 读取断言，防止越界读取
-   * @param {number} length 断言字节长度
-   */
-  protected assertRead(length: number): void {
-    if (this._offset + length > this._length) {
-      throw new RangeError(errors.readOverflow);
     }
   }
 
@@ -601,6 +572,35 @@ export class Buffer {
     }
 
     throw new RangeError(errors.readOverflow);
+  }
+
+  /**
+   * @public
+   * @method slice
+   * @description 从指定开始和结束位置索引截取并返回新的 Buffer 对象
+   * @param {number} [start] 截取开始位置索引
+   * @param {number} [end] 截取结束位置索引
+   * @returns {Buffer}
+   */
+  public slice(start?: number, end?: number): Buffer {
+    const bytes: Uint8Array = this._bytes.slice(start, end);
+
+    return new Buffer(bytes, this._pageSize);
+  }
+
+  /**
+   * @public
+   * @method copyWithin
+   * @description 从 Buffer 对象中将指定位置的数据复制到以 target 起始的位置
+   * @param {number} target 粘贴开始位置索引
+   * @param {number} start 复制开始位置索引
+   * @param {number} [end] 复制结束位置索引
+   * @returns {this}
+   */
+  public copyWithin(target: number, start: number, end?: number): this {
+    this._bytes.copyWithin(target, start, end);
+
+    return this;
   }
 
   /**
