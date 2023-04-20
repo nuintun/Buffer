@@ -52,7 +52,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-typescript": "^11.1.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^18.15.12",
     "magic-string": "^0.30.0",
     "prettier": "^2.8.7",
     "rimraf": "^5.0.0",
