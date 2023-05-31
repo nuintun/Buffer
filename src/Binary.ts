@@ -9,6 +9,6 @@
 export const mapping: string[] = [];
 
 // 生成映射表
-for (let i: number = 0; i < 256; i++) {
-  mapping[i] = String.fromCharCode(i);
+for (let code = 0; code < 256; code++) {
+  mapping[code] = String.fromCharCode(code);
 }

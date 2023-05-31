@@ -11,7 +11,7 @@
  */
 export function calcBufferLength(length: number, pageSize: number): number {
   if (length > pageSize) {
-    const pages: number = Math.ceil(length / pageSize);
+    const pages = Math.ceil(length / pageSize);
 
     return pages * pageSize;
   } else {

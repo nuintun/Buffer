@@ -11,13 +11,13 @@ export function encodingInvalid(encoding: string): string {
 export const unknownEndianness = 'Unknown endianness';
 
 // 非法长度
-export const lengthInvalid: string = 'Invalid buffer length';
+export const lengthInvalid = 'Invalid buffer length';
 
 // 非法读写指针
-export const offsetInvalid: string = 'Invalid buffer offset';
+export const offsetInvalid = 'Invalid buffer offset';
 
 // 数据读取溢出
-export const readOverflow: string = 'Read is outside the bounds of the Buffer';
+export const readOverflow = 'Read is outside the bounds of the Buffer';
 
 // 读写指针溢出
-export const offsetOverflow: string = 'Offset is outside the bounds of the Buffer';
+export const offsetOverflow = 'Offset is outside the bounds of the Buffer';

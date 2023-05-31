@@ -10,15 +10,15 @@ export type TypeArray = typeof Uint16Array | typeof Uint32Array;
  * @param {TypeArray} Buffer
  * @returns {Uint8Array}
  */
-export function encode(input: string, Buffer: TypeArray): Uint8Array {
-  const { length }: string = input;
-  const raw: InstanceType<TypeArray> = new Buffer(length);
+export function encode(input: string, TypeArray: TypeArray): Uint8Array {
+  const { length } = input;
+  const array = new TypeArray(length);
 
-  for (let i: number = 0; i < length; i++) {
-    raw[i] = input.codePointAt(i) || 0;
+  for (let i = 0; i < length; i++) {
+    array[i] = input.codePointAt(i) || 0;
   }
 
-  return new Uint8Array(raw.buffer);
+  return new Uint8Array(array.buffer);
 }
 
 /**
@@ -27,15 +27,13 @@ export function encode(input: string, Buffer: TypeArray): Uint8Array {
  * @param {TypeArray} Buffer
  * @returns {string}
  */
-export function decode(input: BufferSource, Buffer: TypeArray): string {
-  const buffer: ArrayBuffer = ArrayBuffer.isView(input) ? input.buffer : input;
-  const raw: InstanceType<TypeArray> = new Buffer(buffer);
-  const { length }: InstanceType<TypeArray> = raw;
+export function decode(input: BufferSource, TypeArray: TypeArray): string {
+  let result = '';
 
-  let result: string = '';
+  const array = new TypeArray(ArrayBuffer.isView(input) ? input.buffer : input);
 
-  for (let i: number = 0; i < length; i++) {
-    result += String.fromCodePoint(raw[i]);
+  for (const code of array) {
+    result += String.fromCodePoint(code);
   }
 
   return result;
