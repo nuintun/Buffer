@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
   tslib:
@@ -7,14 +11,14 @@ dependencies:
 
 devDependencies:
   '@rollup/plugin-node-resolve':
-    specifier: ^15.0.2
-    version: 15.0.2(rollup@3.23.0)
+    specifier: ^15.1.0
+    version: 15.1.0(rollup@3.23.0)
   '@rollup/plugin-typescript':
     specifier: ^11.1.1
     version: 11.1.1(rollup@3.23.0)(tslib@2.5.2)(typescript@5.0.4)
   '@types/node':
-    specifier: ^20.2.3
-    version: 20.2.3
+    specifier: ^20.2.5
+    version: 20.2.5
   magic-string:
     specifier: ^0.30.0
     version: 0.30.0
@@ -39,7 +43,7 @@ packages:
     dependencies:
       string-width: 5.1.2
       string-width-cjs: /string-width@4.2.3
-      strip-ansi: 7.0.1
+      strip-ansi: 7.1.0
       strip-ansi-cjs: /strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: /wrap-ansi@7.0.0
@@ -56,8 +60,8 @@ packages:
     dev: true
     optional: true
 
-  /@rollup/plugin-node-resolve@15.0.2(rollup@3.23.0):
-    resolution: {integrity: sha512-Y35fRGUjC3FaurG722uhUuG8YHOJRJQbI6/CkbRkdPotSpDj9NtIN85z1zrcyDcCQIW4qp5mgG72U+gJ0TAFEg==}
+  /@rollup/plugin-node-resolve@15.1.0(rollup@3.23.0):
+    resolution: {integrity: sha512-xeZHCgsiZ9pzYVgAo9580eCGqwh/XCEUM9q6iQfGNocjgkufHAqC3exA+45URvhiYV8sBF9RlBai650eNs7AsA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.78.0||^3.0.0
@@ -113,8 +117,8 @@ packages:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
 
-  /@types/node@20.2.3:
-    resolution: {integrity: sha512-pg9d0yC4rVNWQzX8U7xb4olIOFuuVL9za3bzMT2pu2SU0SNEi66i2qrvhE2qt0HvkhuCaWJu7pLNOt/Pj8BIrw==}
+  /@types/node@20.2.5:
+    resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
     dev: true
 
   /@types/resolve@1.20.2:
@@ -382,7 +386,7 @@ packages:
     dependencies:
       eastasianwidth: 0.2.0
       emoji-regex: 9.2.2
-      strip-ansi: 7.0.1
+      strip-ansi: 7.1.0
     dev: true
 
   /strip-ansi@6.0.1:
@@ -392,8 +396,8 @@ packages:
       ansi-regex: 5.0.1
     dev: true
 
-  /strip-ansi@7.0.1:
-    resolution: {integrity: sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==}
+  /strip-ansi@7.1.0:
+    resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
     engines: {node: '>=12'}
     dependencies:
       ansi-regex: 6.0.1
@@ -436,5 +440,5 @@ packages:
     dependencies:
       ansi-styles: 6.2.1
       string-width: 5.1.2
-      strip-ansi: 7.0.1
+      strip-ansi: 7.1.0
     dev: true
