@@ -71,7 +71,7 @@ export class Buffer {
       this._length = input.length;
       this._dataView = new DataView(input.buffer);
     } else {
-      const bytes: Uint8Array = new Uint8Array(utils.calcBufferLength(input, pageSize));
+      const bytes = new Uint8Array(utils.calcBufferLength(input, pageSize));
 
       this._bytes = bytes;
       this._length = input;
@@ -195,13 +195,15 @@ export class Buffer {
     if (length > 0) {
       length += this._offset;
 
+      const bytes = this._bytes;
+
       if (length > this._bytes.length) {
-        const bytes: Uint8Array = new Uint8Array(utils.calcBufferLength(length, this._pageSize));
+        const newBytes = new Uint8Array(utils.calcBufferLength(length, this._pageSize));
 
-        bytes.set(this._bytes);
+        newBytes.set(bytes);
 
-        this._bytes = bytes;
-        this._dataView = new DataView(bytes.buffer);
+        this._bytes = newBytes;
+        this._dataView = new DataView(newBytes.buffer);
       }
 
       if (length > this._length) {
