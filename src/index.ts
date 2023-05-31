@@ -76,6 +76,59 @@ export class Buffer {
   }
 
   /**
+   * @private
+   * @method grow
+   * @description 增加长度
+   * @param {number} length 长度增加量
+   */
+  #grow(length: number): void {
+    this.#length += length;
+  }
+
+  /**
+   * @private
+   * @method seek
+   * @description 移动读写指针
+   * @param {number} offset 指针偏移量
+   */
+  #seek(offset: number): void {
+    this.#offset += offset;
+  }
+
+  /**
+   * @private
+   * @method assertRead
+   * @description 读取断言，防止越界读取
+   * @param {number} length 断言字节长度
+   */
+  #assertRead(length: number): void {
+    if (length < 0 || this.#offset + length > this.#length) {
+      throw new RangeError(errors.readOverflow);
+    }
+  }
+
+  /**
+   * @private
+   * @method alloc
+   * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
+   * @param {number} length 分配字节长度
+   */
+  #alloc(length: number): void {
+    length += this.#offset;
+
+    const bytes = this.#bytes;
+
+    if (length > bytes.length) {
+      const newBytes = new Uint8Array(utils.calcBufferLength(length, this.#pageSize));
+
+      newBytes.set(bytes);
+
+      this.#bytes = newBytes;
+      this.#dataView = new DataView(newBytes.buffer);
+    }
+  }
+
+  /**
    * @public
    * @property {number} offset
    * @description 设置读写指针位置，以字节为单位
@@ -118,7 +171,7 @@ export class Buffer {
     const currentLength = this.#length;
 
     if (length > currentLength) {
-      this.alloc(length - currentLength);
+      this.#alloc(length - currentLength);
     } else {
       this.#length = length;
 
@@ -162,64 +215,16 @@ export class Buffer {
   }
 
   /**
-   * @protected
-   * @method seek
-   * @description 移动读写指针
-   * @param {number} offset 移动偏移量
-   */
-  protected seek(offset: number): void {
-    this.#offset += offset;
-  }
-
-  /**
-   * @protected
-   * @method assertRead
-   * @description 读取断言，防止越界读取
-   * @param {number} length 断言字节长度
-   */
-  protected assertRead(length: number): void {
-    if (length < 0 || this.#offset + length > this.#length) {
-      throw new RangeError(errors.readOverflow);
-    }
-  }
-
-  /**
-   * @protected
-   * @method alloc
-   * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
-   * @param {number} length 分配字节长度
-   */
-  protected alloc(length: number): void {
-    if (length > 0) {
-      length += this.#offset;
-
-      const bytes = this.#bytes;
-
-      if (length > bytes.length) {
-        const newBytes = new Uint8Array(utils.calcBufferLength(length, this.#pageSize));
-
-        newBytes.set(bytes);
-
-        this.#bytes = newBytes;
-        this.#dataView = new DataView(newBytes.buffer);
-      }
-
-      if (length > this.#length) {
-        this.#length = length;
-      }
-    }
-  }
-
-  /**
    * @public
    * @method writeInt8
    * @description 在缓冲区中写入一个有符号整数
    * @param {number} value 介于 -128 和 127 之间的整数
    */
   public writeInt8(value: number): void {
-    this.alloc(SizeOf.INT8);
+    this.#alloc(SizeOf.INT8);
     this.#dataView.setInt8(this.#offset, value);
-    this.seek(SizeOf.INT8);
+    this.#grow(SizeOf.INT8);
+    this.#seek(SizeOf.INT8);
   }
 
   /**
@@ -229,9 +234,10 @@ export class Buffer {
    * @param {number} value 介于 0 和 255 之间的整数
    */
   public writeUint8(value: number): void {
-    this.alloc(SizeOf.UINT8);
+    this.#alloc(SizeOf.UINT8);
     this.#dataView.setUint8(this.#offset, value);
-    this.seek(SizeOf.UINT8);
+    this.#grow(SizeOf.UINT8);
+    this.#seek(SizeOf.UINT8);
   }
 
   /**
@@ -250,9 +256,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt16(value: number, littleEndian?: boolean): void {
-    this.alloc(SizeOf.INT16);
+    this.#alloc(SizeOf.INT16);
     this.#dataView.setInt16(this.#offset, value, littleEndian);
-    this.seek(SizeOf.INT16);
+    this.#grow(SizeOf.INT16);
+    this.#seek(SizeOf.INT16);
   }
 
   /**
@@ -262,9 +269,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeUint16(value: number, littleEndian?: boolean): void {
-    this.alloc(SizeOf.UINT16);
+    this.#alloc(SizeOf.UINT16);
     this.#dataView.setUint16(this.#offset, value, littleEndian);
-    this.seek(SizeOf.UINT16);
+    this.#grow(SizeOf.UINT16);
+    this.#seek(SizeOf.UINT16);
   }
 
   /**
@@ -274,9 +282,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt32(value: number, littleEndian?: boolean): void {
-    this.alloc(SizeOf.INT32);
+    this.#alloc(SizeOf.INT32);
     this.#dataView.setInt32(this.#offset, value, littleEndian);
-    this.seek(SizeOf.INT32);
+    this.#grow(SizeOf.INT32);
+    this.#seek(SizeOf.INT32);
   }
 
   /**
@@ -286,9 +295,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeUint32(value: number, littleEndian?: boolean): void {
-    this.alloc(SizeOf.UINT32);
+    this.#alloc(SizeOf.UINT32);
     this.#dataView.setUint32(this.#offset, value, littleEndian);
-    this.seek(SizeOf.UINT32);
+    this.#grow(SizeOf.UINT32);
+    this.#seek(SizeOf.UINT32);
   }
 
   /**
@@ -298,9 +308,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt64(value: bigint, littleEndian?: boolean): void {
-    this.alloc(SizeOf.INI64);
+    this.#alloc(SizeOf.INI64);
     this.#dataView.setBigInt64(this.#offset, value, littleEndian);
-    this.seek(SizeOf.INI64);
+    this.#grow(SizeOf.INI64);
+    this.#seek(SizeOf.INI64);
   }
 
   /**
@@ -310,9 +321,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeUint64(value: bigint, littleEndian?: boolean): void {
-    this.alloc(SizeOf.UINT64);
+    this.#alloc(SizeOf.UINT64);
     this.#dataView.setBigUint64(this.#offset, value, littleEndian);
-    this.seek(SizeOf.UINT64);
+    this.#grow(SizeOf.UINT64);
+    this.#seek(SizeOf.UINT64);
   }
 
   /**
@@ -322,9 +334,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeFloat32(value: number, littleEndian?: boolean): void {
-    this.alloc(SizeOf.FLOAT32);
+    this.#alloc(SizeOf.FLOAT32);
     this.#dataView.setFloat32(this.#offset, value, littleEndian);
-    this.seek(SizeOf.FLOAT32);
+    this.#grow(SizeOf.FLOAT32);
+    this.#seek(SizeOf.FLOAT32);
   }
 
   /**
@@ -334,9 +347,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeFloat64(value: number, littleEndian?: boolean): void {
-    this.alloc(SizeOf.FLOAT64);
+    this.#alloc(SizeOf.FLOAT64);
     this.#dataView.setFloat64(this.#offset, value, littleEndian);
-    this.seek(SizeOf.FLOAT64);
+    this.#grow(SizeOf.FLOAT64);
+    this.#seek(SizeOf.FLOAT64);
   }
 
   /**
@@ -366,9 +380,10 @@ export class Buffer {
     const { length } = bytes;
 
     if (length > 0) {
-      this.alloc(length);
+      this.#alloc(length);
       this.#bytes.set(bytes, this.#offset);
-      this.seek(length);
+      this.#grow(length);
+      this.#seek(length);
     }
   }
 
@@ -378,11 +393,11 @@ export class Buffer {
    * @returns {number} 介于 -128 和 127 之间的整数
    */
   public readInt8(): number {
-    this.assertRead(SizeOf.INT8);
+    this.#assertRead(SizeOf.INT8);
 
     const value = this.#dataView.getInt8(this.#offset);
 
-    this.seek(SizeOf.INT8);
+    this.#seek(SizeOf.INT8);
 
     return value;
   }
@@ -393,11 +408,11 @@ export class Buffer {
    * @returns {number} 介于 0 和 255 之间的无符号整数
    */
   public readUint8(): number {
-    this.assertRead(SizeOf.UINT8);
+    this.#assertRead(SizeOf.UINT8);
 
     const value = this.#dataView.getUint8(this.#offset);
 
-    this.seek(SizeOf.UINT8);
+    this.#seek(SizeOf.UINT8);
 
     return value;
   }
@@ -418,11 +433,11 @@ export class Buffer {
    * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
    */
   public readInt16(littleEndian?: boolean): number {
-    this.assertRead(SizeOf.INT16);
+    this.#assertRead(SizeOf.INT16);
 
     const value = this.#dataView.getInt16(this.#offset, littleEndian);
 
-    this.seek(SizeOf.INT16);
+    this.#seek(SizeOf.INT16);
 
     return value;
   }
@@ -434,11 +449,11 @@ export class Buffer {
    * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
    */
   public readUint16(littleEndian?: boolean): number {
-    this.assertRead(SizeOf.UINT16);
+    this.#assertRead(SizeOf.UINT16);
 
     const value = this.#dataView.getUint16(this.#offset, littleEndian);
 
-    this.seek(SizeOf.UINT16);
+    this.#seek(SizeOf.UINT16);
 
     return value;
   }
@@ -450,11 +465,11 @@ export class Buffer {
    * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
    */
   public readInt32(littleEndian?: boolean): number {
-    this.assertRead(SizeOf.INT32);
+    this.#assertRead(SizeOf.INT32);
 
     const value = this.#dataView.getInt32(this.#offset, littleEndian);
 
-    this.seek(SizeOf.INT32);
+    this.#seek(SizeOf.INT32);
 
     return value;
   }
@@ -466,11 +481,11 @@ export class Buffer {
    * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
    */
   public readUint32(littleEndian?: boolean): number {
-    this.assertRead(SizeOf.UINT32);
+    this.#assertRead(SizeOf.UINT32);
 
     const value = this.#dataView.getUint32(this.#offset, littleEndian);
 
-    this.seek(SizeOf.UINT32);
+    this.#seek(SizeOf.UINT32);
 
     return value;
   }
@@ -482,11 +497,11 @@ export class Buffer {
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
   public readInt64(littleEndian?: boolean): bigint {
-    this.assertRead(SizeOf.INI64);
+    this.#assertRead(SizeOf.INI64);
 
     const value = this.#dataView.getBigInt64(this.#offset, littleEndian);
 
-    this.seek(SizeOf.INI64);
+    this.#seek(SizeOf.INI64);
 
     return value;
   }
@@ -498,11 +513,11 @@ export class Buffer {
    * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
    */
   public readUint64(littleEndian?: boolean): bigint {
-    this.assertRead(SizeOf.UINT64);
+    this.#assertRead(SizeOf.UINT64);
 
     const value = this.#dataView.getBigUint64(this.#offset, littleEndian);
 
-    this.seek(SizeOf.UINT64);
+    this.#seek(SizeOf.UINT64);
 
     return value;
   }
@@ -514,11 +529,11 @@ export class Buffer {
    * @returns {number} 单精度 32 位浮点数
    */
   public readFloat32(littleEndian?: boolean): number {
-    this.assertRead(SizeOf.FLOAT32);
+    this.#assertRead(SizeOf.FLOAT32);
 
     const value = this.#dataView.getFloat32(this.#offset, littleEndian);
 
-    this.seek(SizeOf.FLOAT32);
+    this.#seek(SizeOf.FLOAT32);
 
     return value;
   }
@@ -530,11 +545,11 @@ export class Buffer {
    * @returns {number} 双精度 64 位浮点数
    */
   public readFloat64(littleEndian?: boolean): number {
-    this.assertRead(SizeOf.FLOAT64);
+    this.#assertRead(SizeOf.FLOAT64);
 
     const value = this.#dataView.getFloat64(this.#offset, littleEndian);
 
-    this.seek(SizeOf.FLOAT64);
+    this.#seek(SizeOf.FLOAT64);
 
     return value;
   }
@@ -555,12 +570,12 @@ export class Buffer {
    */
   public read(length: number, encoding: string): string;
   public read(length: number, encoding?: string): string | Uint8Array {
-    this.assertRead(length);
+    this.#assertRead(length);
 
     const offset = this.#offset;
     const bytes = this.#bytes.slice(offset, offset + length);
 
-    this.seek(length);
+    this.#seek(length);
 
     if (arguments.length >= 2) {
       return Encoding.decode(bytes, encoding);

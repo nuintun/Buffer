@@ -260,7 +260,16 @@ function decode(input, encoding = 'UTF8') {
 /**
  * @module Buffer
  */
-var _Buffer_length, _Buffer_offset, _Buffer_pageSize, _Buffer_bytes, _Buffer_dataView;
+var _Buffer_instances,
+  _Buffer_length,
+  _Buffer_offset,
+  _Buffer_pageSize,
+  _Buffer_bytes,
+  _Buffer_dataView,
+  _Buffer_grow,
+  _Buffer_seek,
+  _Buffer_assertRead,
+  _Buffer_alloc;
 // 字节序类型
 var Endian;
 (function (Endian) {
@@ -288,6 +297,7 @@ function endianness() {
  */
 class Buffer {
   constructor(input = 0, pageSize = 4096) {
+    _Buffer_instances.add(this);
     // 已使用字节长度
     _Buffer_length.set(this, 0);
     // 读写指针位置
@@ -348,7 +358,7 @@ class Buffer {
     }
     const currentLength = __classPrivateFieldGet(this, _Buffer_length, 'f');
     if (length > currentLength) {
-      this.alloc(length - currentLength);
+      __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, length - currentLength);
     } else {
       __classPrivateFieldSet(this, _Buffer_length, length, 'f');
       // 重置多余字节
@@ -386,59 +396,16 @@ class Buffer {
     return __classPrivateFieldGet(this, _Buffer_bytes, 'f').slice(0, __classPrivateFieldGet(this, _Buffer_length, 'f'));
   }
   /**
-   * @protected
-   * @method seek
-   * @description 移动读写指针
-   * @param {number} offset 移动偏移量
-   */
-  seek(offset) {
-    __classPrivateFieldSet(this, _Buffer_offset, __classPrivateFieldGet(this, _Buffer_offset, 'f') + offset, 'f');
-  }
-  /**
-   * @protected
-   * @method assertRead
-   * @description 读取断言，防止越界读取
-   * @param {number} length 断言字节长度
-   */
-  assertRead(length) {
-    if (
-      length < 0 ||
-      __classPrivateFieldGet(this, _Buffer_offset, 'f') + length > __classPrivateFieldGet(this, _Buffer_length, 'f')
-    ) {
-      throw new RangeError(readOverflow);
-    }
-  }
-  /**
-   * @protected
-   * @method alloc
-   * @description 分配指定长度的缓冲区大小，如果缓冲区溢出则刷新缓冲区
-   * @param {number} length 分配字节长度
-   */
-  alloc(length) {
-    if (length > 0) {
-      length += __classPrivateFieldGet(this, _Buffer_offset, 'f');
-      const bytes = __classPrivateFieldGet(this, _Buffer_bytes, 'f');
-      if (length > bytes.length) {
-        const newBytes = new Uint8Array(calcBufferLength(length, __classPrivateFieldGet(this, _Buffer_pageSize, 'f')));
-        newBytes.set(bytes);
-        __classPrivateFieldSet(this, _Buffer_bytes, newBytes, 'f');
-        __classPrivateFieldSet(this, _Buffer_dataView, new DataView(newBytes.buffer), 'f');
-      }
-      if (length > __classPrivateFieldGet(this, _Buffer_length, 'f')) {
-        __classPrivateFieldSet(this, _Buffer_length, length, 'f');
-      }
-    }
-  }
-  /**
    * @public
    * @method writeInt8
    * @description 在缓冲区中写入一个有符号整数
    * @param {number} value 介于 -128 和 127 之间的整数
    */
   writeInt8(value) {
-    this.alloc(1 /* SizeOf.INT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 1 /* SizeOf.INT8 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setInt8(__classPrivateFieldGet(this, _Buffer_offset, 'f'), value);
-    this.seek(1 /* SizeOf.INT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 1 /* SizeOf.INT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 1 /* SizeOf.INT8 */);
   }
   /**
    * @public
@@ -447,9 +414,10 @@ class Buffer {
    * @param {number} value 介于 0 和 255 之间的整数
    */
   writeUint8(value) {
-    this.alloc(1 /* SizeOf.UINT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 1 /* SizeOf.UINT8 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setUint8(__classPrivateFieldGet(this, _Buffer_offset, 'f'), value);
-    this.seek(1 /* SizeOf.UINT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 1 /* SizeOf.UINT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 1 /* SizeOf.UINT8 */);
   }
   /**
    * @method writeBoolean
@@ -466,13 +434,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeInt16(value, littleEndian) {
-    this.alloc(2 /* SizeOf.INT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 2 /* SizeOf.INT16 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setInt16(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(2 /* SizeOf.INT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 2 /* SizeOf.INT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 2 /* SizeOf.INT16 */);
   }
   /**
    * @method writeUint16
@@ -481,13 +450,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeUint16(value, littleEndian) {
-    this.alloc(2 /* SizeOf.UINT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 2 /* SizeOf.UINT16 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setUint16(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(2 /* SizeOf.UINT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 2 /* SizeOf.UINT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 2 /* SizeOf.UINT16 */);
   }
   /**
    * @method writeInt32
@@ -496,13 +466,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeInt32(value, littleEndian) {
-    this.alloc(4 /* SizeOf.INT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 4 /* SizeOf.INT32 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setInt32(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(4 /* SizeOf.INT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 4 /* SizeOf.INT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 4 /* SizeOf.INT32 */);
   }
   /**
    * @method writeUint32
@@ -511,13 +482,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeUint32(value, littleEndian) {
-    this.alloc(4 /* SizeOf.UINT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 4 /* SizeOf.UINT32 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setUint32(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(4 /* SizeOf.UINT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 4 /* SizeOf.UINT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 4 /* SizeOf.UINT32 */);
   }
   /**
    * @method writeInt64
@@ -526,13 +498,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeInt64(value, littleEndian) {
-    this.alloc(8 /* SizeOf.INI64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 8 /* SizeOf.INI64 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setBigInt64(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(8 /* SizeOf.INI64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 8 /* SizeOf.INI64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 8 /* SizeOf.INI64 */);
   }
   /**
    * @method writeUint64
@@ -541,13 +514,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeUint64(value, littleEndian) {
-    this.alloc(8 /* SizeOf.UINT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 8 /* SizeOf.UINT64 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setBigUint64(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(8 /* SizeOf.UINT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 8 /* SizeOf.UINT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 8 /* SizeOf.UINT64 */);
   }
   /**
    * @method writeFloat32
@@ -556,13 +530,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeFloat32(value, littleEndian) {
-    this.alloc(4 /* SizeOf.FLOAT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 4 /* SizeOf.FLOAT32 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setFloat32(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(4 /* SizeOf.FLOAT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 4 /* SizeOf.FLOAT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 4 /* SizeOf.FLOAT32 */);
   }
   /**
    * @method writeFloat64
@@ -571,13 +546,14 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeFloat64(value, littleEndian) {
-    this.alloc(8 /* SizeOf.FLOAT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, 8 /* SizeOf.FLOAT64 */);
     __classPrivateFieldGet(this, _Buffer_dataView, 'f').setFloat64(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       value,
       littleEndian
     );
-    this.seek(8 /* SizeOf.FLOAT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, 8 /* SizeOf.FLOAT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 8 /* SizeOf.FLOAT64 */);
   }
   write(input, start, end) {
     let bytes;
@@ -588,9 +564,10 @@ class Buffer {
     }
     const { length } = bytes;
     if (length > 0) {
-      this.alloc(length);
+      __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_alloc).call(this, length);
       __classPrivateFieldGet(this, _Buffer_bytes, 'f').set(bytes, __classPrivateFieldGet(this, _Buffer_offset, 'f'));
-      this.seek(length);
+      __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_grow).call(this, length);
+      __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, length);
     }
   }
   /**
@@ -599,11 +576,11 @@ class Buffer {
    * @returns {number} 介于 -128 和 127 之间的整数
    */
   readInt8() {
-    this.assertRead(1 /* SizeOf.INT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 1 /* SizeOf.INT8 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getInt8(
       __classPrivateFieldGet(this, _Buffer_offset, 'f')
     );
-    this.seek(1 /* SizeOf.INT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 1 /* SizeOf.INT8 */);
     return value;
   }
   /**
@@ -612,11 +589,11 @@ class Buffer {
    * @returns {number} 介于 0 和 255 之间的无符号整数
    */
   readUint8() {
-    this.assertRead(1 /* SizeOf.UINT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 1 /* SizeOf.UINT8 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getUint8(
       __classPrivateFieldGet(this, _Buffer_offset, 'f')
     );
-    this.seek(1 /* SizeOf.UINT8 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 1 /* SizeOf.UINT8 */);
     return value;
   }
   /**
@@ -634,12 +611,12 @@ class Buffer {
    * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
    */
   readInt16(littleEndian) {
-    this.assertRead(2 /* SizeOf.INT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 2 /* SizeOf.INT16 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getInt16(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(2 /* SizeOf.INT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 2 /* SizeOf.INT16 */);
     return value;
   }
   /**
@@ -649,12 +626,12 @@ class Buffer {
    * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
    */
   readUint16(littleEndian) {
-    this.assertRead(2 /* SizeOf.UINT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 2 /* SizeOf.UINT16 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getUint16(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(2 /* SizeOf.UINT16 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 2 /* SizeOf.UINT16 */);
     return value;
   }
   /**
@@ -664,12 +641,12 @@ class Buffer {
    * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
    */
   readInt32(littleEndian) {
-    this.assertRead(4 /* SizeOf.INT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 4 /* SizeOf.INT32 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getInt32(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(4 /* SizeOf.INT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 4 /* SizeOf.INT32 */);
     return value;
   }
   /**
@@ -679,12 +656,12 @@ class Buffer {
    * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
    */
   readUint32(littleEndian) {
-    this.assertRead(4 /* SizeOf.UINT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 4 /* SizeOf.UINT32 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getUint32(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(4 /* SizeOf.UINT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 4 /* SizeOf.UINT32 */);
     return value;
   }
   /**
@@ -694,12 +671,12 @@ class Buffer {
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
   readInt64(littleEndian) {
-    this.assertRead(8 /* SizeOf.INI64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 8 /* SizeOf.INI64 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getBigInt64(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(8 /* SizeOf.INI64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 8 /* SizeOf.INI64 */);
     return value;
   }
   /**
@@ -709,12 +686,12 @@ class Buffer {
    * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
    */
   readUint64(littleEndian) {
-    this.assertRead(8 /* SizeOf.UINT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 8 /* SizeOf.UINT64 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getBigUint64(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(8 /* SizeOf.UINT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 8 /* SizeOf.UINT64 */);
     return value;
   }
   /**
@@ -724,12 +701,12 @@ class Buffer {
    * @returns {number} 单精度 32 位浮点数
    */
   readFloat32(littleEndian) {
-    this.assertRead(4 /* SizeOf.FLOAT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 4 /* SizeOf.FLOAT32 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getFloat32(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(4 /* SizeOf.FLOAT32 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 4 /* SizeOf.FLOAT32 */);
     return value;
   }
   /**
@@ -739,19 +716,19 @@ class Buffer {
    * @returns {number} 双精度 64 位浮点数
    */
   readFloat64(littleEndian) {
-    this.assertRead(8 /* SizeOf.FLOAT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, 8 /* SizeOf.FLOAT64 */);
     const value = __classPrivateFieldGet(this, _Buffer_dataView, 'f').getFloat64(
       __classPrivateFieldGet(this, _Buffer_offset, 'f'),
       littleEndian
     );
-    this.seek(8 /* SizeOf.FLOAT64 */);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, 8 /* SizeOf.FLOAT64 */);
     return value;
   }
   read(length, encoding) {
-    this.assertRead(length);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_assertRead).call(this, length);
     const offset = __classPrivateFieldGet(this, _Buffer_offset, 'f');
     const bytes = __classPrivateFieldGet(this, _Buffer_bytes, 'f').slice(offset, offset + length);
-    this.seek(length);
+    __classPrivateFieldGet(this, _Buffer_instances, 'm', _Buffer_seek).call(this, length);
     if (arguments.length >= 2) {
       return decode(bytes, encoding);
     }
@@ -805,7 +782,32 @@ class Buffer {
   (_Buffer_offset = new WeakMap()),
   (_Buffer_pageSize = new WeakMap()),
   (_Buffer_bytes = new WeakMap()),
-  (_Buffer_dataView = new WeakMap());
+  (_Buffer_dataView = new WeakMap()),
+  (_Buffer_instances = new WeakSet()),
+  (_Buffer_grow = function _Buffer_grow(length) {
+    __classPrivateFieldSet(this, _Buffer_length, __classPrivateFieldGet(this, _Buffer_length, 'f') + length, 'f');
+  }),
+  (_Buffer_seek = function _Buffer_seek(offset) {
+    __classPrivateFieldSet(this, _Buffer_offset, __classPrivateFieldGet(this, _Buffer_offset, 'f') + offset, 'f');
+  }),
+  (_Buffer_assertRead = function _Buffer_assertRead(length) {
+    if (
+      length < 0 ||
+      __classPrivateFieldGet(this, _Buffer_offset, 'f') + length > __classPrivateFieldGet(this, _Buffer_length, 'f')
+    ) {
+      throw new RangeError(readOverflow);
+    }
+  }),
+  (_Buffer_alloc = function _Buffer_alloc(length) {
+    length += __classPrivateFieldGet(this, _Buffer_offset, 'f');
+    const bytes = __classPrivateFieldGet(this, _Buffer_bytes, 'f');
+    if (length > bytes.length) {
+      const newBytes = new Uint8Array(calcBufferLength(length, __classPrivateFieldGet(this, _Buffer_pageSize, 'f')));
+      newBytes.set(bytes);
+      __classPrivateFieldSet(this, _Buffer_bytes, newBytes, 'f');
+      __classPrivateFieldSet(this, _Buffer_dataView, new DataView(newBytes.buffer), 'f');
+    }
+  });
 
 /**
  * @module tests
