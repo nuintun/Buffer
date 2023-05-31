@@ -35,10 +35,6 @@ export function endianness(): Endian {
  * @classdesc Buffer 类提供用于优化读取，写入以及处理二进制数据的方法和属性
  */
 export class Buffer {
-  // 已使用字节长度
-  #length = 0;
-  // 读写指针位置
-  #offset = 0;
   // 缓冲区页大小
   // 容量不足时按页大小增长
   #pageSize: number;
@@ -46,6 +42,10 @@ export class Buffer {
   #bytes: Uint8Array;
   // 缓冲区视图
   #dataView: DataView;
+  // 读写指针位置
+  #offset: number = 0;
+  // 已使用字节长度
+  #length: number = 0;
 
   /**
    * @constructor

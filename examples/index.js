@@ -266,11 +266,11 @@
    * @module Buffer
    */
   var _Buffer_instances,
-    _Buffer_length,
-    _Buffer_offset,
     _Buffer_pageSize,
     _Buffer_bytes,
     _Buffer_dataView,
+    _Buffer_offset,
+    _Buffer_length,
     _Buffer_grow,
     _Buffer_seek,
     _Buffer_assertRead,
@@ -303,10 +303,6 @@
   class Buffer {
     constructor(input = 0, pageSize = 4096) {
       _Buffer_instances.add(this);
-      // 已使用字节长度
-      _Buffer_length.set(this, 0);
-      // 读写指针位置
-      _Buffer_offset.set(this, 0);
       // 缓冲区页大小
       // 容量不足时按页大小增长
       _Buffer_pageSize.set(this, void 0);
@@ -314,6 +310,10 @@
       _Buffer_bytes.set(this, void 0);
       // 缓冲区视图
       _Buffer_dataView.set(this, void 0);
+      // 读写指针位置
+      _Buffer_offset.set(this, 0);
+      // 已使用字节长度
+      _Buffer_length.set(this, 0);
       __classPrivateFieldSet(this, _Buffer_pageSize, pageSize, 'f');
       if (input instanceof Uint8Array) {
         __classPrivateFieldSet(this, _Buffer_bytes, input, 'f');
@@ -786,11 +786,11 @@
       return binary;
     }
   }
-  (_Buffer_length = new WeakMap()),
-    (_Buffer_offset = new WeakMap()),
-    (_Buffer_pageSize = new WeakMap()),
+  (_Buffer_pageSize = new WeakMap()),
     (_Buffer_bytes = new WeakMap()),
     (_Buffer_dataView = new WeakMap()),
+    (_Buffer_offset = new WeakMap()),
+    (_Buffer_length = new WeakMap()),
     (_Buffer_instances = new WeakSet()),
     (_Buffer_grow = function _Buffer_grow(length) {
       __classPrivateFieldSet(this, _Buffer_length, __classPrivateFieldGet(this, _Buffer_length, 'f') + length, 'f');
