@@ -95,7 +95,7 @@
     OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
-  /* global Reflect, Promise */
+  /* global Reflect, Promise, SuppressedError, Symbol */
 
   function __classPrivateFieldGet(receiver, state, kind, f) {
     if (kind === 'a' && !f) throw new TypeError('Private accessor was defined without a getter');
@@ -111,6 +111,13 @@
       throw new TypeError('Cannot write private member to an object whose class did not declare it');
     return kind === 'a' ? f.call(receiver, value) : f ? (f.value = value) : state.set(receiver, value), value;
   }
+
+  typeof SuppressedError === 'function'
+    ? SuppressedError
+    : function (error, suppressed, message) {
+        var e = new Error(message);
+        return (e.name = 'SuppressedError'), (e.error = error), (e.suppressed = suppressed), e;
+      };
 
   /**
    * @module utils
