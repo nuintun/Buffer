@@ -2,8 +2,8 @@
  * @module tests
  */
 
-import hex from './hex';
-import { Buffer, Endian, endianness } from '../src';
+import { hex } from './hex';
+import { Buffer, Endian, endianness } from '@nuintun/buffer';
 
 /**
  * @function byteLength

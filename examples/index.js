@@ -120,6 +120,15 @@
       };
 
   /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
+
+  /**
    * @module utils
    */
   /**
@@ -139,6 +148,15 @@
   }
 
   /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
+
+  /**
    * @module Binary
    */
   /**
@@ -150,6 +168,15 @@
   for (let code = 0; code < 256; code++) {
     mapping[code] = String.fromCharCode(code);
   }
+
+  /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
 
   /**
    * @module errors
@@ -170,6 +197,15 @@
   const offsetOverflow = 'Offset is outside the bounds of the Buffer';
 
   /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
+
+  /**
    * @module UTF8
    */
   // 编码器实例
@@ -188,6 +224,15 @@
    * @returns {string}
    */
   const decode$2 = decoder.decode.bind(decoder);
+
+  /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
 
   /**
    * @module Unicode
@@ -220,6 +265,15 @@
     }
     return result;
   }
+
+  /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
 
   /**
    * @module Encoding
@@ -268,6 +322,15 @@
         throw new TypeError(encodingInvalid(encoding));
     }
   }
+
+  /**
+   * @package @nuintun/buffer
+   * @license MIT
+   * @version 0.0.1
+   * @author nuintun <nuintun@qq.com>
+   * @description A buffer tool for javascript.
+   * @see https://github.com/nuintun/Buffer#readme
+   */
 
   /**
    * @module Buffer

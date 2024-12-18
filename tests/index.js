@@ -115,6 +115,15 @@ typeof SuppressedError === 'function'
     };
 
 /**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
+
+/**
  * @module utils
  */
 /**
@@ -134,6 +143,15 @@ function calcBufferLength(length, pageSize) {
 }
 
 /**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
+
+/**
  * @module Binary
  */
 /**
@@ -145,6 +163,15 @@ const mapping = [];
 for (let code = 0; code < 256; code++) {
   mapping[code] = String.fromCharCode(code);
 }
+
+/**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
 
 /**
  * @module errors
@@ -165,6 +192,15 @@ const readOverflow = 'Read is outside the bounds of the Buffer';
 const offsetOverflow = 'Offset is outside the bounds of the Buffer';
 
 /**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
+
+/**
  * @module UTF8
  */
 // 编码器实例
@@ -183,6 +219,15 @@ const encode$2 = encoder.encode.bind(encoder);
  * @returns {string}
  */
 const decode$2 = decoder.decode.bind(decoder);
+
+/**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
 
 /**
  * @module Unicode
@@ -215,6 +260,15 @@ function decode$1(input, TypeArray) {
   }
   return result;
 }
+
+/**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
 
 /**
  * @module Encoding
@@ -263,6 +317,15 @@ function decode(input, encoding = 'UTF8') {
       throw new TypeError(encodingInvalid(encoding));
   }
 }
+
+/**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.0.1
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
 
 /**
  * @module Buffer

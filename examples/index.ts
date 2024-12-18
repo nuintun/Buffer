@@ -2,8 +2,8 @@
  * @module examples
  */
 
-import hex from './hex';
-import { Buffer, Endian, endianness } from '../src';
+import { hex } from './hex';
+import { Buffer, Endian, endianness } from '@nuintun/buffer';
 
 let raf: number;
 let index: number = 0;
