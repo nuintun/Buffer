@@ -183,18 +183,18 @@
    */
   // 未支持的编码格式
   function encodingInvalid(encoding) {
-    return 'Unsupported encoding ' + encoding;
+    return 'unsupported encoding ' + encoding;
   }
   // 未知字节序
-  const unknownEndianness = 'Unknown endianness';
+  const unknownEndianness = 'unknown endianness';
   // 非法长度
-  const lengthInvalid = 'Invalid buffer length';
+  const lengthInvalid = 'invalid buffer length';
   // 非法读写指针
-  const offsetInvalid = 'Invalid buffer offset';
+  const offsetInvalid = 'invalid buffer offset';
   // 数据读取溢出
-  const readOverflow = 'Read is outside the bounds of the Buffer';
+  const readOverflow = 'read is outside the bounds of the Buffer';
   // 读写指针溢出
-  const offsetOverflow = 'Offset is outside the bounds of the Buffer';
+  const offsetOverflow = 'offset is outside the bounds of the Buffer';
 
   /**
    * @package @nuintun/buffer
