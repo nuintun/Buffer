@@ -1,6 +1,6 @@
 {
   "name": "@nuintun/buffer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A buffer tool for javascript.",
   "type": "module",
   "sideEffects": false,
