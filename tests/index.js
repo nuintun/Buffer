@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -79,7 +79,7 @@ function hex(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -107,7 +107,7 @@ function calcBufferLength(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -129,7 +129,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -156,7 +156,7 @@ const offsetOverflow = 'offset is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -185,7 +185,7 @@ const decode$2 = decoder.decode.bind(decoder);
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -226,7 +226,7 @@ function decode$1(input, TypeArray) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -283,7 +283,7 @@ function decode(input, encoding = 'UTF8') {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.1.0
+ * @version 0.2.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -809,9 +809,7 @@ buffer.writeInt16(0xfafc);
 buffer.writeUint16(0xfcfa);
 buffer.writeInt32(0xfafbfcfd);
 buffer.writeUint32(0xfdfbfafc);
-// @ts-ignore
 buffer.writeInt64(0xf0f1fafbfcfdfeffn);
-// @ts-ignore
 buffer.writeUint64(0xfffefdfcfbfaf1f0n);
 buffer.writeFloat32(123456.654321);
 buffer.writeFloat64(987654321.123456789);
@@ -824,9 +822,7 @@ console.log(0xfafc, '->', buffer.readInt16());
 console.log(0xfcfa, '->', buffer.readUint16());
 console.log(0xfafbfcfd, '->', buffer.readInt32());
 console.log(0xfdfbfafc, '->', buffer.readUint32());
-// @ts-ignore
 console.log(0xf0f1fafbfcfdfeffn, '->', buffer.readInt64());
-// @ts-ignore
 console.log(0xfffefdfcfbfaf1f0n, '->', buffer.readUint64());
 console.log(123456.654321, '->', buffer.readFloat32());
 console.log(987654321.123456789, '->', buffer.readFloat64());
