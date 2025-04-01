@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -79,7 +79,7 @@ function hex(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -107,7 +107,7 @@ function calcBufferLength(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -129,7 +129,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -156,7 +156,7 @@ const offsetOverflow = 'offset is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -185,7 +185,7 @@ const decode$2 = decoder.decode.bind(decoder);
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -226,7 +226,7 @@ function decode$1(input, TypeArray) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -283,7 +283,7 @@ function decode(input, encoding = 'UTF8') {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.1
+ * @version 0.2.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
