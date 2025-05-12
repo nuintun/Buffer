@@ -35,15 +35,15 @@
     "lint": "tsc --noEmit",
     "test": "node tests/index.js",
     "clean": "node tools/clean.js",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm build",
     "build:cjs": "rollup -c tools/rollup.cjs.js",
     "build:esm": "rollup -c tools/rollup.esm.js",
     "build:fix-types": "node tools/fix-types.js",
     "build:tests": "rollup -c tools/rollup.tests.js",
     "build:examples": "rollup -c tools/rollup.examples.js",
     "format": "prettier --write . --ignore-path .prettierignore",
-    "build:main": "npm run build:cjs && npm run build:esm && npm run build:fix-types",
-    "build": "npm run clean && npm run build:main && npm run build:tests && npm run build:examples && npm run format"
+    "build:main": "pnpm build:cjs && pnpm build:esm && pnpm build:fix-types",
+    "build": "pnpm clean && pnpm build:main && pnpm build:tests && pnpm build:examples && pnpm format"
   },
   "dependencies": {
     "tslib": "^2.8.1"
