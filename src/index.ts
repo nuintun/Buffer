@@ -303,7 +303,7 @@ export class Buffer {
 
   /**
    * @method writeInt64
-   * @description 在缓冲区中写入一个无符号的 64 位有符号整数
+   * @description 在缓冲区中写入一个 64 位有符号整数
    * @param {bigint} value 要写入的 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
