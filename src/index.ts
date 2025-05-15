@@ -308,10 +308,10 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   public writeInt64(value: bigint, littleEndian?: boolean): void {
-    this.#alloc(SizeOf.INI64);
+    this.#alloc(SizeOf.INT64);
     this.#dataView.setBigInt64(this.#offset, value, littleEndian);
-    this.#grow(SizeOf.INI64);
-    this.#seek(SizeOf.INI64);
+    this.#grow(SizeOf.INT64);
+    this.#seek(SizeOf.INT64);
   }
 
   /**
@@ -497,11 +497,11 @@ export class Buffer {
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
   public readInt64(littleEndian?: boolean): bigint {
-    this.#assertRead(SizeOf.INI64);
+    this.#assertRead(SizeOf.INT64);
 
     const value = this.#dataView.getBigInt64(this.#offset, littleEndian);
 
-    this.#seek(SizeOf.INI64);
+    this.#seek(SizeOf.INT64);
 
     return value;
   }

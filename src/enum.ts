@@ -10,7 +10,7 @@ export const enum SizeOf {
   UINT16 = 2,
   INT32 = 4,
   UINT32 = 4,
-  INI64 = 8,
+  INT64 = 8,
   UINT64 = 8,
   FLOAT32 = 4,
   FLOAT64 = 8
