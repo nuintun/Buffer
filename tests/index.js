@@ -543,15 +543,15 @@ class Buffer {
   }
   /**
    * @method writeInt64
-   * @description 在缓冲区中写入一个无符号的 64 位有符号整数
+   * @description 在缓冲区中写入一个 64 位有符号整数
    * @param {bigint} value 要写入的 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeInt64(value, littleEndian) {
-    this.#alloc(8 /* SizeOf.INI64 */);
+    this.#alloc(8 /* SizeOf.INT64 */);
     this.#dataView.setBigInt64(this.#offset, value, littleEndian);
-    this.#grow(8 /* SizeOf.INI64 */);
-    this.#seek(8 /* SizeOf.INI64 */);
+    this.#grow(8 /* SizeOf.INT64 */);
+    this.#seek(8 /* SizeOf.INT64 */);
   }
   /**
    * @method writeUint64
@@ -689,9 +689,9 @@ class Buffer {
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
   readInt64(littleEndian) {
-    this.#assertRead(8 /* SizeOf.INI64 */);
+    this.#assertRead(8 /* SizeOf.INT64 */);
     const value = this.#dataView.getBigInt64(this.#offset, littleEndian);
-    this.#seek(8 /* SizeOf.INI64 */);
+    this.#seek(8 /* SizeOf.INT64 */);
     return value;
   }
   /**
