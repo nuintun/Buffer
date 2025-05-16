@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.4
+ * @version 0.2.5
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -84,7 +84,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -112,7 +112,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -134,7 +134,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -161,7 +161,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -190,7 +190,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -231,7 +231,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -288,7 +288,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.2.4
+   * @version 0.2.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
