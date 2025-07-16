@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -79,7 +79,7 @@ function hex(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -89,25 +89,23 @@ function hex(buffer) {
  * @module utils
  */
 /**
- * @function calcBufferLength
- * @description 计算适合的 Buffer 长度
- * @param {number} length 数据字节总大小
+ * @function makeUint8Array
+ * @description 创建一个合适长度的 Uint8Array
+ * @param {number} byteLength 数据字节总大小
  * @param {number} pageSize 缓冲区页大小
- * @returns {number}
+ * @returns {Uint8Array}
  */
-function calcBufferLength(length, pageSize) {
-  if (length > pageSize) {
-    const pages = Math.ceil(length / pageSize);
-    return pages * pageSize;
-  } else {
-    return length;
+function makeUint8Array(byteLength, pageSize) {
+  if (byteLength > pageSize) {
+    return new Uint8Array(Math.ceil(byteLength / pageSize) * pageSize);
   }
+  return new Uint8Array(pageSize);
 }
 
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -129,7 +127,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -156,7 +154,7 @@ const offsetOverflow = 'offset is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -185,7 +183,7 @@ const decode$2 = decoder.decode.bind(decoder);
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -226,7 +224,7 @@ function decode$1(input, TypeArray) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -283,7 +281,7 @@ function decode(input, encoding = 'UTF8') {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.2.5
+ * @version 0.3.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -336,7 +334,7 @@ class Buffer {
       this.#length = input.length;
       this.#dataView = new DataView(input.buffer);
     } else {
-      const bytes = new Uint8Array(calcBufferLength(input, pageSize));
+      const bytes = makeUint8Array(input, pageSize);
       this.#bytes = bytes;
       this.#length = input;
       this.#dataView = new DataView(bytes.buffer);
@@ -381,7 +379,7 @@ class Buffer {
     length += this.#offset;
     const bytes = this.#bytes;
     if (length > bytes.length) {
-      const newBytes = new Uint8Array(calcBufferLength(length, this.#pageSize));
+      const newBytes = makeUint8Array(length, this.#pageSize);
       newBytes.set(bytes);
       this.#bytes = newBytes;
       this.#dataView = new DataView(newBytes.buffer);
@@ -450,7 +448,7 @@ class Buffer {
    * @returns {ArrayBuffer}
    */
   get buffer() {
-    return this.#bytes.buffer.slice(0, this.#length);
+    return this.bytes.buffer;
   }
   /**
    * @public
@@ -459,7 +457,7 @@ class Buffer {
    * @returns {Uint8Array}
    */
   get bytes() {
-    return this.#bytes.slice(0, this.#length);
+    return this.#bytes.subarray(0, this.#length);
   }
   /**
    * @public

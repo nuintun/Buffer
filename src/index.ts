@@ -67,7 +67,7 @@ export class Buffer {
       this.#length = input.length;
       this.#dataView = new DataView(input.buffer);
     } else {
-      const bytes = new Uint8Array(utils.calcBufferLength(input, pageSize));
+      const bytes = utils.makeUint8Array(input, pageSize);
 
       this.#bytes = bytes;
       this.#length = input;
@@ -119,7 +119,7 @@ export class Buffer {
     const bytes = this.#bytes;
 
     if (length > bytes.length) {
-      const newBytes = new Uint8Array(utils.calcBufferLength(length, this.#pageSize));
+      const newBytes = utils.makeUint8Array(length, this.#pageSize);
 
       newBytes.set(bytes);
 
@@ -201,7 +201,7 @@ export class Buffer {
    * @returns {ArrayBuffer}
    */
   public get buffer(): ArrayBuffer {
-    return this.#bytes.buffer.slice(0, this.#length);
+    return this.bytes.buffer;
   }
 
   /**
@@ -211,7 +211,7 @@ export class Buffer {
    * @returns {Uint8Array}
    */
   public get bytes(): Uint8Array {
-    return this.#bytes.slice(0, this.#length);
+    return this.#bytes.subarray(0, this.#length);
   }
 
   /**

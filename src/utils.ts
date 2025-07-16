@@ -3,18 +3,16 @@
  */
 
 /**
- * @function calcBufferLength
- * @description 计算适合的 Buffer 长度
- * @param {number} length 数据字节总大小
+ * @function makeUint8Array
+ * @description 创建一个合适长度的 Uint8Array
+ * @param {number} byteLength 数据字节总大小
  * @param {number} pageSize 缓冲区页大小
- * @returns {number}
+ * @returns {Uint8Array}
  */
-export function calcBufferLength(length: number, pageSize: number): number {
-  if (length > pageSize) {
-    const pages = Math.ceil(length / pageSize);
-
-    return pages * pageSize;
-  } else {
-    return length;
+export function makeUint8Array(byteLength: number, pageSize: number): Uint8Array {
+  if (byteLength > pageSize) {
+    return new Uint8Array(Math.ceil(byteLength / pageSize) * pageSize);
   }
+
+  return new Uint8Array(pageSize);
 }
