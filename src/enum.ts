@@ -2,6 +2,12 @@
  * @module enum
  */
 
+// 字节序类型
+export enum Endian {
+  Big,
+  Little
+}
+
 // 基础类型空间占用
 export const enum SizeOf {
   INT8 = 1,

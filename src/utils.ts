@@ -3,6 +3,16 @@
  */
 
 /**
+ * @function isNaturalNumber
+ * @description 判断是否为自然数
+ * @param value 待判断的值
+ * @returns {boolean}
+ */
+export function isNaturalNumber(value: number): boolean {
+  return value >= 0 && Number.isInteger(value);
+}
+
+/**
  * @function makeUint8Array
  * @description 创建一个合适长度的 Uint8Array
  * @param {number} byteLength 数据字节总大小
