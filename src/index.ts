@@ -76,7 +76,7 @@ export class Buffer {
     } else {
       length = input;
 
-      bytes = makeUint8Array(input, pageSize);
+      bytes = makeUint8Array(length, pageSize);
 
       dataView = new DataView(bytes.buffer);
     }

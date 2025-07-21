@@ -349,13 +349,13 @@ function isNaturalNumber(value) {
 /**
  * @function makeUint8Array
  * @description 创建一个合适长度的 Uint8Array
- * @param {number} byteLength 数据字节总大小
+ * @param {number} length 数据长度大小
  * @param {number} pageSize 缓冲区页大小
  * @returns {Uint8Array}
  */
-function makeUint8Array(byteLength, pageSize) {
-  if (byteLength > pageSize) {
-    return new Uint8Array(Math.ceil(byteLength / pageSize) * pageSize);
+function makeUint8Array(length, pageSize) {
+  if (length > pageSize) {
+    return new Uint8Array(Math.ceil(length / pageSize) * pageSize);
   }
   return new Uint8Array(pageSize);
 }
@@ -419,7 +419,7 @@ class Buffer {
       dataView = new DataView(bytes.buffer);
     } else {
       length = input;
-      bytes = makeUint8Array(input, pageSize);
+      bytes = makeUint8Array(length, pageSize);
       dataView = new DataView(bytes.buffer);
     }
     this.#bytes = bytes;
