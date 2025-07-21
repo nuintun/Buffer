@@ -530,7 +530,7 @@ class Buffer {
   /**
    * @public
    * @property {ArrayBuffer} buffer
-   * @description 获取原始全部 ArrayBuffer 缓冲区
+   * @description 获取全部 ArrayBuffer 原始缓冲区
    * @returns {ArrayBuffer}
    */
   get buffer() {
@@ -539,7 +539,7 @@ class Buffer {
   /**
    * @public
    * @property {Uint8Array} bytes
-   * @description 获取原始已写入 Uint8Array 缓冲区
+   * @description 获取已写入 Uint8Array 原始缓冲区
    * @returns {Uint8Array}
    */
   get bytes() {
