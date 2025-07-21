@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -129,7 +129,7 @@ function toFloat64(value) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -151,7 +151,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -182,7 +182,7 @@ const readOverflow = 'read is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -211,7 +211,7 @@ const decode$2 = decoder.decode.bind(decoder);
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -252,7 +252,7 @@ function decode$1(input, TypeArray) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -309,7 +309,7 @@ function decode(input, encoding = 'UTF8') {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -328,7 +328,7 @@ var Endian;
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -374,7 +374,7 @@ function makeUint8Array(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.1
+ * @version 0.3.2
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
