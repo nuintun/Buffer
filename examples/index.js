@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.0
+ * @version 0.3.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -84,7 +84,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -106,7 +106,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -137,7 +137,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -166,7 +166,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -207,7 +207,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -264,7 +264,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -283,7 +283,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -318,7 +318,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.0
+   * @version 0.3.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -485,16 +485,16 @@
     /**
      * @public
      * @property {ArrayBuffer} buffer
-     * @description 获取 ArrayBuffer 缓冲区
+     * @description 获取原始全部 ArrayBuffer 缓冲区
      * @returns {ArrayBuffer}
      */
     get buffer() {
-      return this.bytes.buffer;
+      return this.#bytes.buffer;
     }
     /**
      * @public
      * @property {Uint8Array} bytes
-     * @description 获取 Uint8Array 缓冲区
+     * @description 获取原始已写入 Uint8Array 缓冲区
      * @returns {Uint8Array}
      */
     get bytes() {
@@ -818,6 +818,30 @@
       return this;
     }
     /**
+     * @method entries
+     * @description 获取迭代器
+     * @returns {IterableIterator<[number, number]>}
+     */
+    *entries() {
+      const bytes = this.bytes;
+      const length = this.#length;
+      for (let i = 0; i < length; i++) {
+        yield [i, bytes[i]];
+      }
+    }
+    /**
+     * @method values
+     * @description 获取迭代器
+     * @returns {IterableIterator<number>}
+     */
+    *values() {
+      const bytes = this.bytes;
+      const length = this.#length;
+      for (let i = 0; i < length; i++) {
+        yield bytes[i];
+      }
+    }
+    /**
      * @override
      * @method toString
      * @description 获取 Buffer 对象二进制编码字符串
@@ -834,6 +858,14 @@
       }
       // 返回二进制编码
       return binary;
+    }
+    /**
+     * @method iterator
+     * @description 迭代器
+     * @returns {IterableIterator<number>}
+     */
+    [Symbol.iterator]() {
+      return this.values();
     }
   }
 

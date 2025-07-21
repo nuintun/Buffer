@@ -207,17 +207,17 @@ export class Buffer {
   /**
    * @public
    * @property {ArrayBuffer} buffer
-   * @description 获取 ArrayBuffer 缓冲区
+   * @description 获取原始全部 ArrayBuffer 缓冲区
    * @returns {ArrayBuffer}
    */
   public get buffer(): ArrayBuffer {
-    return this.bytes.buffer;
+    return this.#bytes.buffer;
   }
 
   /**
    * @public
    * @property {Uint8Array} bytes
-   * @description 获取 Uint8Array 缓冲区
+   * @description 获取原始已写入 Uint8Array 缓冲区
    * @returns {Uint8Array}
    */
   public get bytes(): Uint8Array {
@@ -660,6 +660,34 @@ export class Buffer {
   }
 
   /**
+   * @method entries
+   * @description 获取迭代器
+   * @returns {IterableIterator<[number, number]>}
+   */
+  public *entries(): IterableIterator<[number, number]> {
+    const bytes = this.bytes;
+    const length = this.#length;
+
+    for (let i = 0; i < length; i++) {
+      yield [i, bytes[i]];
+    }
+  }
+
+  /**
+   * @method values
+   * @description 获取迭代器
+   * @returns {IterableIterator<number>}
+   */
+  public *values(): IterableIterator<number> {
+    const bytes = this.bytes;
+    const length = this.#length;
+
+    for (let i = 0; i < length; i++) {
+      yield bytes[i];
+    }
+  }
+
+  /**
    * @override
    * @method toString
    * @description 获取 Buffer 对象二进制编码字符串
@@ -679,5 +707,14 @@ export class Buffer {
 
     // 返回二进制编码
     return binary;
+  }
+
+  /**
+   * @method iterator
+   * @description 迭代器
+   * @returns {IterableIterator<number>}
+   */
+  public [Symbol.iterator]() {
+    return this.values();
   }
 }
