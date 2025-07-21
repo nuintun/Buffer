@@ -344,7 +344,7 @@ var Endian;
  * @returns {boolean}
  */
 function isNaturalNumber(value) {
-  return value >= 0 && Number.isInteger(value);
+  return Number.isInteger(value) && value >= 0;
 }
 /**
  * @function makeUint8Array

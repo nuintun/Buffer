@@ -8,8 +8,8 @@
  * @param value 待判断的值
  * @returns {boolean}
  */
-export function isNaturalNumber(value: number): boolean {
-  return value >= 0 && Number.isInteger(value);
+export function isNaturalNumber(value: unknown): value is number {
+  return Number.isInteger(value) && (value as number) >= 0;
 }
 
 /**
