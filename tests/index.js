@@ -378,10 +378,10 @@ function makeUint8Array(byteLength, pageSize) {
  * @returns {Endian}
  */
 function endianness() {
-  switch (new Uint8Array(new Uint32Array([0x12345678]))[0]) {
-    case 0x12:
+  switch (new Uint8Array(new Uint16Array([0x00ff]).buffer)[0]) {
+    case 0x00:
       return Endian.Big;
-    case 0x78:
+    case 0xff:
       return Endian.Little;
     default:
       throw new TypeError(unknownEndianness);
