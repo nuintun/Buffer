@@ -79,13 +79,17 @@ export class Buffer {
 
       bytes = makeUint8Array(length, pageSize);
 
-      bytes.set(new Uint8Array(input.buffer));
+      if (length > 0) {
+        bytes.set(new Uint8Array(input.buffer));
+      }
     } else if (input instanceof ArrayBuffer) {
       length = input.byteLength;
 
       bytes = makeUint8Array(length, pageSize);
 
-      bytes.set(new Uint8Array(input));
+      if (length > 0) {
+        bytes.set(new Uint8Array(input));
+      }
     } else {
       length = input;
 
