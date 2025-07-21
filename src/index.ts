@@ -2,13 +2,17 @@
  * @module Buffer
  */
 
+import type { TypedArray } from './utils';
+
 import * as Binary from './Binary';
 import * as errors from './errors';
 import * as Encoding from './Encoding';
 import { Endian, SizeOf } from './enum';
-import { isNaturalNumber, makeUint8Array } from './utils';
+import { isNaturalNumber, isTypedArray, makeUint8Array } from './utils';
 
 export { Endian };
+
+export type { TypedArray };
 
 /**
  * @function endianness
@@ -45,46 +49,53 @@ export class Buffer {
 
   /**
    * @constructor
-   * @param {number} [length] 缓冲区初始大小
+   * @param {number} [length] 缓冲区初始字节大小
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
   constructor(length?: number, pageSize?: number);
   /**
    * @constructor
-   * @param {Uint8Array} bytes 缓冲区初始数据
+   * @param {Uint8Array} bytes 缓冲区初始字节数据
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
-  constructor(bytes?: Uint8Array, pageSize?: number);
+  constructor(bytes: TypedArray, pageSize?: number);
   /**
    * @constructor
-   * @param {number | Uint8Array} input 缓冲区初始配置
-   * @param {number} pageSize 缓冲区分页大小，扩容时将按分页大小增加
+   * @param {ArrayBuffer} buffer 缓冲区初始缓冲数据
+   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
-  constructor(input: number | Uint8Array = 0, pageSize: number = 4096) {
+  constructor(buffer: ArrayBuffer, pageSize?: number);
+  /**
+   * @constructor
+   * @param {number | Uint8Array | ArrayBuffer} [input] 缓冲区初始配置
+   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
+   */
+  constructor(input: number | TypedArray | ArrayBuffer = 0, pageSize: number = 4096) {
     let length: number;
     let bytes: Uint8Array;
-    let dataView: DataView;
 
-    if (input instanceof Uint8Array) {
-      length = input.length;
+    if (isTypedArray(input)) {
+      length = input.byteLength;
 
       bytes = makeUint8Array(length, pageSize);
 
-      bytes.set(input);
+      bytes.set(new Uint8Array(input.buffer));
+    } else if (input instanceof ArrayBuffer) {
+      length = input.byteLength;
 
-      dataView = new DataView(bytes.buffer);
+      bytes = makeUint8Array(length, pageSize);
+
+      bytes.set(new Uint8Array(input));
     } else {
       length = input;
 
       bytes = makeUint8Array(length, pageSize);
-
-      dataView = new DataView(bytes.buffer);
     }
 
     this.#bytes = bytes;
     this.#length = length;
-    this.#dataView = dataView;
     this.#pageSize = pageSize;
+    this.#dataView = new DataView(bytes.buffer);
   }
 
   /**

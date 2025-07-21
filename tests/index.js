@@ -337,6 +337,17 @@ var Endian;
 /**
  * @module utils
  */
+// 获取 TypedArray 原型
+const TypedArray = Object.getPrototypeOf(Uint8Array);
+/**
+ * @function isTypedArray
+ * @description 检测是否为 TypedArray
+ * @param value 待判断的值
+ * @returns {boolean}
+ */
+function isTypedArray(value) {
+  return value instanceof TypedArray;
+}
 /**
  * @function isNaturalNumber
  * @description 判断是否为自然数
@@ -405,27 +416,28 @@ class Buffer {
   #length = 0;
   /**
    * @constructor
-   * @param {number | Uint8Array} input 缓冲区初始配置
-   * @param {number} pageSize 缓冲区分页大小，扩容时将按分页大小增加
+   * @param {number | Uint8Array | ArrayBuffer} [input] 缓冲区初始配置
+   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
   constructor(input = 0, pageSize = 4096) {
     let length;
     let bytes;
-    let dataView;
-    if (input instanceof Uint8Array) {
-      length = input.length;
+    if (isTypedArray(input)) {
+      length = input.byteLength;
       bytes = makeUint8Array(length, pageSize);
-      bytes.set(input);
-      dataView = new DataView(bytes.buffer);
+      bytes.set(new Uint8Array(input.buffer));
+    } else if (input instanceof ArrayBuffer) {
+      length = input.byteLength;
+      bytes = makeUint8Array(length, pageSize);
+      bytes.set(new Uint8Array(input));
     } else {
       length = input;
       bytes = makeUint8Array(length, pageSize);
-      dataView = new DataView(bytes.buffer);
     }
     this.#bytes = bytes;
     this.#length = length;
-    this.#dataView = dataView;
     this.#pageSize = pageSize;
+    this.#dataView = new DataView(bytes.buffer);
   }
   /**
    * @private

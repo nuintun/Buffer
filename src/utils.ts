@@ -2,6 +2,32 @@
  * @module utils
  */
 
+export type TypedArray =
+  | Int8Array
+  | Int16Array
+  | Int32Array
+  | Uint8Array
+  | Uint16Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array
+  | BigInt64Array
+  | BigUint64Array
+  | Uint8ClampedArray;
+
+// 获取 TypedArray 原型
+const TypedArray = Object.getPrototypeOf(Uint8Array);
+
+/**
+ * @function isTypedArray
+ * @description 检测是否为 TypedArray
+ * @param value 待判断的值
+ * @returns {boolean}
+ */
+export function isTypedArray(value: unknown): value is TypedArray {
+  return value instanceof TypedArray;
+}
+
 /**
  * @function isNaturalNumber
  * @description 判断是否为自然数
