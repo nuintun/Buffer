@@ -5,7 +5,7 @@
 /**
  * @function encodingInvalid
  * @description 未支持的编码格式
- * @param encoding 编码格式
+ * @param {string} encoding 编码格式
  */
 export function encodingInvalid(encoding: string): string {
   return 'unsupported encoding ' + encoding;

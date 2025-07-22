@@ -4,15 +4,33 @@
 
 import type { TypedArray } from './utils';
 
-import * as Binary from './Binary';
 import * as errors from './errors';
-import * as Encoding from './Encoding';
+import { mapping } from './binary';
 import { Endian, SizeOf } from './enum';
+import { decode, encode, TextDecode, TextEncode } from './encoding';
 import { isNaturalNumber, isTypedArray, makeUint8Array } from './utils';
 
 export { Endian };
 
 export type { TypedArray };
+
+export interface Options {
+  /**
+   * @property {number} [pageSize]
+   * @description 缓存页大小
+   */
+  pageSize?: number;
+  /**
+   * @property {TextEncode} [encode]
+   * @description 文本编码函数
+   */
+  encode?: TextEncode;
+  /**
+   * @property {TextDecode} [decode]
+   * @description 文本解码函数
+   */
+  decode?: TextDecode;
+}
 
 /**
  * @function endianness
@@ -46,33 +64,34 @@ export class Buffer {
   #offset: number = 0;
   // 已使用字节长度
   #length: number = 0;
+  // 文本编码方法
+  #encode: TextEncode;
+  // 文本解码方法
+  #decode: TextDecode;
 
   /**
    * @constructor
    * @param {number} [length] 缓冲区初始字节大小
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
-  constructor(length?: number, pageSize?: number);
+  constructor(length?: number, options?: Options);
   /**
    * @constructor
    * @param {Uint8Array} bytes 缓冲区初始字节数据
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
-  constructor(bytes: TypedArray, pageSize?: number);
+  constructor(bytes: TypedArray, options?: Options);
   /**
    * @constructor
    * @param {ArrayBuffer} buffer 缓冲区初始缓冲数据
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
-  constructor(buffer: ArrayBuffer, pageSize?: number);
-  /**
-   * @constructor
-   * @param {number | Uint8Array | ArrayBuffer} [input] 缓冲区初始配置
-   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
-   */
-  constructor(input: number | TypedArray | ArrayBuffer = 0, pageSize: number = 4096) {
+  constructor(buffer: ArrayBuffer, options?: Options);
+  constructor(input: number | TypedArray | ArrayBuffer = 0, options: Options = {}) {
     let length: number;
     let bytes: Uint8Array;
+
+    const { pageSize = 4096 } = options;
 
     if (isTypedArray(input)) {
       length = input.byteLength;
@@ -99,6 +118,8 @@ export class Buffer {
     this.#bytes = bytes;
     this.#length = length;
     this.#pageSize = pageSize;
+    this.#encode = options.encode ?? encode;
+    this.#decode = options.decode ?? decode;
     this.#dataView = new DataView(bytes.buffer);
   }
 
@@ -407,9 +428,9 @@ export class Buffer {
     let bytes: Uint8Array;
 
     if (input instanceof Uint8Array) {
-      bytes = input.subarray(start as number, end);
+      bytes = input.subarray(start as number | undefined, end);
     } else {
-      bytes = Encoding.encode(input, start as string);
+      bytes = this.#encode(input, (start as string | undefined) ?? 'utf-8');
     }
 
     const { length } = bytes;
@@ -638,8 +659,8 @@ export class Buffer {
 
     this.#seek(offset);
 
-    if (arguments.length >= 2) {
-      return Encoding.decode(bytes, encoding);
+    if (encoding != null) {
+      return this.#decode(bytes, encoding);
     }
 
     return bytes;
@@ -654,9 +675,11 @@ export class Buffer {
    * @returns {Buffer}
    */
   public slice(start?: number, end?: number): Buffer {
-    const bytes = this.#bytes.slice(start, end);
-
-    return new Buffer(bytes, this.#pageSize);
+    return new Buffer(this.#bytes.slice(start, end), {
+      encode: this.#encode,
+      decode: this.#decode,
+      pageSize: this.#pageSize
+    });
   }
 
   /**
@@ -703,6 +726,15 @@ export class Buffer {
   }
 
   /**
+   * @method iterator
+   * @description 迭代器
+   * @returns {IterableIterator<number>}
+   */
+  public [Symbol.iterator]() {
+    return this.values();
+  }
+
+  /**
    * @override
    * @method toString
    * @description 获取 Buffer 对象二进制编码字符串
@@ -712,24 +744,12 @@ export class Buffer {
     // 二进制编码字符串
     let binary = '';
 
-    // 提前获取 bytes，防止重复计算
-    const bytes: Uint8Array = this.bytes;
-
     // 获取二进制编码
-    for (const byte of bytes) {
-      binary += Binary.mapping[byte];
+    for (const byte of this) {
+      binary += mapping[byte];
     }
 
     // 返回二进制编码
     return binary;
-  }
-
-  /**
-   * @method iterator
-   * @description 迭代器
-   * @returns {IterableIterator<number>}
-   */
-  public [Symbol.iterator]() {
-    return this.values();
   }
 }

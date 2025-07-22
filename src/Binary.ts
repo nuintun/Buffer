@@ -1,5 +1,5 @@
 /**
- * @module Binary
+ * @module binary
  */
 
 /**

@@ -136,34 +136,12 @@ function toFloat64(value) {
  */
 
 /**
- * @module Binary
- */
-/**
- * @type {string[]}
- * @description 已获得的二进制映射表
- */
-const mapping = [];
-// 生成映射表
-for (let code = 0; code < 256; code++) {
-  mapping[code] = String.fromCharCode(code);
-}
-
-/**
- * @package @nuintun/buffer
- * @license MIT
- * @version 0.3.2
- * @author nuintun <nuintun@qq.com>
- * @description A buffer tool for javascript.
- * @see https://github.com/nuintun/Buffer#readme
- */
-
-/**
  * @module errors
  */
 /**
  * @function encodingInvalid
  * @description 未支持的编码格式
- * @param encoding 编码格式
+ * @param {string} encoding 编码格式
  */
 function encodingInvalid(encoding) {
   return 'unsupported encoding ' + encoding;
@@ -189,121 +167,16 @@ const readOverflow = 'read is outside the bounds of the Buffer';
  */
 
 /**
- * @module UTF8
- */
-// 编码器实例
-const encoder = new TextEncoder();
-// 解码器实例
-const decoder = new TextDecoder();
-/**
- * @function encode
- * @param {string} input
- * @returns {Uint8Array}
- */
-const encode$2 = encoder.encode.bind(encoder);
-/**
- * @function decode
- * @param {BufferSource} input
- * @returns {string}
- */
-const decode$2 = decoder.decode.bind(decoder);
-
-/**
- * @package @nuintun/buffer
- * @license MIT
- * @version 0.3.2
- * @author nuintun <nuintun@qq.com>
- * @description A buffer tool for javascript.
- * @see https://github.com/nuintun/Buffer#readme
- */
-
-/**
- * @module Unicode
+ * @module binary
  */
 /**
- * @function encode
- * @param {string} input
- * @param {TypeArray} Buffer
- * @returns {Uint8Array}
+ * @type {string[]}
+ * @description 已获得的二进制映射表
  */
-function encode$1(input, TypeArray) {
-  const { length } = input;
-  const array = new TypeArray(length);
-  for (let i = 0; i < length; i++) {
-    array[i] = input.codePointAt(i) || 0;
-  }
-  return new Uint8Array(array.buffer);
-}
-/**
- * @function decode
- * @param {BufferSource} input
- * @param {TypeArray} Buffer
- * @returns {string}
- */
-function decode$1(input, TypeArray) {
-  let result = '';
-  const array = new TypeArray(ArrayBuffer.isView(input) ? input.buffer : input);
-  for (const code of array) {
-    result += String.fromCodePoint(code);
-  }
-  return result;
-}
-
-/**
- * @package @nuintun/buffer
- * @license MIT
- * @version 0.3.2
- * @author nuintun <nuintun@qq.com>
- * @description A buffer tool for javascript.
- * @see https://github.com/nuintun/Buffer#readme
- */
-
-/**
- * @module Encoding
- */
-/**
- * @function encode
- * @description 用指定编码编码字符串
- * @param {string} input 需要编码的字符串
- * @param {string} [encoding] 字符串编码
- * @returns {Uint8Array}
- */
-function encode(input, encoding = 'UTF8') {
-  switch (encoding.toUpperCase()) {
-    case 'UTF8':
-    case 'UTF-8':
-      return encode$2(input);
-    case 'UTF16':
-    case 'UTF-16':
-      return encode$1(input, Uint16Array);
-    case 'UTF32':
-    case 'UTF-32':
-      return encode$1(input, Uint32Array);
-    default:
-      throw new TypeError(encodingInvalid(encoding));
-  }
-}
-/**
- * @function decode
- * @description 用指定编码解码字符串数据
- * @param {BufferSource} input 需要解码的字符串数据
- * @param {string} [encoding] 字符串编码
- * @returns {string}
- */
-function decode(input, encoding = 'UTF8') {
-  switch (encoding.toUpperCase()) {
-    case 'UTF8':
-    case 'UTF-8':
-      return decode$2(input);
-    case 'UTF16':
-    case 'UTF-16':
-      return decode$1(input, Uint16Array);
-    case 'UTF32':
-    case 'UTF-32':
-      return decode$1(input, Uint32Array);
-    default:
-      throw new TypeError(encodingInvalid(encoding));
-  }
+const mapping = [];
+// 生成映射表
+for (let code = 0; code < 256; code++) {
+  mapping[code] = String.fromCharCode(code);
 }
 
 /**
@@ -324,6 +197,94 @@ var Endian;
   Endian[(Endian['Big'] = 0)] = 'Big';
   Endian[(Endian['Little'] = 1)] = 'Little';
 })(Endian || (Endian = {}));
+
+/**
+ * @package @nuintun/buffer
+ * @license MIT
+ * @version 0.3.2
+ * @author nuintun <nuintun@qq.com>
+ * @description A buffer tool for javascript.
+ * @see https://github.com/nuintun/Buffer#readme
+ */
+
+/**
+ * @module encoding
+ */
+/**
+ * @function encodeSBSC
+ * @description 单字节字符编码
+ * @param {string} content 文本内容
+ * @param {number} maxCode 最大编码
+ * @returns {Uint8Array}
+ */
+function encodeSBSC(content, maxCode) {
+  const bytes = [];
+  for (const character of content) {
+    const code = character.codePointAt(0);
+    // If gt max code, push "?".
+    bytes.push(code == null || code > maxCode ? 63 : code);
+  }
+  return new Uint8Array(bytes);
+}
+/**
+ * @function swapEndian
+ * @description 翻转字节序
+ * @param {number} value 待翻转字节序的值
+ * @returns {number}
+ */
+function swapEndian(value) {
+  return ((value & 0xff) << 8) | ((value >> 8) & 0xff);
+}
+/**
+ * @function encodeUTF16
+ * @param {string} input 待编码字符串
+ * @param {boolean} [littleEndian] 是否使用小端字节序
+ * @returns {Uint8Array}
+ */
+function encodeUTF16(input, littleEndian) {
+  let offset = 0;
+  // 分配内存
+  const codes = new Uint16Array(input.length);
+  for (const char of input) {
+    const code = char.codePointAt(0);
+    if (code > 0xffff) {
+      // 代理对处理
+      const high = 0xd800 | ((code - 0x10000) >> 10);
+      const low = 0xdc00 | (code & 0x3ff);
+      codes[offset++] = littleEndian ? high : swapEndian(high);
+      codes[offset++] = littleEndian ? low : swapEndian(low);
+    } else {
+      codes[offset++] = littleEndian ? code : swapEndian(code);
+    }
+  }
+  return new Uint8Array(codes.buffer, 0, offset * 2);
+}
+function encode(content, encoding) {
+  switch (encoding.toLowerCase()) {
+    case 'ascii':
+      return encodeSBSC(content, 0x7f);
+    case 'latin1':
+      return encodeSBSC(content, 0xff);
+    case 'utf8':
+    case 'utf-8':
+      return new TextEncoder().encode(content);
+    case 'utf16le':
+    case 'utf-16le':
+      return encodeUTF16(content, true);
+    case 'utf16be':
+    case 'utf-16be':
+      return encodeUTF16(content, false);
+    default:
+      throw new Error(encodingInvalid(encoding));
+  }
+}
+function decode(bytes, encoding) {
+  try {
+    return new TextDecoder(encoding).decode(bytes);
+  } catch {
+    throw new Error(encodingInvalid(encoding));
+  }
+}
 
 /**
  * @package @nuintun/buffer
@@ -414,14 +375,14 @@ class Buffer {
   #offset = 0;
   // 已使用字节长度
   #length = 0;
-  /**
-   * @constructor
-   * @param {number | Uint8Array | ArrayBuffer} [input] 缓冲区初始配置
-   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
-   */
-  constructor(input = 0, pageSize = 4096) {
+  // 文本编码方法
+  #encode;
+  // 文本解码方法
+  #decode;
+  constructor(input = 0, options = {}) {
     let length;
     let bytes;
+    const { pageSize = 4096 } = options;
     if (isTypedArray(input)) {
       length = input.byteLength;
       bytes = makeUint8Array(length, pageSize);
@@ -441,6 +402,8 @@ class Buffer {
     this.#bytes = bytes;
     this.#length = length;
     this.#pageSize = pageSize;
+    this.#encode = options.encode ?? encode;
+    this.#decode = options.decode ?? decode;
     this.#dataView = new DataView(bytes.buffer);
   }
   /**
@@ -694,7 +657,7 @@ class Buffer {
     if (input instanceof Uint8Array) {
       bytes = input.subarray(start, end);
     } else {
-      bytes = encode(input, start);
+      bytes = this.#encode(input, start ?? 'utf-8');
     }
     const { length } = bytes;
     if (length > 0) {
@@ -848,8 +811,8 @@ class Buffer {
     this.#assertRead(offset);
     const bytes = this.#bytes.slice(this.#offset, offset);
     this.#seek(offset);
-    if (arguments.length >= 2) {
-      return decode(bytes, encoding);
+    if (encoding != null) {
+      return this.#decode(bytes, encoding);
     }
     return bytes;
   }
@@ -862,8 +825,11 @@ class Buffer {
    * @returns {Buffer}
    */
   slice(start, end) {
-    const bytes = this.#bytes.slice(start, end);
-    return new Buffer(bytes, this.#pageSize);
+    return new Buffer(this.#bytes.slice(start, end), {
+      encode: this.#encode,
+      decode: this.#decode,
+      pageSize: this.#pageSize
+    });
   }
   /**
    * @public
@@ -903,6 +869,14 @@ class Buffer {
     }
   }
   /**
+   * @method iterator
+   * @description 迭代器
+   * @returns {IterableIterator<number>}
+   */
+  [Symbol.iterator]() {
+    return this.values();
+  }
+  /**
    * @override
    * @method toString
    * @description 获取 Buffer 对象二进制编码字符串
@@ -911,22 +885,12 @@ class Buffer {
   toString() {
     // 二进制编码字符串
     let binary = '';
-    // 提前获取 bytes，防止重复计算
-    const bytes = this.bytes;
     // 获取二进制编码
-    for (const byte of bytes) {
+    for (const byte of this) {
       binary += mapping[byte];
     }
     // 返回二进制编码
     return binary;
-  }
-  /**
-   * @method iterator
-   * @description 迭代器
-   * @returns {IterableIterator<number>}
-   */
-  [Symbol.iterator]() {
-    return this.values();
   }
 }
 
@@ -971,6 +935,6 @@ console.log(toInt64(0xf0f1fafbfcfdfeffn), '->', buffer.readInt64());
 console.log(toUint64(0xfffefdfcfbfaf1f0n), '->', buffer.readUint64());
 console.log(toFloat32(123456.654321), '->', buffer.readFloat32());
 console.log(toFloat64(987654321.123456789), '->', buffer.readFloat64());
-console.log(desc, '->', buffer.read(byteLength(desc), 'UTF-8'));
+console.log(desc, '->', buffer.read(byteLength(desc), 'utf-8'));
 console.log(`\r\n${hex(buffer.bytes)}\r\n`);
 console.log('endianness', '->', Endian[endianness()]);
