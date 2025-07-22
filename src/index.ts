@@ -675,7 +675,7 @@ export class Buffer {
    * @returns {Buffer}
    */
   public slice(start?: number, end?: number): Buffer {
-    return new Buffer(this.#bytes.slice(start, end), {
+    return new Buffer(this.bytes.slice(start, end), {
       encode: this.#encode,
       decode: this.#decode,
       pageSize: this.#pageSize
@@ -692,7 +692,7 @@ export class Buffer {
    * @returns {this}
    */
   public copyWithin(target: number, start: number, end?: number): this {
-    this.#bytes.copyWithin(target, start, end);
+    this.bytes.copyWithin(target, start, end);
 
     return this;
   }
