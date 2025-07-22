@@ -32,12 +32,12 @@ function zero(value: number, max: number): string {
 }
 
 /**
- * @function hex
+ * @function hexdump
  * @function Hex 查看器
  * @param {Uint8Array} buffer
  * @returns {string}
  */
-export function hex(buffer: Uint8Array): string {
+export function hexdump(buffer: Uint8Array): string {
   const { length }: Uint8Array = buffer;
   const last: number = length % 16 || 16;
   const rows: number = Math.ceil(length / 16);

@@ -2,8 +2,8 @@
  * @module tests
  */
 
-import { hex } from './hex';
 import * as number from './number';
+import { hexdump } from './hexdump';
 import { Buffer, Endian, endianness } from '@nuintun/buffer';
 
 /**
@@ -51,5 +51,5 @@ console.log(number.toUint64(0xfffefdfcfbfaf1f0n), '->', buffer.readUint64());
 console.log(number.toFloat32(123456.654321), '->', buffer.readFloat32());
 console.log(number.toFloat64(987654321.123456789), '->', buffer.readFloat64());
 console.log(desc, '->', buffer.read(byteLength(desc), 'utf-8'));
-console.log(`\r\n${hex(buffer.bytes)}\r\n`);
+console.log(`\r\n${hexdump(buffer.bytes)}\r\n`);
 console.log('endianness', '->', Endian[endianness()]);
