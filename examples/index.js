@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.3.2
+ * @version 0.4.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -84,7 +84,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.2
+   * @version 0.4.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -115,7 +115,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.2
+   * @version 0.4.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -137,7 +137,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.2
+   * @version 0.4.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -156,7 +156,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.2
+   * @version 0.4.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -244,7 +244,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.2
+   * @version 0.4.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -290,7 +290,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.3.2
+   * @version 0.4.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
