@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -129,7 +129,7 @@ function hexdump(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -160,7 +160,7 @@ const readOverflow = 'read is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -182,7 +182,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -201,7 +201,7 @@ var Endian;
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -289,7 +289,7 @@ function decode(bytes, encoding) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -335,7 +335,7 @@ function makeUint8Array(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.5.0
+ * @version 0.6.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -387,13 +387,7 @@ class Buffer {
       length = input.byteLength;
       bytes = makeUint8Array(length, pageSize);
       if (length > 0) {
-        bytes.set(new Uint8Array(input.buffer));
-      }
-    } else if (input instanceof ArrayBuffer) {
-      length = input.byteLength;
-      bytes = makeUint8Array(length, pageSize);
-      if (length > 0) {
-        bytes.set(new Uint8Array(input));
+        bytes.set(new Uint8Array(input.buffer, input.byteOffset, length));
       }
     } else {
       length = input;
