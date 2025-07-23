@@ -81,13 +81,7 @@ export class Buffer {
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
   constructor(bytes: TypedArray, options?: Options);
-  /**
-   * @constructor
-   * @param {ArrayBuffer} buffer 缓冲区初始缓冲数据
-   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
-   */
-  constructor(buffer: ArrayBuffer, options?: Options);
-  constructor(input: number | TypedArray | ArrayBuffer = 0, options: Options = {}) {
+  constructor(input: number | TypedArray = 0, options: Options = {}) {
     let length: number;
     let bytes: Uint8Array;
 
@@ -100,14 +94,6 @@ export class Buffer {
 
       if (length > 0) {
         bytes.set(new Uint8Array(input.buffer, input.byteOffset, length));
-      }
-    } else if (input instanceof ArrayBuffer) {
-      length = input.byteLength;
-
-      bytes = makeUint8Array(length, pageSize);
-
-      if (length > 0) {
-        bytes.set(new Uint8Array(input));
       }
     } else {
       length = input;
