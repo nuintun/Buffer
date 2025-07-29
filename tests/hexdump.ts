@@ -4,31 +4,62 @@
 
 /**
  * @type {string[]}
- * @description 已获得的 hex 映射表
+ * @description 字节到可见字符的查找表
  */
-const mapping: string[] = [];
+const BYTE_TO_CHAR_TABLE: string[] = [];
+
+for (let byte = 0; byte <= 0xff; byte++) {
+  if (byte > 31 && byte < 127) {
+    BYTE_TO_CHAR_TABLE.push(String.fromCodePoint(byte));
+  } else {
+    BYTE_TO_CHAR_TABLE.push('.');
+  }
+}
+
+/**
+ * @type {string[]}
+ * @description 字节到十六进制字符串的查找表
+ */
+const BYTE_TO_HEX_TABLE: string[] = [];
 
 // 字母映射表
 const alphabet: string = '0123456789ABCDEF';
 
 // 生成映射表
-for (let i: number = 0; i < 16; ++i) {
-  const i16: number = i * 16;
+for (let i = 0; i < 16; i++) {
+  const i16 = i * 16;
 
-  for (let j: number = 0; j < 16; ++j) {
-    mapping[i16 + j] = alphabet[i] + alphabet[j];
+  for (let j = 0; j < 16; j++) {
+    BYTE_TO_HEX_TABLE[i16 + j] = alphabet[i] + alphabet[j];
   }
 }
 
 /**
- * @function zero
+ * @function getHexDigitCount
+ * @description 获取十六进制字符串的长度
+ * @param length 数据长度
+ */
+function getHexDigitCount(length: number): number {
+  if (length === 0) {
+    return 1;
+  }
+
+  return (35 - Math.clz32(length)) >> 2;
+}
+
+/**
+ * @function pad
  * @description 数字左边补零操作
  * @param {number} value
  * @param {number} max
  * @returns {string}
  */
-function zero(value: number, max: number): string {
-  return (value > 0xff ? value.toString(16) : mapping[value]).padStart(max, '0');
+function pad(value: number, max: number): string {
+  if (value > 0xff) {
+    return value.toString(16).padStart(max, '0');
+  }
+
+  return BYTE_TO_HEX_TABLE[value].padStart(max, '0');
 }
 
 /**
@@ -38,49 +69,52 @@ function zero(value: number, max: number): string {
  * @returns {string}
  */
 export function hexdump(buffer: Uint8Array): string {
-  const { length }: Uint8Array = buffer;
-  const last: number = length % 16 || 16;
-  const rows: number = Math.ceil(length / 16);
-  const offsetLength: number = Math.max(6, length.toString(16).length);
-
+  let index = 0;
   let rowBytes: number;
-  let index: number = 0;
   let rowSpaces: number;
-  let hex: string = `\u001b[36mOFFSET  `;
+  let hex = `\u001b[36mOFFSET  `;
 
-  for (let i: number = 0; i < 16; i++) {
-    hex += ` ${zero(i, 2)}`;
+  const { length } = buffer;
+  const rows = Math.ceil(length / 16);
+
+  for (let i = 0; i < 16; i++) {
+    hex += ` ${pad(i, 2)}`;
   }
 
-  hex += `\u001b[0m\n`;
+  hex += `\u001b[0m`;
 
-  if (length) {
-    hex += `\n`;
+  if (rows > 0) {
+    hex += `\n\n`;
   }
 
-  for (let i: number = 0; i < rows; i++) {
-    hex += `\u001b[36m${zero(index, offsetLength)}\u001b[0m  `;
-    rowBytes = i === rows - 1 ? last : 16;
+  const maxRowIndex = rows - 1;
+  const offset = Math.max(6, getHexDigitCount(length));
+
+  for (let i = 0; i < rows; i++) {
+    const isLastRow = i >= maxRowIndex;
+
+    hex += `\u001b[36m${pad(index, offset)}\u001b[0m  `;
+    rowBytes = isLastRow ? length % 16 : 16;
     rowSpaces = 16 - rowBytes;
 
-    for (let j: number = 0; j < rowBytes; j++) {
-      hex += ` \u001b[33m${zero(buffer[index++], 2)}\u001b[0m`;
+    for (let j = 0; j < rowBytes; j++) {
+      hex += ` \u001b[33m${pad(buffer[index++], 2)}\u001b[0m`;
     }
 
-    for (let j: number = 0; j <= rowSpaces; j++) {
+    for (let j = 0; j <= rowSpaces; j++) {
       hex += `   `;
     }
 
     index -= rowBytes;
 
-    for (let j: number = 0; j < rowBytes; j++) {
-      const byte: number = buffer[index++];
-
-      hex += (byte > 31 && byte < 127) || byte > 159 ? String.fromCharCode(byte) : `.`;
+    for (let j = 0; j < rowBytes; j++) {
+      hex += BYTE_TO_CHAR_TABLE[buffer[index++]];
     }
 
-    hex += `\n`;
+    if (!isLastRow) {
+      hex += `\n`;
+    }
   }
 
-  return hex.trim();
+  return hex;
 }
