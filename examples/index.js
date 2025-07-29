@@ -17,68 +17,95 @@
    */
   /**
    * @type {string[]}
-   * @description 已获得的 hex 映射表
+   * @description 字节到可见字符的查找表
    */
-  const mapping$1 = [];
-  // 字母映射表
-  const alphabet = '0123456789ABCDEF';
-  // 生成映射表
-  for (let i = 0; i < 16; ++i) {
-    const i16 = i * 16;
-    for (let j = 0; j < 16; ++j) {
-      mapping$1[i16 + j] = alphabet[i] + alphabet[j];
+  const BYTE_TO_CHAR_TABLE = [];
+  for (let byte = 0; byte <= 0xff; byte++) {
+    if (byte > 31 && byte < 127) {
+      BYTE_TO_CHAR_TABLE.push(String.fromCodePoint(byte));
+    } else {
+      BYTE_TO_CHAR_TABLE.push('.');
     }
   }
   /**
-   * @function zero
+   * @type {string[]}
+   * @description 字节到十六进制字符串的查找表
+   */
+  const BYTE_TO_HEX_TABLE = [];
+  // 字母映射表
+  const alphabet = '0123456789ABCDEF';
+  // 生成映射表
+  for (let i = 0; i < 16; i++) {
+    const i16 = i * 16;
+    for (let j = 0; j < 16; j++) {
+      BYTE_TO_HEX_TABLE[i16 + j] = alphabet[i] + alphabet[j];
+    }
+  }
+  /**
+   * @function getHexDigitCount
+   * @description 获取十六进制字符串的长度
+   * @param length 数据长度
+   */
+  function getHexDigitCount(length) {
+    if (length === 0) {
+      return 1;
+    }
+    return (35 - Math.clz32(length)) >> 2;
+  }
+  /**
+   * @function pad
    * @description 数字左边补零操作
    * @param {number} value
    * @param {number} max
    * @returns {string}
    */
-  function zero(value, max) {
-    return (value > 0xff ? value.toString(16) : mapping$1[value]).padStart(max, '0');
+  function pad(value, max) {
+    if (value > 0xff) {
+      return value.toString(16).padStart(max, '0');
+    }
+    return BYTE_TO_HEX_TABLE[value].padStart(max, '0');
   }
   /**
-   * @function hex
+   * @function hexdump
    * @function Hex 查看器
    * @param {Uint8Array} buffer
    * @returns {string}
    */
-  function hex(buffer) {
-    const { length } = buffer;
-    const last = length % 16 || 16;
-    const rows = Math.ceil(length / 16);
-    const offsetLength = Math.max(6, length.toString(16).length);
-    let rowBytes;
+  function hexdump(buffer) {
     let index = 0;
+    let rowBytes;
     let rowSpaces;
     let hex = `OFFSET  `;
+    const { length } = buffer;
+    const rows = Math.ceil(length / 16);
     for (let i = 0; i < 16; i++) {
-      hex += ` ${zero(i, 2)}`;
+      hex += ` ${pad(i, 2)}`;
     }
-    hex += `\n`;
-    if (length) {
-      hex += `\n`;
+    if (rows > 0) {
+      hex += `\n\n`;
     }
+    const maxRowIndex = rows - 1;
+    const offset = Math.max(6, getHexDigitCount(length));
     for (let i = 0; i < rows; i++) {
-      hex += `${zero(index, offsetLength)}  `;
-      rowBytes = i === rows - 1 ? last : 16;
+      const isLastRow = i >= maxRowIndex;
+      hex += `${pad(index, offset)}  `;
+      rowBytes = isLastRow ? length % 16 : 16;
       rowSpaces = 16 - rowBytes;
       for (let j = 0; j < rowBytes; j++) {
-        hex += ` ${zero(buffer[index++], 2)}`;
+        hex += ` ${pad(buffer[index++], 2)}`;
       }
       for (let j = 0; j <= rowSpaces; j++) {
         hex += `   `;
       }
       index -= rowBytes;
       for (let j = 0; j < rowBytes; j++) {
-        const byte = buffer[index++];
-        hex += (byte > 31 && byte < 127) || byte > 159 ? String.fromCharCode(byte) : `.`;
+        hex += BYTE_TO_CHAR_TABLE[buffer[index++]];
       }
-      hex += `\n`;
+      if (!isLastRow) {
+        hex += `\n`;
+      }
     }
-    return hex.trim();
+    return hex;
   }
 
   /**
@@ -857,7 +884,7 @@
     const buffer = new Buffer();
     buffer.write(`${++index}: A buffer tool for javascript.`);
     const performance = window.performance.now() - timeStamp;
-    view.value = `${hex(buffer.bytes)}\r\n\r\nendianness: ${Endian[endianness()]}\r\nperformance: ${performance}ms`;
+    view.value = `${hexdump(buffer.bytes)}\r\n\r\nendianness: ${Endian[endianness()]}\r\nperformance: ${performance}ms`;
     raf = window.requestAnimationFrame(onStart);
   }
   function onStop() {

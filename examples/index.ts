@@ -2,7 +2,7 @@
  * @module examples
  */
 
-import { hex } from './hex';
+import { hexdump } from './hexdump';
 import { Buffer, Endian, endianness } from '@nuintun/buffer';
 
 let raf: number;
@@ -23,7 +23,7 @@ function onStart() {
 
   const performance: number = window.performance.now() - timeStamp;
 
-  view.value = `${hex(buffer.bytes)}\r\n\r\nendianness: ${Endian[endianness()]}\r\nperformance: ${performance}ms`;
+  view.value = `${hexdump(buffer.bytes)}\r\n\r\nendianness: ${Endian[endianness()]}\r\nperformance: ${performance}ms`;
 
   raf = window.requestAnimationFrame(onStart);
 }
