@@ -94,7 +94,7 @@ export function hexdump(buffer: Uint8Array): string {
     const isLastRow = i >= maxRowIndex;
 
     hex += `\u001b[36m${pad(index, offset)}\u001b[0m  `;
-    rowBytes = isLastRow ? length % 16 : 16;
+    rowBytes = isLastRow ? length - index : 16;
     rowSpaces = 16 - rowBytes;
 
     for (let j = 0; j < rowBytes; j++) {

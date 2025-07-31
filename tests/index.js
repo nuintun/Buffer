@@ -135,7 +135,7 @@ function hexdump(buffer) {
   for (let i = 0; i < rows; i++) {
     const isLastRow = i >= maxRowIndex;
     hex += `\u001b[36m${pad(index, offset)}\u001b[0m  `;
-    rowBytes = isLastRow ? length % 16 : 16;
+    rowBytes = isLastRow ? length - index : 16;
     rowSpaces = 16 - rowBytes;
     for (let j = 0; j < rowBytes; j++) {
       hex += ` \u001b[33m${pad(buffer[index++], 2)}\u001b[0m`;

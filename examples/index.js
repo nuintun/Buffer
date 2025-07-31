@@ -89,7 +89,7 @@
     for (let i = 0; i < rows; i++) {
       const isLastRow = i >= maxRowIndex;
       hex += `${pad(index, offset)}  `;
-      rowBytes = isLastRow ? length % 16 : 16;
+      rowBytes = isLastRow ? length - index : 16;
       rowSpaces = 16 - rowBytes;
       for (let j = 0; j < rowBytes; j++) {
         hex += ` ${pad(buffer[index++], 2)}`;
