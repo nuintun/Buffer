@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -157,7 +157,7 @@ function hexdump(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -188,7 +188,7 @@ const readOverflow = 'read is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -210,7 +210,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -229,7 +229,7 @@ var Endian;
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -317,7 +317,7 @@ function decode(bytes, encoding) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -363,7 +363,7 @@ function makeUint8Array(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -429,7 +429,7 @@ class Buffer {
     this.#encode = options.encode ?? encode;
     this.#decode = options.decode ?? decode;
     this.#dataView = new DataView(bytes.buffer);
-    this.#littleEndian = options.littleEndian ?? false;
+    this.#littleEndian = options.littleEndian ?? true;
   }
   /**
    * @private

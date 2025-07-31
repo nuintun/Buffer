@@ -55,7 +55,7 @@ export interface Options {
   decode?: TextDecode;
   /**
    * @property {boolean} [littleEndian]
-   * @description 指定默认字节序
+   * @description 指定默认字节序，默认小端字节序
    */
   littleEndian?: boolean;
 }

@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.1
+ * @version 0.7.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -111,7 +111,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.6.1
+   * @version 0.7.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -142,7 +142,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.6.1
+   * @version 0.7.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -164,7 +164,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.6.1
+   * @version 0.7.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -183,7 +183,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.6.1
+   * @version 0.7.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -271,7 +271,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.6.1
+   * @version 0.7.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -317,7 +317,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.6.1
+   * @version 0.7.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -383,7 +383,7 @@
       this.#encode = options.encode ?? encode;
       this.#decode = options.decode ?? decode;
       this.#dataView = new DataView(bytes.buffer);
-      this.#littleEndian = options.littleEndian ?? false;
+      this.#littleEndian = options.littleEndian ?? true;
     }
     /**
      * @private
