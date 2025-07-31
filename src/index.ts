@@ -114,7 +114,7 @@ export class Buffer {
     this.#encode = options.encode ?? encode;
     this.#decode = options.decode ?? decode;
     this.#dataView = new DataView(bytes.buffer);
-    this.#littleEndian = options.littleEndian ?? false;
+    this.#littleEndian = options.littleEndian ?? true;
   }
 
   /**
