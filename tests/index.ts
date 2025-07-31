@@ -6,23 +6,9 @@ import * as number from './number';
 import { hexdump } from './hexdump';
 import { Buffer, Endian, endianness } from '@nuintun/buffer';
 
-/**
- * @function byteLength
- * @description 获取字符串指定编码字节长度
- * @param {string} input
- * @param {string} [encoding]
- * @returns {number}
- */
-function byteLength(input: string, encoding?: string): number {
-  const buffer: Buffer = new Buffer();
-
-  buffer.write(input, encoding);
-
-  return buffer.length;
-}
-
-const buffer: Buffer = new Buffer();
-const desc: string = `A buffer tool for javascript.`;
+const buffer = new Buffer();
+const desc = `A buffer tool for javascript.`;
+const descBytes = new TextEncoder().encode(desc);
 
 buffer.writeInt8(0xaf);
 buffer.writeUint8(0xfa);
@@ -35,7 +21,7 @@ buffer.writeInt64(0xf0f1fafbfcfdfeffn);
 buffer.writeUint64(0xfffefdfcfbfaf1f0n);
 buffer.writeFloat32(123456.654321);
 buffer.writeFloat64(987654321.123456789);
-buffer.write(desc);
+buffer.write(descBytes);
 
 buffer.offset = 0;
 
@@ -50,6 +36,6 @@ console.log(number.toInt64(0xf0f1fafbfcfdfeffn), '->', buffer.readInt64());
 console.log(number.toUint64(0xfffefdfcfbfaf1f0n), '->', buffer.readUint64());
 console.log(number.toFloat32(123456.654321), '->', buffer.readFloat32());
 console.log(number.toFloat64(987654321.123456789), '->', buffer.readFloat64());
-console.log(desc, '->', buffer.read(byteLength(desc), 'utf-8'));
+console.log(desc, '->', buffer.read(descBytes.length, 'utf-8'));
 console.log(`\r\n${hexdump(buffer.bytes)}\r\n`);
 console.log('endianness', '->', Endian[endianness()]);

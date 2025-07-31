@@ -923,20 +923,9 @@ class Buffer {
 /**
  * @module tests
  */
-/**
- * @function byteLength
- * @description 获取字符串指定编码字节长度
- * @param {string} input
- * @param {string} [encoding]
- * @returns {number}
- */
-function byteLength(input, encoding) {
-  const buffer = new Buffer();
-  buffer.write(input, encoding);
-  return buffer.length;
-}
 const buffer = new Buffer();
 const desc = `A buffer tool for javascript.`;
+const descBytes = new TextEncoder().encode(desc);
 buffer.writeInt8(0xaf);
 buffer.writeUint8(0xfa);
 buffer.writeBoolean(true);
@@ -948,7 +937,7 @@ buffer.writeInt64(0xf0f1fafbfcfdfeffn);
 buffer.writeUint64(0xfffefdfcfbfaf1f0n);
 buffer.writeFloat32(123456.654321);
 buffer.writeFloat64(987654321.123456789);
-buffer.write(desc);
+buffer.write(descBytes);
 buffer.offset = 0;
 console.log(toInt8(0xaf), '->', buffer.readInt8());
 console.log(toUint8(0xfa), '->', buffer.readUint8());
@@ -961,6 +950,6 @@ console.log(toInt64(0xf0f1fafbfcfdfeffn), '->', buffer.readInt64());
 console.log(toUint64(0xfffefdfcfbfaf1f0n), '->', buffer.readUint64());
 console.log(toFloat32(123456.654321), '->', buffer.readFloat32());
 console.log(toFloat64(987654321.123456789), '->', buffer.readFloat64());
-console.log(desc, '->', buffer.read(byteLength(desc), 'utf-8'));
+console.log(desc, '->', buffer.read(descBytes.length, 'utf-8'));
 console.log(`\r\n${hexdump(buffer.bytes)}\r\n`);
 console.log('endianness', '->', Endian[endianness()]);
