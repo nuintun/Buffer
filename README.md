@@ -53,6 +53,11 @@ export interface Options {
    * @description 文本解码函数
    */
   decode?: TextDecode;
+  /**
+   * @property {boolean} [littleEndian]
+   * @description 指定默认字节序
+   */
+  littleEndian?: boolean;
 }
 
 /**
@@ -79,12 +84,6 @@ export declare class Buffer {
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
   constructor(bytes: TypedArray, options?: Options);
-  /**
-   * @constructor
-   * @param {ArrayBuffer} buffer 缓冲区初始缓冲数据
-   * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
-   */
-  constructor(buffer: ArrayBuffer, options?: Options);
   /**
    * @public
    * @property {number} offset
@@ -179,7 +178,7 @@ export declare class Buffer {
   /**
    * @method writeInt64
    * @description 在缓冲区中写入一个 64 位有符号整数
-   * @param {bigint} value 要写入的 32 位有符号整数
+   * @param {bigint} value 要写入的 64 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
   writeInt64(value: bigint, littleEndian?: boolean): void;

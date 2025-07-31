@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -157,7 +157,7 @@ function hexdump(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -188,7 +188,7 @@ const readOverflow = 'read is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -210,7 +210,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -229,7 +229,7 @@ var Endian;
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -317,7 +317,7 @@ function decode(bytes, encoding) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -363,7 +363,7 @@ function makeUint8Array(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.6.0
+ * @version 0.6.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -407,6 +407,8 @@ class Buffer {
   #encode;
   // 文本解码方法
   #decode;
+  // 字节序
+  #littleEndian;
   constructor(input = 0, options = {}) {
     let length;
     let bytes;
@@ -427,6 +429,7 @@ class Buffer {
     this.#encode = options.encode ?? encode;
     this.#decode = options.decode ?? decode;
     this.#dataView = new DataView(bytes.buffer);
+    this.#littleEndian = options.littleEndian ?? false;
   }
   /**
    * @private
@@ -584,7 +587,7 @@ class Buffer {
    * @param {number} value 要写入的 16 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeInt16(value, littleEndian) {
+  writeInt16(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(2 /* SizeOf.INT16 */);
     this.#alloc(offset);
     this.#dataView.setInt16(this.#offset, value, littleEndian);
@@ -596,7 +599,7 @@ class Buffer {
    * @param {number} value 要写入的 16 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeUint16(value, littleEndian) {
+  writeUint16(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(2 /* SizeOf.UINT16 */);
     this.#alloc(offset);
     this.#dataView.setUint16(this.#offset, value, littleEndian);
@@ -608,7 +611,7 @@ class Buffer {
    * @param {number} value 要写入的 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeInt32(value, littleEndian) {
+  writeInt32(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(4 /* SizeOf.INT32 */);
     this.#alloc(offset);
     this.#dataView.setInt32(this.#offset, value, littleEndian);
@@ -620,7 +623,7 @@ class Buffer {
    * @param {number} value 要写入的 32 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeUint32(value, littleEndian) {
+  writeUint32(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(4 /* SizeOf.UINT32 */);
     this.#alloc(offset);
     this.#dataView.setUint32(this.#offset, value, littleEndian);
@@ -629,10 +632,10 @@ class Buffer {
   /**
    * @method writeInt64
    * @description 在缓冲区中写入一个 64 位有符号整数
-   * @param {bigint} value 要写入的 32 位有符号整数
+   * @param {bigint} value 要写入的 64 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeInt64(value, littleEndian) {
+  writeInt64(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(8 /* SizeOf.INT64 */);
     this.#alloc(offset);
     this.#dataView.setBigInt64(this.#offset, value, littleEndian);
@@ -644,7 +647,7 @@ class Buffer {
    * @param {bigint} value 要写入的 64 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeUint64(value, littleEndian) {
+  writeUint64(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(8 /* SizeOf.UINT64 */);
     this.#alloc(offset);
     this.#dataView.setBigUint64(this.#offset, value, littleEndian);
@@ -656,7 +659,7 @@ class Buffer {
    * @param {number} value 单精度 32 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeFloat32(value, littleEndian) {
+  writeFloat32(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(4 /* SizeOf.FLOAT32 */);
     this.#alloc(offset);
     this.#dataView.setFloat32(this.#offset, value, littleEndian);
@@ -668,7 +671,7 @@ class Buffer {
    * @param {number} value 双精度 64 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  writeFloat64(value, littleEndian) {
+  writeFloat64(value, littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(8 /* SizeOf.FLOAT64 */);
     this.#alloc(offset);
     this.#dataView.setFloat64(this.#offset, value, littleEndian);
@@ -727,7 +730,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
    */
-  readInt16(littleEndian) {
+  readInt16(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(2 /* SizeOf.INT16 */);
     this.#assertRead(offset);
     const value = this.#dataView.getInt16(this.#offset, littleEndian);
@@ -740,7 +743,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
    */
-  readUint16(littleEndian) {
+  readUint16(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(2 /* SizeOf.UINT16 */);
     this.#assertRead(offset);
     const value = this.#dataView.getUint16(this.#offset, littleEndian);
@@ -753,7 +756,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
    */
-  readInt32(littleEndian) {
+  readInt32(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(4 /* SizeOf.INT32 */);
     this.#assertRead(offset);
     const value = this.#dataView.getInt32(this.#offset, littleEndian);
@@ -766,7 +769,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
    */
-  readUint32(littleEndian) {
+  readUint32(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(4 /* SizeOf.UINT32 */);
     this.#assertRead(offset);
     const value = this.#dataView.getUint32(this.#offset, littleEndian);
@@ -779,7 +782,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
-  readInt64(littleEndian) {
+  readInt64(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(8 /* SizeOf.INT64 */);
     this.#assertRead(offset);
     const value = this.#dataView.getBigInt64(this.#offset, littleEndian);
@@ -792,7 +795,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
    */
-  readUint64(littleEndian) {
+  readUint64(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(8 /* SizeOf.UINT64 */);
     this.#assertRead(offset);
     const value = this.#dataView.getBigUint64(this.#offset, littleEndian);
@@ -805,7 +808,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 单精度 32 位浮点数
    */
-  readFloat32(littleEndian) {
+  readFloat32(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(4 /* SizeOf.FLOAT32 */);
     this.#assertRead(offset);
     const value = this.#dataView.getFloat32(this.#offset, littleEndian);
@@ -818,7 +821,7 @@ class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 双精度 64 位浮点数
    */
-  readFloat64(littleEndian) {
+  readFloat64(littleEndian = this.#littleEndian) {
     const offset = this.#getOffset(8 /* SizeOf.FLOAT64 */);
     this.#assertRead(offset);
     const value = this.#dataView.getFloat64(this.#offset, littleEndian);
@@ -847,10 +850,11 @@ class Buffer {
    * @returns {Buffer}
    */
   slice(start, end) {
-    return new Buffer(this.bytes.slice(start, end), {
+    return new Buffer(this.bytes.subarray(start, end), {
       encode: this.#encode,
       decode: this.#decode,
-      pageSize: this.#pageSize
+      pageSize: this.#pageSize,
+      littleEndian: this.#littleEndian
     });
   }
   /**
