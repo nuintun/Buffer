@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -111,7 +111,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.7.0
+   * @version 0.7.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -138,11 +138,13 @@
   const readLengthInvalid = 'invalid read length';
   // 数据读取溢出
   const readOverflow = 'read is outside the bounds of the Buffer';
+  // 读写指针溢出
+  const offsetOverflow = 'offset is outside the bounds of the Buffer';
 
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.7.0
+   * @version 0.7.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -164,7 +166,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.7.0
+   * @version 0.7.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -183,7 +185,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.7.0
+   * @version 0.7.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -271,7 +273,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.7.0
+   * @version 0.7.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -317,7 +319,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.7.0
+   * @version 0.7.1
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -392,9 +394,6 @@
      * @param {number} offset 指针位置
      */
     #seek(offset) {
-      if (offset > this.#length) {
-        this.#length = offset;
-      }
       this.#offset = offset;
     }
     /**
@@ -410,10 +409,10 @@
      * @private
      * @method assertRead
      * @description 读取断言，防止越界读取
-     * @param {number} size 断言字节长度
+     * @param {number} offset 断言字节长度
      */
-    #assertRead(length) {
-      if (length > this.#length) {
+    #assertRead(offset) {
+      if (offset > this.#length) {
         throw new RangeError(readOverflow);
       }
     }
@@ -431,6 +430,9 @@
         this.#bytes = newBytes;
         this.#dataView = new DataView(newBytes.buffer);
       }
+      if (length > this.#length) {
+        this.#length = length;
+      }
     }
     /**
      * @public
@@ -441,6 +443,9 @@
     set offset(offset) {
       if (!isNaturalNumber(offset)) {
         throw new RangeError(offsetInvalid);
+      }
+      if (offset > this.#length) {
+        throw new RangeError(offsetOverflow);
       }
       this.#offset = offset;
     }
@@ -464,9 +469,8 @@
       if (!isNaturalNumber(length)) {
         throw new RangeError(lengthInvalid);
       }
-      const currentLength = this.#length;
-      if (length > currentLength) {
-        this.#alloc(length - currentLength);
+      if (length > this.#length) {
+        this.#alloc(length);
       } else {
         this.#length = length;
         // 重置多余字节

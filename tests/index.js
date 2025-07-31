@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -157,7 +157,7 @@ function hexdump(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -184,11 +184,13 @@ const unknownEndianness = 'unknown endianness';
 const readLengthInvalid = 'invalid read length';
 // 数据读取溢出
 const readOverflow = 'read is outside the bounds of the Buffer';
+// 读写指针溢出
+const offsetOverflow = 'offset is outside the bounds of the Buffer';
 
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -210,7 +212,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -229,7 +231,7 @@ var Endian;
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -317,7 +319,7 @@ function decode(bytes, encoding) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -363,7 +365,7 @@ function makeUint8Array(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.0
+ * @version 0.7.1
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -438,9 +440,6 @@ class Buffer {
    * @param {number} offset 指针位置
    */
   #seek(offset) {
-    if (offset > this.#length) {
-      this.#length = offset;
-    }
     this.#offset = offset;
   }
   /**
@@ -456,10 +455,10 @@ class Buffer {
    * @private
    * @method assertRead
    * @description 读取断言，防止越界读取
-   * @param {number} size 断言字节长度
+   * @param {number} offset 断言字节长度
    */
-  #assertRead(length) {
-    if (length > this.#length) {
+  #assertRead(offset) {
+    if (offset > this.#length) {
       throw new RangeError(readOverflow);
     }
   }
@@ -477,6 +476,9 @@ class Buffer {
       this.#bytes = newBytes;
       this.#dataView = new DataView(newBytes.buffer);
     }
+    if (length > this.#length) {
+      this.#length = length;
+    }
   }
   /**
    * @public
@@ -487,6 +489,9 @@ class Buffer {
   set offset(offset) {
     if (!isNaturalNumber(offset)) {
       throw new RangeError(offsetInvalid);
+    }
+    if (offset > this.#length) {
+      throw new RangeError(offsetOverflow);
     }
     this.#offset = offset;
   }
@@ -510,9 +515,8 @@ class Buffer {
     if (!isNaturalNumber(length)) {
       throw new RangeError(lengthInvalid);
     }
-    const currentLength = this.#length;
-    if (length > currentLength) {
-      this.#alloc(length - currentLength);
+    if (length > this.#length) {
+      this.#alloc(length);
     } else {
       this.#length = length;
       // 重置多余字节

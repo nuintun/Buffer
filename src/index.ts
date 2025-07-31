@@ -124,10 +124,6 @@ export class Buffer {
    * @param {number} offset 指针位置
    */
   #seek(offset: number): void {
-    if (offset > this.#length) {
-      this.#length = offset;
-    }
-
     this.#offset = offset;
   }
 
@@ -145,10 +141,10 @@ export class Buffer {
    * @private
    * @method assertRead
    * @description 读取断言，防止越界读取
-   * @param {number} size 断言字节长度
+   * @param {number} offset 断言字节长度
    */
-  #assertRead(length: number): asserts length {
-    if (length > this.#length) {
+  #assertRead(offset: number): asserts offset {
+    if (offset > this.#length) {
       throw new RangeError(errors.readOverflow);
     }
   }
@@ -170,6 +166,10 @@ export class Buffer {
       this.#bytes = newBytes;
       this.#dataView = new DataView(newBytes.buffer);
     }
+
+    if (length > this.#length) {
+      this.#length = length;
+    }
   }
 
   /**
@@ -181,6 +181,10 @@ export class Buffer {
   public set offset(offset: number) {
     if (!isNaturalNumber(offset)) {
       throw new RangeError(errors.offsetInvalid);
+    }
+
+    if (offset > this.#length) {
+      throw new RangeError(errors.offsetOverflow);
     }
 
     this.#offset = offset;
@@ -208,10 +212,8 @@ export class Buffer {
       throw new RangeError(errors.lengthInvalid);
     }
 
-    const currentLength = this.#length;
-
-    if (length > currentLength) {
-      this.#alloc(length - currentLength);
+    if (length > this.#length) {
+      this.#alloc(length);
     } else {
       this.#length = length;
 
