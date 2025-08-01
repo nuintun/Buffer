@@ -17,10 +17,10 @@ importers:
         version: 16.0.1(rollup@4.46.2)
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
-        version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.8.3)
+        version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)
       dts-paths:
-        specifier: ^1.1.10
-        version: 1.1.10(typescript@5.8.3)
+        specifier: ^1.1.11
+        version: 1.1.11(typescript@5.9.2)
       magic-string:
         specifier: ^0.30.17
         version: 0.30.17
@@ -34,8 +34,8 @@ importers:
         specifier: ^4.46.2
         version: 4.46.2
       typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
 packages:
 
@@ -244,8 +244,8 @@ packages:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
 
-  dts-paths@1.1.10:
-    resolution: {integrity: sha512-Yza1ZlZzDOdufz4CLYOVga8CcBqL0nSAoK87XwGlDf7osh3ErklR4VYeOp1pnt7BtkBmZDm6u0IkD+ZKCiXtfg==}
+  dts-paths@1.1.11:
+    resolution: {integrity: sha512-yK4kuJzh/FV6NAPnyWZVo8Viwli+A0VJ8HptJPxq2dkY+JOgCrrV0yz/U9anyiEmFmJgdOP2XVDwmjxWnzDu9g==}
     peerDependencies:
       typescript: ^5.0.0
 
@@ -447,8 +447,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typescript@5.8.3:
-    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+  typescript@5.9.2:
+    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -506,11 +506,11 @@ snapshots:
     optionalDependencies:
       rollup: 4.46.2
 
-  '@rollup/plugin-typescript@12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.8.3)':
+  '@rollup/plugin-typescript@12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)':
     dependencies:
       '@rollup/pluginutils': 5.2.0(rollup@4.46.2)
       resolve: 1.22.10
-      typescript: 5.8.3
+      typescript: 5.9.2
     optionalDependencies:
       rollup: 4.46.2
       tslib: 2.8.1
@@ -623,11 +623,11 @@ snapshots:
 
   deepmerge@4.3.1: {}
 
-  dts-paths@1.1.10(typescript@5.8.3):
+  dts-paths@1.1.11(typescript@5.9.2):
     dependencies:
       ts-morph: 26.0.0
       tslib: 2.8.1
-      typescript: 5.8.3
+      typescript: 5.9.2
 
   eastasianwidth@0.2.0: {}
 
@@ -826,7 +826,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  typescript@5.8.3: {}
+  typescript@5.9.2: {}
 
   which@2.0.2:
     dependencies:
