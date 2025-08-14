@@ -84,7 +84,7 @@ export class Buffer {
   constructor(length?: number, options?: Options);
   /**
    * @constructor
-   * @param {Uint8Array} bytes 缓冲区初始字节数据
+   * @param {TypedArray} bytes 缓冲区初始字节数据
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
   constructor(bytes: TypedArray, options?: Options);
@@ -248,11 +248,11 @@ export class Buffer {
 
   /**
    * @public
-   * @property {Uint8Array} bytes
+   * @property {Uint8Array<ArrayBuffer>} bytes
    * @description 获取已写入 Uint8Array 原始缓冲区
-   * @returns {Uint8Array}
+   * @returns {Uint8Array<ArrayBuffer>}
    */
-  public get bytes(): Uint8Array {
+  public get bytes(): Uint8Array<ArrayBuffer> {
     return this.#bytes.subarray(0, this.#length);
   }
 
@@ -631,9 +631,9 @@ export class Buffer {
    * @method read
    * @description 从缓冲区中读取指定长度的 Uint8Array 对象
    * @param {number} length 读取的字节长度
-   * @returns {Uint8Array}
+   * @returns {Uint8Array<ArrayBuffer>}
    */
-  public read(length: number): Uint8Array;
+  public read(length: number): Uint8Array<ArrayBuffer>;
   /**
    * @method read
    * @description 从缓冲区中读取一个字符串
@@ -642,7 +642,7 @@ export class Buffer {
    * @returns {string} 指定编码的字符串
    */
   public read(length: number, encoding: string): string;
-  public read(length: number, encoding?: string): string | Uint8Array {
+  public read(length: number, encoding?: string): string | Uint8Array<ArrayBuffer> {
     if (!isNaturalNumber(length)) {
       throw new RangeError(errors.readLengthInvalid);
     }

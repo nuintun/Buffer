@@ -546,9 +546,9 @@ class Buffer {
   }
   /**
    * @public
-   * @property {Uint8Array} bytes
+   * @property {Uint8Array<ArrayBuffer>} bytes
    * @description 获取已写入 Uint8Array 原始缓冲区
-   * @returns {Uint8Array}
+   * @returns {Uint8Array<ArrayBuffer>}
    */
   get bytes() {
     return this.#bytes.subarray(0, this.#length);

@@ -80,7 +80,7 @@ export declare class Buffer {
   constructor(length?: number, options?: Options);
   /**
    * @constructor
-   * @param {Uint8Array} bytes 缓冲区初始字节数据
+   * @param {TypedArray} bytes 缓冲区初始字节数据
    * @param {number} [pageSize] 缓冲区分页大小，扩容时将按分页大小增加
    */
   constructor(bytes: TypedArray, options?: Options);
@@ -122,11 +122,11 @@ export declare class Buffer {
   get buffer(): ArrayBuffer;
   /**
    * @public
-   * @property {Uint8Array} bytes
+   * @property {Uint8Array<ArrayBuffer>} bytes
    * @description 获取已写入 Uint8Array 原始缓冲区
-   * @returns {Uint8Array}
+   * @returns {Uint8Array<ArrayBuffer>}
    */
-  get bytes(): Uint8Array;
+  get bytes(): Uint8Array<ArrayBuffer>;
   /**
    * @public
    * @method writeInt8
@@ -296,9 +296,9 @@ export declare class Buffer {
    * @method read
    * @description 从缓冲区中读取指定长度的 Uint8Array 对象
    * @param {number} length 读取的字节长度
-   * @returns {Uint8Array}
+   * @returns {Uint8Array<ArrayBuffer>}
    */
-  read(length: number): Uint8Array;
+  read(length: number): Uint8Array<ArrayBuffer>;
   /**
    * @method read
    * @description 从缓冲区中读取一个字符串
