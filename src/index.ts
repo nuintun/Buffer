@@ -61,10 +61,6 @@ export class Buffer {
   // 缓冲区页大小
   // 容量不足时按页大小增长
   #pageSize: number;
-  // 缓冲区数据
-  #bytes: Uint8Array;
-  // 缓冲区视图
-  #dataView: DataView;
   // 读写指针位置
   #offset: number = 0;
   // 已使用字节长度
@@ -75,6 +71,10 @@ export class Buffer {
   #decode: TextDecode;
   // 字节序
   #littleEndian: boolean;
+  // 缓冲区数据
+  #bytes: Uint8Array<ArrayBuffer>;
+  // 缓冲区视图
+  #dataView: DataView<ArrayBuffer>;
 
   /**
    * @constructor
@@ -90,7 +90,7 @@ export class Buffer {
   constructor(bytes: TypedArray, options?: Options);
   constructor(input: number | TypedArray = 0, options: Options = {}) {
     let length: number;
-    let bytes: Uint8Array;
+    let bytes: Uint8Array<ArrayBuffer>;
 
     const { pageSize = 4096 } = options;
 

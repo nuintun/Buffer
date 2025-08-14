@@ -43,9 +43,9 @@ export function isNaturalNumber(value: unknown): value is number {
  * @description 创建一个合适长度的 Uint8Array
  * @param {number} length 数据长度大小
  * @param {number} pageSize 缓冲区页大小
- * @returns {Uint8Array}
+ * @returns {Uint8Array<ArrayBuffer>}
  */
-export function makeUint8Array(length: number, pageSize: number): Uint8Array {
+export function makeUint8Array(length: number, pageSize: number): Uint8Array<ArrayBuffer> {
   if (length > pageSize) {
     return new Uint8Array(Math.ceil(length / pageSize) * pageSize);
   }

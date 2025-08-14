@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -157,7 +157,7 @@ function hexdump(buffer) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -190,7 +190,7 @@ const offsetOverflow = 'offset is outside the bounds of the Buffer';
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -212,7 +212,7 @@ for (let code = 0; code < 256; code++) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -231,7 +231,7 @@ var Endian;
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -319,7 +319,7 @@ function decode(bytes, encoding) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -353,7 +353,7 @@ function isNaturalNumber(value) {
  * @description 创建一个合适长度的 Uint8Array
  * @param {number} length 数据长度大小
  * @param {number} pageSize 缓冲区页大小
- * @returns {Uint8Array}
+ * @returns {Uint8Array<ArrayBuffer>}
  */
 function makeUint8Array(length, pageSize) {
   if (length > pageSize) {
@@ -365,7 +365,7 @@ function makeUint8Array(length, pageSize) {
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.7.1
+ * @version 0.7.3
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -397,10 +397,6 @@ class Buffer {
   // 缓冲区页大小
   // 容量不足时按页大小增长
   #pageSize;
-  // 缓冲区数据
-  #bytes;
-  // 缓冲区视图
-  #dataView;
   // 读写指针位置
   #offset = 0;
   // 已使用字节长度
@@ -411,6 +407,10 @@ class Buffer {
   #decode;
   // 字节序
   #littleEndian;
+  // 缓冲区数据
+  #bytes;
+  // 缓冲区视图
+  #dataView;
   constructor(input = 0, options = {}) {
     let length;
     let bytes;
