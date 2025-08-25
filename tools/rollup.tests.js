@@ -3,7 +3,6 @@
  */
 
 import { createRequire } from 'module';
-import treeShake from './plugins/tree-shake.js';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
@@ -37,5 +36,5 @@ export default {
       warn(error);
     }
   },
-  plugins: [resolve(), typescript({ tsconfig: 'tests/tsconfig.json' }), treeShake()]
+  plugins: [resolve(), typescript({ tsconfig: 'tests/tsconfig.json' })]
 };
