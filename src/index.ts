@@ -30,11 +30,6 @@ export interface Options {
    * @description 文本解码函数
    */
   decode?: TextDecode;
-  /**
-   * @property {boolean} [littleEndian]
-   * @description 指定默认字节序，默认小端字节序
-   */
-  littleEndian?: boolean;
 }
 
 /**
@@ -69,8 +64,6 @@ export class Buffer {
   #encode: TextEncode;
   // 文本解码方法
   #decode: TextDecode;
-  // 字节序
-  #littleEndian: boolean;
   // 缓冲区数据
   #bytes: Uint8Array<ArrayBuffer>;
   // 缓冲区视图
@@ -114,7 +107,6 @@ export class Buffer {
     this.#encode = options.encode ?? encode;
     this.#decode = options.decode ?? decode;
     this.#dataView = new DataView(bytes.buffer);
-    this.#littleEndian = options.littleEndian ?? true;
   }
 
   /**
@@ -299,7 +291,7 @@ export class Buffer {
    * @param {number} value 要写入的 16 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeInt16(value: number, littleEndian = this.#littleEndian): void {
+  public writeInt16(value: number, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.INT16);
 
     this.#alloc(offset);
@@ -313,7 +305,7 @@ export class Buffer {
    * @param {number} value 要写入的 16 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeUint16(value: number, littleEndian = this.#littleEndian): void {
+  public writeUint16(value: number, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.UINT16);
 
     this.#alloc(offset);
@@ -327,7 +319,7 @@ export class Buffer {
    * @param {number} value 要写入的 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeInt32(value: number, littleEndian = this.#littleEndian): void {
+  public writeInt32(value: number, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.INT32);
 
     this.#alloc(offset);
@@ -341,7 +333,7 @@ export class Buffer {
    * @param {number} value 要写入的 32 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeUint32(value: number, littleEndian = this.#littleEndian): void {
+  public writeUint32(value: number, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.UINT32);
 
     this.#alloc(offset);
@@ -355,7 +347,7 @@ export class Buffer {
    * @param {bigint} value 要写入的 64 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeInt64(value: bigint, littleEndian = this.#littleEndian): void {
+  public writeInt64(value: bigint, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.INT64);
 
     this.#alloc(offset);
@@ -369,7 +361,7 @@ export class Buffer {
    * @param {bigint} value 要写入的 64 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeUint64(value: bigint, littleEndian = this.#littleEndian): void {
+  public writeUint64(value: bigint, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.UINT64);
 
     this.#alloc(offset);
@@ -383,7 +375,7 @@ export class Buffer {
    * @param {number} value 单精度 32 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeFloat32(value: number, littleEndian = this.#littleEndian): void {
+  public writeFloat32(value: number, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.FLOAT32);
 
     this.#alloc(offset);
@@ -397,7 +389,7 @@ export class Buffer {
    * @param {number} value 双精度 64 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
    */
-  public writeFloat64(value: number, littleEndian = this.#littleEndian): void {
+  public writeFloat64(value: number, littleEndian?: boolean): void {
     const offset = this.#getOffset(SizeOf.FLOAT64);
 
     this.#alloc(offset);
@@ -489,7 +481,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 -32768 和 32767 之间的 16 位有符号整数
    */
-  public readInt16(littleEndian = this.#littleEndian): number {
+  public readInt16(littleEndian?: boolean): number {
     const offset = this.#getOffset(SizeOf.INT16);
 
     this.#assertRead(offset);
@@ -507,7 +499,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 0 和 65535 之间的 16 位无符号整数
    */
-  public readUint16(littleEndian = this.#littleEndian): number {
+  public readUint16(littleEndian?: boolean): number {
     const offset = this.#getOffset(SizeOf.UINT16);
 
     this.#assertRead(offset);
@@ -525,7 +517,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 -2147483648 和 2147483647 之间的 32 位有符号整数
    */
-  public readInt32(littleEndian = this.#littleEndian): number {
+  public readInt32(littleEndian?: boolean): number {
     const offset = this.#getOffset(SizeOf.INT32);
 
     this.#assertRead(offset);
@@ -543,7 +535,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 介于 0 和 4294967295 之间的 32 位无符号整数
    */
-  public readUint32(littleEndian = this.#littleEndian): number {
+  public readUint32(littleEndian?: boolean): number {
     const offset = this.#getOffset(SizeOf.UINT32);
 
     this.#assertRead(offset);
@@ -561,7 +553,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {bigint} 介于 -9223372036854775808 和 9223372036854775807 之间的 64 位有符号整数
    */
-  public readInt64(littleEndian = this.#littleEndian): bigint {
+  public readInt64(littleEndian?: boolean): bigint {
     const offset = this.#getOffset(SizeOf.INT64);
 
     this.#assertRead(offset);
@@ -579,7 +571,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {bigint} 介于 0 和 18446744073709551615 之间的 64 位无符号整数
    */
-  public readUint64(littleEndian = this.#littleEndian): bigint {
+  public readUint64(littleEndian?: boolean): bigint {
     const offset = this.#getOffset(SizeOf.UINT64);
 
     this.#assertRead(offset);
@@ -597,7 +589,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 单精度 32 位浮点数
    */
-  public readFloat32(littleEndian = this.#littleEndian): number {
+  public readFloat32(littleEndian?: boolean): number {
     const offset = this.#getOffset(SizeOf.FLOAT32);
 
     this.#assertRead(offset);
@@ -615,7 +607,7 @@ export class Buffer {
    * @param {boolean} [littleEndian] 是否为小端字节序
    * @returns {number} 双精度 64 位浮点数
    */
-  public readFloat64(littleEndian = this.#littleEndian): number {
+  public readFloat64(littleEndian?: boolean): number {
     const offset = this.#getOffset(SizeOf.FLOAT64);
 
     this.#assertRead(offset);
@@ -671,11 +663,10 @@ export class Buffer {
    * @returns {Buffer}
    */
   public slice(start?: number, end?: number): Buffer {
-    return new Buffer(this.bytes.subarray(start, end), {
+    return new Buffer(this.bytes.slice(start, end), {
       encode: this.#encode,
       decode: this.#decode,
-      pageSize: this.#pageSize,
-      littleEndian: this.#littleEndian
+      pageSize: this.#pageSize
     });
   }
 

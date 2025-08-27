@@ -53,11 +53,6 @@ export interface Options {
    * @description 文本解码函数
    */
   decode?: TextDecode;
-  /**
-   * @property {boolean} [littleEndian]
-   * @description 指定默认字节序，默认小端字节序
-   */
-  littleEndian?: boolean;
 }
 
 /**
