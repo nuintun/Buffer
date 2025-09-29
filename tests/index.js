@@ -851,7 +851,7 @@ class Buffer {
    * @returns {Buffer}
    */
   slice(start, end) {
-    return new Buffer(this.bytes.slice(start, end), {
+    return new Buffer(this.bytes.subarray(start, end), {
       encode: this.#encode,
       decode: this.#decode,
       pageSize: this.#pageSize
