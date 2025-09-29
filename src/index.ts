@@ -277,6 +277,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeBoolean
    * @description 在缓冲区中写入布尔值，true 写 1，false写 0
    * @param {boolean} value 布尔值
@@ -286,6 +287,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeInt16
    * @description 在缓冲区中写入一个 16 位有符号整数
    * @param {number} value 要写入的 16 位有符号整数
@@ -300,6 +302,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeUint16
    * @description 在缓冲区中写入一个 16 位无符号整数
    * @param {number} value 要写入的 16 位无符号整数
@@ -314,6 +317,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeInt32
    * @description 在缓冲区中写入一个有符号的 32 位有符号整数
    * @param {number} value 要写入的 32 位有符号整数
@@ -328,6 +332,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeUint32
    * @description 在缓冲区中写入一个无符号的 32 位无符号整数
    * @param {number} value 要写入的 32 位无符号整数
@@ -342,6 +347,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeInt64
    * @description 在缓冲区中写入一个 64 位有符号整数
    * @param {bigint} value 要写入的 64 位有符号整数
@@ -356,6 +362,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeUint64
    * @description 在缓冲区中写入一个无符号的 64 位无符号整数
    * @param {bigint} value 要写入的 64 位无符号整数
@@ -370,6 +377,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeFloat32
    * @description 在缓冲区中写入一个 IEEE 754 单精度 32 位浮点数
    * @param {number} value 单精度 32 位浮点数
@@ -384,6 +392,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method writeFloat64
    * @description 在缓冲区中写入一个 IEEE 754 双精度 64 位浮点数
    * @param {number} value 双精度 64 位浮点数
@@ -398,6 +407,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method write
    * @description 将字符串用指定编码写入字节流
    * @param {string} value 要写入的字符串
@@ -405,6 +415,7 @@ export class Buffer {
    */
   public write(value: string, encoding?: string): void;
   /**
+   * @public
    * @method write
    * @description 将 Uint8Array 对象写入字节流
    * @param {Uint8Array} bytes 要写入 Uint8Array 对象
@@ -433,6 +444,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readInt8
    * @description 从缓冲区中读取有符号的整数
    * @returns {number} 介于 -128 和 127 之间的整数
@@ -450,6 +462,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readUint8
    * @description 从缓冲区中读取无符号的整数
    * @returns {number} 介于 0 和 255 之间的无符号整数
@@ -467,6 +480,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readBoolean
    * @description 从缓冲区中读取布尔值
    * @returns {boolean} 如果字节非零，则返回 true，否则返回 false
@@ -476,6 +490,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readInt16
    * @description 从缓冲区中读取一个 16 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -494,6 +509,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readUint16
    * @description 从缓冲区中读取一个 16 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -512,6 +528,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readInt32
    * @description 从缓冲区中读取一个 32 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -530,6 +547,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readUint32
    * @description 从缓冲区中读取一个 32 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -548,6 +566,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readInt64
    * @description 从缓冲区中读取一个 64 位有符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -566,6 +585,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readUint64
    * @description 从缓冲区中读取一个 64 位无符号整数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -584,6 +604,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readFloat32
    * @description 从缓冲区中读取一个 IEEE 754 单精度 32 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -602,6 +623,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method readFloat64
    * @description 从缓冲区中读取一个 IEEE 754 双精度 64 位浮点数
    * @param {boolean} [littleEndian] 是否为小端字节序
@@ -620,6 +642,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method read
    * @description 从缓冲区中读取指定长度的 Uint8Array 对象
    * @param {number} length 读取的字节长度
@@ -627,6 +650,7 @@ export class Buffer {
    */
   public read(length: number): Uint8Array<ArrayBuffer>;
   /**
+   * @public
    * @method read
    * @description 从缓冲区中读取一个字符串
    * @param {number} length 读取的字节长度
@@ -686,6 +710,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method entries
    * @description 获取迭代器
    * @returns {IterableIterator<[number, number]>}
@@ -700,6 +725,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method values
    * @description 获取迭代器
    * @returns {IterableIterator<number>}
@@ -714,6 +740,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @method iterator
    * @description 迭代器
    * @returns {IterableIterator<number>}
@@ -723,6 +750,7 @@ export class Buffer {
   }
 
   /**
+   * @public
    * @override
    * @method toString
    * @description 获取 Buffer 对象二进制编码字符串

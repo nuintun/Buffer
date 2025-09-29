@@ -529,6 +529,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeBoolean
      * @description 在缓冲区中写入布尔值，true 写 1，false写 0
      * @param {boolean} value 布尔值
@@ -537,6 +538,7 @@
       this.writeUint8(value ? 1 : 0);
     }
     /**
+     * @public
      * @method writeInt16
      * @description 在缓冲区中写入一个 16 位有符号整数
      * @param {number} value 要写入的 16 位有符号整数
@@ -549,6 +551,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeUint16
      * @description 在缓冲区中写入一个 16 位无符号整数
      * @param {number} value 要写入的 16 位无符号整数
@@ -561,6 +564,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeInt32
      * @description 在缓冲区中写入一个有符号的 32 位有符号整数
      * @param {number} value 要写入的 32 位有符号整数
@@ -573,6 +577,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeUint32
      * @description 在缓冲区中写入一个无符号的 32 位无符号整数
      * @param {number} value 要写入的 32 位无符号整数
@@ -585,6 +590,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeInt64
      * @description 在缓冲区中写入一个 64 位有符号整数
      * @param {bigint} value 要写入的 64 位有符号整数
@@ -597,6 +603,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeUint64
      * @description 在缓冲区中写入一个无符号的 64 位无符号整数
      * @param {bigint} value 要写入的 64 位无符号整数
@@ -609,6 +616,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeFloat32
      * @description 在缓冲区中写入一个 IEEE 754 单精度 32 位浮点数
      * @param {number} value 单精度 32 位浮点数
@@ -621,6 +629,7 @@
       this.#seek(offset);
     }
     /**
+     * @public
      * @method writeFloat64
      * @description 在缓冲区中写入一个 IEEE 754 双精度 64 位浮点数
      * @param {number} value 双精度 64 位浮点数
@@ -648,6 +657,7 @@
       }
     }
     /**
+     * @public
      * @method readInt8
      * @description 从缓冲区中读取有符号的整数
      * @returns {number} 介于 -128 和 127 之间的整数
@@ -660,6 +670,7 @@
       return value;
     }
     /**
+     * @public
      * @method readUint8
      * @description 从缓冲区中读取无符号的整数
      * @returns {number} 介于 0 和 255 之间的无符号整数
@@ -672,6 +683,7 @@
       return value;
     }
     /**
+     * @public
      * @method readBoolean
      * @description 从缓冲区中读取布尔值
      * @returns {boolean} 如果字节非零，则返回 true，否则返回 false
@@ -680,6 +692,7 @@
       return Boolean(this.readUint8());
     }
     /**
+     * @public
      * @method readInt16
      * @description 从缓冲区中读取一个 16 位有符号整数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -693,6 +706,7 @@
       return value;
     }
     /**
+     * @public
      * @method readUint16
      * @description 从缓冲区中读取一个 16 位无符号整数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -706,6 +720,7 @@
       return value;
     }
     /**
+     * @public
      * @method readInt32
      * @description 从缓冲区中读取一个 32 位有符号整数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -719,6 +734,7 @@
       return value;
     }
     /**
+     * @public
      * @method readUint32
      * @description 从缓冲区中读取一个 32 位无符号整数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -732,6 +748,7 @@
       return value;
     }
     /**
+     * @public
      * @method readInt64
      * @description 从缓冲区中读取一个 64 位有符号整数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -745,6 +762,7 @@
       return value;
     }
     /**
+     * @public
      * @method readUint64
      * @description 从缓冲区中读取一个 64 位无符号整数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -758,6 +776,7 @@
       return value;
     }
     /**
+     * @public
      * @method readFloat32
      * @description 从缓冲区中读取一个 IEEE 754 单精度 32 位浮点数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -771,6 +790,7 @@
       return value;
     }
     /**
+     * @public
      * @method readFloat64
      * @description 从缓冲区中读取一个 IEEE 754 双精度 64 位浮点数
      * @param {boolean} [littleEndian] 是否为小端字节序
@@ -825,6 +845,7 @@
       return this;
     }
     /**
+     * @public
      * @method entries
      * @description 获取迭代器
      * @returns {IterableIterator<[number, number]>}
@@ -837,6 +858,7 @@
       }
     }
     /**
+     * @public
      * @method values
      * @description 获取迭代器
      * @returns {IterableIterator<number>}
@@ -849,6 +871,7 @@
       }
     }
     /**
+     * @public
      * @method iterator
      * @description 迭代器
      * @returns {IterableIterator<number>}
@@ -857,6 +880,7 @@
       return this.values();
     }
     /**
+     * @public
      * @override
      * @method toString
      * @description 获取 Buffer 对象二进制编码字符串
