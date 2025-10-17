@@ -279,7 +279,7 @@ export class Buffer {
   /**
    * @public
    * @method writeBoolean
-   * @description 在缓冲区中写入布尔值，true 写 1，false写 0
+   * @description 在缓冲区中写入布尔值，true 写 1，false 写 0
    * @param {boolean} value 布尔值
    */
   public writeBoolean(value: boolean): void {
