@@ -1,7 +1,7 @@
 /**
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.8.3
+ * @version 0.8.5
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -111,7 +111,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.3
+   * @version 0.8.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -144,7 +144,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.3
+   * @version 0.8.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -166,7 +166,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.3
+   * @version 0.8.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -185,7 +185,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.3
+   * @version 0.8.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -273,7 +273,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.3
+   * @version 0.8.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -319,7 +319,7 @@
   /**
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.3
+   * @version 0.8.5
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -531,7 +531,7 @@
     /**
      * @public
      * @method writeBoolean
-     * @description 在缓冲区中写入布尔值，true 写 1，false写 0
+     * @description 在缓冲区中写入布尔值，true 写 1，false 写 0
      * @param {boolean} value 布尔值
      */
     writeBoolean(value) {
