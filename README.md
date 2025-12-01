@@ -380,10 +380,10 @@ export declare class Buffer {
 [npm-image]: https://img.shields.io/npm/v/@nuintun/buffer?style=flat-square
 [npm-url]: https://www.npmjs.org/package/@nuintun/buffer
 [download-image]: https://img.shields.io/npm/dm/@nuintun/buffer?style=flat-square
-[languages-image]: https://img.shields.io/github/languages/top/nuintun/buffer?style=flat-square
-[github-url]: https://github.com/nuintun/buffer
+[languages-image]: https://img.shields.io/github/languages/top/nuintun/Buffer?style=flat-square
+[github-url]: https://github.com/nuintun/Buffer
 [tree-shakeable-image]: https://img.shields.io/badge/tree--shakeable-true-brightgreen?style=flat-square
 [side-effect-image]: https://img.shields.io/badge/side--effect-free-brightgreen?style=flat-square
 [bundle-phobia-url]: https://bundlephobia.com/result?p=@nuintun/buffer
-[license-image]: https://img.shields.io/github/license/nuintun/buffer?style=flat-square
-[license-url]: https://github.com/nuintun/buffer/blob/main/LICENSE
+[license-image]: https://img.shields.io/github/license/nuintun/Buffer?style=flat-square
+[license-url]: https://github.com/nuintun/Buffer/blob/main/LICENSE
