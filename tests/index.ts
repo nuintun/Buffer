@@ -2,8 +2,8 @@
  * @module tests
  */
 
-import * as number from './number';
-import { hexdump } from './hexdump';
+import * as number from './number.ts';
+import { hexdump } from './hexdump.ts';
 import { Buffer, Endian, endianness } from '@nuintun/buffer';
 
 const buffer = new Buffer();

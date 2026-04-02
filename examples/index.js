@@ -1,7 +1,8 @@
 /**
+ * @module Buffer
  * @package @nuintun/buffer
  * @license MIT
- * @version 0.8.5
+ * @version 0.9.0
  * @author nuintun <nuintun@qq.com>
  * @description A buffer tool for javascript.
  * @see https://github.com/nuintun/Buffer#readme
@@ -109,9 +110,10 @@
   }
 
   /**
+   * @module Buffer
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.5
+   * @version 0.9.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -142,9 +144,10 @@
   const offsetOverflow = 'offset is outside the bounds of the Buffer';
 
   /**
+   * @module Buffer
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.5
+   * @version 0.9.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -164,9 +167,10 @@
   }
 
   /**
+   * @module Buffer
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.5
+   * @version 0.9.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -183,9 +187,10 @@
   })(Endian || (Endian = {}));
 
   /**
+   * @module Buffer
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.5
+   * @version 0.9.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -271,9 +276,10 @@
   }
 
   /**
+   * @module Buffer
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.5
+   * @version 0.9.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme
@@ -317,9 +323,10 @@
   }
 
   /**
+   * @module Buffer
    * @package @nuintun/buffer
    * @license MIT
-   * @version 0.8.5
+   * @version 0.9.0
    * @author nuintun <nuintun@qq.com>
    * @description A buffer tool for javascript.
    * @see https://github.com/nuintun/Buffer#readme

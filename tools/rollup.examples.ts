@@ -2,25 +2,22 @@
  * @module rollup.examples
  */
 
-import { createRequire } from 'node:module';
+import type { RollupOptions } from 'rollup';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-
-const pkg = createRequire(import.meta.url)('../package.json');
+import pkg from '../package.json' with { type: 'json' };
 
 const banner = `/**
-  * @package ${pkg.name}
-  * @license ${pkg.license}
-  * @version ${pkg.version}
-  * @author ${pkg.author.name} <${pkg.author.email}>
-  * @description ${pkg.description}
-  * @see ${pkg.homepage}
-  */
- `;
-
-/**
- * @type {import('rollup').RollupOptions}
+ * @module Buffer
+ * @package ${pkg.name}
+ * @license ${pkg.license}
+ * @version ${pkg.version}
+ * @author ${pkg.author.name} <${pkg.author.email}>
+ * @description ${pkg.description}
+ * @see ${pkg.homepage}
  */
+`;
+
 export default {
   input: 'examples/index.ts',
   output: {
@@ -33,10 +30,15 @@ export default {
     file: 'examples/index.js',
     generatedCode: { constBindings: true }
   },
+  plugins: [
+    resolve(),
+    typescript({
+      rootDir: 'examples'
+    })
+  ],
   onwarn(error, warn) {
     if (error.code !== 'CIRCULAR_DEPENDENCY') {
       warn(error);
     }
-  },
-  plugins: [resolve(), typescript({ tsconfig: 'examples/tsconfig.json' })]
-};
+  }
+} as RollupOptions;
