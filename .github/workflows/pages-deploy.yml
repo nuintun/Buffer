@@ -41,7 +41,9 @@ jobs:
       - name: Upload GitHub Pages
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./examples
+          path: |
+            ./examples/index.html
+            ./examples/index.js
   # 部署任务
   deploy:
     needs: build
