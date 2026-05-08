@@ -25,12 +25,6 @@
       ]
     }
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*",
-    "tools/**/*",
-    "examples/**/*"
-  ],
   "exclude": [
     "node_modules"
   ]
